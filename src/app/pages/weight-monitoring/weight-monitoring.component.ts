@@ -51,14 +51,15 @@ export class WeightMonitoringComponent {
     });
 
     this.data = {
-      // labels: labels,
       datasets: [
         {
           label: 'Poids (Kg)',
           data: dataPoints,
-          fill: false,
           cubicInterpolationMode: 'monotone',
-          tension: .4,
+          pointStyle: 'circle',
+          pointRadius: 5,
+          pointHoverRadius: 10,
+          borderColor: 'rgb(75, 192, 192)',
           segment: {
             borderColor: (ctx: any) => down(ctx, 'rgb(192,75,75)') || skipped(ctx, 'rgb(0,0,0,.2)'),
             borderDash: (ctx: any) => skipped(ctx, [6, 6]),
@@ -132,26 +133,22 @@ export class WeightMonitoringComponent {
       type: 'line',
       data: this.data,
       options: {
-        responsive: true,
-        interaction: {
-          intersect: false
-        },
         scales: {
           x: {
             type: 'time',
             time: {
-              displayFormats: {
-                quarter: 'DD-MM-YYYY'
-              }
+              tooltipFormat: 'L LT'
             },
             title: {
+              display: true,
               text: 'Date'
             }
           },
           y: {
             title: {
-              text: 'Poids (Kg)'
-            }
+              display: true,
+              text: 'Poids'
+            },
             suggestedMin: 0,
             suggestedMax: this.getSuggestedMax()
           }
