@@ -113,6 +113,20 @@ export class WeightMonitoringComponent {
     this.chart.update();
   }
 
+  private getSuggestedMax(): number {
+    if (this.data) {
+      let max = 0;
+      let suggestedMaxGap = .5;
+      this.data.datasets[0].data.forEach((dataPoint: { x: moment.Moment, y: number }) => {
+        if (dataPoint.y > max) {
+          max = dataPoint.y;
+        }
+      });
+      return max + suggestedMaxGap;
+    }
+    return 5;
+  }
+
   private getChartConfig(): any {
     const config = {
       type: 'line',
@@ -138,6 +152,8 @@ export class WeightMonitoringComponent {
             title: {
               text: 'Poids (Kg)'
             }
+            suggestedMin: 0,
+            suggestedMax: this.getSuggestedMax()
           }
         }
       },
