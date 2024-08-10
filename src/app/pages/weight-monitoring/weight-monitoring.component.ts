@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import Chart from 'chart.js/auto';
+import 'chartjs-adapter-moment';
 import * as moment from 'moment';
 
 import { Measure } from 'src/app/core/models/measure/measure.model';
@@ -16,19 +17,14 @@ export class WeightMonitoringComponent {
 
   measures: Measure[];
 
+  date: moment.Moment | string;
   weight: number;
 
   constructor() {
+    this.date = moment();
     this.weight = 0;
 
     this.measures = [
-      new Measure(moment('2021-06-27'), .220),
-      new Measure(moment('2021-12-27'), .832),
-      new Measure(moment('2022-06-27'), 1.678),
-      new Measure(moment('2022-12-27'), 2.234),
-      new Measure(moment('2023-06-27'), 3.021),
-      new Measure(moment('2023-12-27'), 3.894),
-      new Measure(moment('2024-06-27'), 4.153)
     ];
 
     const DATA_COUNT = 16;
@@ -40,18 +36,26 @@ export class WeightMonitoringComponent {
     const skipped = (ctx: { p0: { skip: any; }; p1: { skip: any; }; }, value: string | number[]) => ctx.p0.skip || ctx.p1.skip ? value : undefined;
     const down = (ctx: { p0: { parsed: { y: number; }; }; p1: { parsed: { y: number; }; }; }, value: string) => ctx.p0.parsed.y > ctx.p1.parsed.y ? value : undefined;
 
-    const datapoints = this.measures.map(measure => measure.weigth);
+    const dataPoints: any[] = [];
+    this.measures.forEach(measure => {
+      let dataPoint = {
+        x: measure.date,
+        y: measure.weigth
+      }
+      dataPoints.push(dataPoint);
+    });
+
     this.data = {
-      labels: labels,
+      // labels: labels,
       datasets: [
         {
           label: 'Poids (Kg)',
-          data: datapoints,
+          data: dataPoints,
           fill: false,
           cubicInterpolationMode: 'monotone',
           tension: .4,
           segment: {
-            borderColor: (ctx: any) => skipped(ctx, 'rgb(0,0,0,0.2)') || down(ctx, 'rgb(192,75,75)'),
+            borderColor: (ctx: any) => skipped(ctx, 'rgb(0,0,0,.2)') || down(ctx, 'rgb(192,75,75)'),
             borderDash: (ctx: any) => skipped(ctx, [6, 6]),
           },
           spanGaps: true
@@ -67,6 +71,13 @@ export class WeightMonitoringComponent {
     );
   }
 
+  isInvalidDate(): boolean {
+    if (this.date) {
+      return !moment(this.date).isValid();
+    }
+    return false;
+  }
+
   isInvalidWeight(): boolean {
     return this.weight < 0;
   }
@@ -80,20 +91,21 @@ export class WeightMonitoringComponent {
     let measure = new Measure(moment(), weight);
     this.measures.push(measure);
 
-    this.chart.data.datasets[0].data.push(weight);
+    let dataPoint = {
+      x: measure.date,
+      y: measure.weigth
+    };
+
+    this.chart.data.datasets[0].data.push(dataPoint);
     this.chart.update();
     this.weight = 0;
   }
 
   deleteMeasure(measureToDelete: Measure) {
-    this.measures.forEach(measure => {
-      if (measure.date.isSame(measureToDelete.date)) {
-        measure.weigth = null;
-        this.chart.data.datasets[0].data = this.measures.map(measure => measure.weigth);
-        this.chart.update();
-        return;
-      }
-    });
+    this.measures = this.measures.filter(measure => !measure.date.isSame(measureToDelete.date, 'day'));
+
+    this.chart.data.datasets[0].data = this.chart.data.datasets[0].data.filter((dataPoint: { x: moment.MomentInput, y: number }) => !moment(dataPoint.x).isSame(measureToDelete.date, 'day'));
+    this.chart.update();
   }
 
   private getChartConfig(): any {
@@ -107,20 +119,20 @@ export class WeightMonitoringComponent {
         },
         scales: {
           x: {
-            display: true,
+            type: 'time',
+            time: {
+              displayFormats: {
+                quarter: 'DD-MM-YYYY'
+              }
+            },
             title: {
-              display: true,
-              text: 'Année'
+              text: 'Date'
             }
           },
           y: {
-            display: true,
             title: {
-              display: true,
               text: 'Poids (Kg)'
-            },
-            suggestedMin: 0,
-            suggestedMax: 6
+            }
           }
         }
       },

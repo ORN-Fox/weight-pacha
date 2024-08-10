@@ -22,6 +22,14 @@
 </div>
 
 <div class="field">
+  <label class="label">Date</label>
+  <div class="control">
+    <input type="date" name="date" class="input" [ngClass]="{'is-danger': isInvalidDate()}" [(ngModel)]="date">
+    <p *ngIf="isInvalidDate()" class="help is-danger">La date est invalide</p>
+  </div>
+</div>
+
+<div class="field">
   <label class="label">Poids (Mettre 0 pour sauter une mesure)</label>
   <div class="control">
     <input type="number" name="weight" class="input" [ngClass]="{'is-danger': isInvalidWeight()}" [(ngModel)]="weight" placeholder="2" step=".25" min="0" max="50">
