@@ -27,14 +27,19 @@ export class WeightMonitoringComponent {
     this.measures = [
     ];
 
-    const DATA_COUNT = 16;
-    const labels = [];
-    for (let i = 0; i < DATA_COUNT; i += .5) {
-      labels.push(i.toString());
+    const down = (ctx: { p0: { parsed: { y: number; }; }; p1: { parsed: { y: number; }; }; }, value: string): string | undefined => {
+      if (ctx.p0.parsed.y > ctx.p1.parsed.y) {
+        return value;
+      }
+      return undefined;
     }
 
-    const skipped = (ctx: { p0: { skip: any; }; p1: { skip: any; }; }, value: string | number[]) => ctx.p0.skip || ctx.p1.skip ? value : undefined;
-    const down = (ctx: { p0: { parsed: { y: number; }; }; p1: { parsed: { y: number; }; }; }, value: string) => ctx.p0.parsed.y > ctx.p1.parsed.y ? value : undefined;
+    const skipped = (ctx: { p0: { skip: any; }; p1: { skip: any; }; }, value: string | number[]): string | number[] | undefined => {
+      if (ctx.p0.skip || ctx.p1.skip) {
+        return value;
+      }
+      return undefined;
+    }
 
     const dataPoints: any[] = [];
     this.measures.forEach(measure => {
@@ -55,7 +60,7 @@ export class WeightMonitoringComponent {
           cubicInterpolationMode: 'monotone',
           tension: .4,
           segment: {
-            borderColor: (ctx: any) => skipped(ctx, 'rgb(0,0,0,.2)') || down(ctx, 'rgb(192,75,75)'),
+            borderColor: (ctx: any) => down(ctx, 'rgb(192,75,75)') || skipped(ctx, 'rgb(0,0,0,.2)'),
             borderDash: (ctx: any) => skipped(ctx, [6, 6]),
           },
           spanGaps: true
