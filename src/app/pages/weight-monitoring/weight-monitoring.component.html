@@ -21,26 +21,37 @@
   </div>
 </div>
 
-<div class="field">
-  <label class="label">Date</label>
-  <div class="control">
-    <input type="date" name="date" class="input" [ngClass]="{'is-danger': isInvalidDate()}" [(ngModel)]="date">
-    <p *ngIf="isInvalidDate()" class="help is-danger">La date est invalide</p>
-  </div>
-</div>
+<div class="columns">
+  <div class="column"></div>
 
-<div class="field">
-  <label class="label">Poids (Mettre 0 pour sauter une mesure)</label>
-  <div class="control">
-    <input type="number" name="weight" class="input" [ngClass]="{'is-danger': isInvalidWeight()}" [(ngModel)]="weight" placeholder="2" step=".25" min="0" max="50">
-    <p *ngIf="isInvalidWeight()" class="help is-danger">Le poids doit être positif</p>
-  </div>
-</div>
+  <div class="column is-two-fifths add-measure">
+    <h2 class="title">Ajouter une mesure</h2>
 
-<div class="field">
-  <div class="control">
-    <button type="button" class="button is-primary" (click)="addValue()" [disabled]="isInvalidWeight()">Ajout</button>
+    <div class="field">
+      <label class="label">Date</label>
+      <div class="control">
+        <input type="text" name="date" id="measureDate" class="input" [ngClass]="{'is-danger': isInvalidDate()}">
+        <p *ngIf="isInvalidDate()" class="help is-danger">La date est invalide</p>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="label">Poids (Mettre 0 pour sauter une mesure)</label>
+      <div class="control">
+        <input type="number" name="weight" class="input" [ngClass]="{'is-danger': isInvalidWeight()}" [(ngModel)]="weight" placeholder="2" step=".25" min="0" max="50">
+        <p *ngIf="isInvalidWeight()" class="help is-danger">Le poids doit être positif</p>
+      </div>
+    </div>
+
+    <div class="field">
+      <div class="control">
+        <button type="button" class="button is-primary" (click)="addMeasure()" [disabled]="shouldDisableAddMeasureButton()">Ajouter</button>
+        <p *ngIf="isExistingMeasureOnSelectedDate()" class="help is-danger">Une mesure existe à cette date</p>
+      </div>
+    </div>
   </div>
+
+  <div class="column"></div>
 </div>
 
 <svg id="clouds" xmlns="http://www.w3.org/2000/svg" width="2611.084" height="485.677" viewBox="0 0 2611.084 485.677">

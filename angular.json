@@ -30,9 +30,13 @@
               "src/assets"
             ],
             "styles": [
+              "node_modules/flatpickr/dist/flatpickr.min.css",
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/flatpickr/dist/flatpickr.min.js",
+              "node_modules/flatpickr/dist/l10n/fr.js"
+            ]
           },
           "configurations": {
             "production": {

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import Chart from 'chart.js/auto';
 import 'chartjs-adapter-moment';
+import flatpickr from 'flatpickr';
 import * as moment from 'moment';
 
 import { Measure } from 'src/app/core/models/measure/measure.model';
@@ -17,7 +18,7 @@ export class WeightMonitoringComponent {
 
   measures: Measure[];
 
-  date: moment.Moment | string;
+  date: moment.Moment;
   weight: number;
 
   constructor() {
@@ -71,6 +72,15 @@ export class WeightMonitoringComponent {
   }
 
   ngAfterViewInit() {
+    flatpickr('#measureDate', {
+      enableTime: true,
+      dateFormat: 'Y-m-d H:i',
+      defaultDate: this.date.toDate(),
+      onChange: (_selectedDates: Object, date: string) => {
+        this.date = moment(date);
+      }
+    });
+
     this.chart = new Chart(
       document.getElementById('weightChart') as HTMLCanvasElement,
       this.getChartConfig()
@@ -88,13 +98,21 @@ export class WeightMonitoringComponent {
     return this.weight < 0;
   }
 
-  addValue() {
+  isExistingMeasureOnSelectedDate(): boolean {
+    return this.measures.filter(measure => measure.date.isSame(this.date, 'day')).length > 0;
+  }
+
+  shouldDisableAddMeasureButton(): boolean {
+    return this.isInvalidWeight() || this.isExistingMeasureOnSelectedDate();
+  }
+
+  addMeasure() {
     let weight: number | null = this.weight;
     if (weight == 0) {
       weight = null;
     }
 
-    let measure = new Measure(moment(), weight);
+    let measure = new Measure(this.date, weight);
     this.measures.push(measure);
 
     let dataPoint = {
