@@ -1,6 +1,6 @@
 <div class="card highlight-card card-small">
-  <img src="/assets/images/cat.png" alt="" style="height: 8rem;">
-  <h1 class="title" style="color: white; margin: 0;">Suivi du poids</h1>
+  <img src="/assets/images/cat.png" alt="">
+  <h1 class="title">Suivi du poids</h1>
 </div>
 
 <div class="columns">
@@ -8,14 +8,14 @@
     <canvas id="weightChart"></canvas>
   </div>
 
-  <div class="column">
+  <div class="column measures">
     <h2 class="title">Mesures</h2>
 
-    <div style="max-height: 60vh; overflow-y: scroll;">
-      <div *ngFor="let measure of measures" class="box">
+    <div class="measures-container">
+      <div *ngFor="let measure of measures" class="box measure-content">
         <p>Date : {{ measure.date.format('DD/MM/YYYY HH:mm') }}</p>
         <p *ngIf="measure.weigth">Poids : {{ measure.weigth }} Kg</p> <p *ngIf="!measure.weigth">Non pesé</p>
-        <button type="button" class="help is-danger" (click)="deleteMeasure(measure)">X</button>
+        <button type="button" class="delete" (click)="deleteMeasure(measure)"></button>
       </div>
     </div>
   </div>
