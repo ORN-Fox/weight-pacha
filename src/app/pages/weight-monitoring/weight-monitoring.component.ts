@@ -4,7 +4,9 @@ import 'chartjs-adapter-moment';
 import flatpickr from 'flatpickr';
 import * as moment from 'moment';
 
-import { Measure } from 'src/app/core/models/measure/measure.model';
+import { LocalStorageService } from 'src/app/core/services/local-storage/local-storage.service';
+
+import { ISerializedMeasure, Measure } from 'src/app/core/models/measure/measure.model';
 
 @Component({
   selector: 'app-weight-monitoring',
@@ -21,7 +23,9 @@ export class WeightMonitoringComponent {
   date: moment.Moment;
   weight: number;
 
-  constructor() {
+  constructor(
+    private localStorageService: LocalStorageService
+  ) {
     this.measures = [];
 
     this.date = moment();
@@ -82,6 +86,13 @@ export class WeightMonitoringComponent {
     this.chart.data.datasets[0].data.push(dataPoint);
     this.chart.update();
     this.weight = 0;
+
+    let serializedMeasures: ISerializedMeasure[] = [];
+    this.measures.forEach(measure => {
+      serializedMeasures.push(measure.serializeForSave());
+    });
+
+    this.localStorageService.setItem('weight-pacha-data', { measures: serializedMeasures });
   }
 
   deleteMeasure(measureToDelete: Measure) {
@@ -89,28 +100,26 @@ export class WeightMonitoringComponent {
 
     this.chart.data.datasets[0].data = this.chart.data.datasets[0].data.filter((dataPoint: { x: moment.MomentInput, y: number }) => !moment(dataPoint.x).isSame(measureToDelete.date, 'day'));
     this.chart.update();
+
+    let serializedMeasures: ISerializedMeasure[] = [];
+    this.measures.forEach(measure => {
+      serializedMeasures.push(measure.serializeForSave());
+    });
+
+    this.localStorageService.setItem('weight-pacha-data', { measures: serializedMeasures });
   }
 
   private loadMeasures() {
-    // TODO load from json file for storage
-    // TODO save in json file for storage
-    this.measures = [
-      new Measure(moment('2024-01-01'), 1),
-      new Measure(moment('2024-02-02'), 1.2),
-      new Measure(moment('2024-03-03'), 1.2),
-      new Measure(moment('2024-04-04'), 1.1),
-      new Measure(moment('2024-05-05'), null),
-      new Measure(moment('2024-06-06'), 1.1),
-      new Measure(moment('2024-07-07'), 1.3),
-      new Measure(moment('2024-08-08'), 0.87),
-      // new Measure(moment('2021-06-27'), .220),
-      // new Measure(moment('2021-12-27'), .832),
-      // new Measure(moment('2022-06-27'), 1.678),
-      // new Measure(moment('2022-12-27'), 2.234),
-      // new Measure(moment('2023-06-27'), 3.021),
-      // new Measure(moment('2023-12-27'), 3.894),
-      // new Measure(moment('2024-06-27'), 4.153)
-    ];
+    if (this.localStorageService.isItemExist('weight-pacha-data')) {
+      let measuresJSON = this.localStorageService.getItem('weight-pacha-data');
+      measuresJSON.measures.forEach((measureJSON: ISerializedMeasure) => {
+        let measure = new Measure(moment(), null);
+        measure.deserilizeFromSave(measureJSON);
+        this.measures.push(measure);
+      });
+    } else {
+      this.localStorageService.setItem('weight-pacha-data', []);
+    }
 
     this.initChartData();
   }
