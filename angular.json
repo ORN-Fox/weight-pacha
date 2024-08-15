@@ -36,6 +36,9 @@
             "scripts": [
               "node_modules/flatpickr/dist/flatpickr.min.js",
               "node_modules/flatpickr/dist/l10n/fr.js"
+            ],
+            "allowedCommonJsDependencies": [
+              "moment"
             ]
           },
           "configurations": {
