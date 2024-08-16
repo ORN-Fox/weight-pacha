@@ -14,7 +14,7 @@
     <div class="measures-container">
       <div *ngFor="let measure of measures" class="box measure-content">
         <p>Date : {{ measure.date.format('DD/MM/YYYY HH:mm') }}</p>
-        <p *ngIf="measure.weigth">Poids : {{ measure.weigth }} Kg</p> <p *ngIf="!measure.weigth">Non pesé</p>
+        <p *ngIf="measure.weigth">Poids : {{ measure.weigth }} {{ getMeasureUnitLabel() }}</p> <p *ngIf="!measure.weigth">Non pesé</p>
         <button type="button" class="delete" (click)="deleteMeasure(measure)"></button>
       </div>
     </div>
@@ -38,7 +38,7 @@
     <div class="field">
       <label class="label">Poids (Mettre 0 pour sauter une mesure)</label>
       <div class="control">
-        <input type="number" name="weight" class="input" [ngClass]="{'is-danger': isInvalidWeight()}" [(ngModel)]="weight" placeholder="2" step=".25" min="0" max="50">
+        <input type="number" name="weight" class="input" [ngClass]="{'is-danger': isInvalidWeight()}" [(ngModel)]="weight" step=".25" min="0" max="50" placeholder="2">
         <p *ngIf="isInvalidWeight()" class="help is-danger">Le poids doit être positif</p>
       </div>
     </div>
@@ -52,6 +52,31 @@
   </div>
 
   <div class="column"></div>
+
+  <div class="column">
+    <h2 class="title">Paramètres</h2>
+
+    <div class="field">
+      <label class="label">Unité de poids</label>
+      <div class="radios">
+        <label class="radio">
+          <input type="radio" name="measureUnit" [(ngModel)]="measureUnit" (ngModelChange)="updateMeasureUnit()" [value]="0" />
+          Kg
+        </label>
+        <label class="radio">
+          <input type="radio" name="measureUnit" [(ngModel)]="measureUnit" (ngModelChange)="updateMeasureUnit()" [value]="1" />
+          Lbs
+        </label>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="label">Poids santé</label>
+      <div class="control">
+        <input type="number" name="healthWeight" class="input" [(ngModel)]="healthWeight" (ngModelChange)="updateHealthWeigth()" step=".25" min="1" max="20" placeholder="4">
+      </div>
+    </div>
+  </div>
 </div>
 
 <svg id="clouds" xmlns="http://www.w3.org/2000/svg" width="2611.084" height="485.677" viewBox="0 0 2611.084 485.677">

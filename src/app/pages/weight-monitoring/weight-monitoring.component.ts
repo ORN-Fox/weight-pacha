@@ -1,12 +1,18 @@
 import { Component } from '@angular/core';
 import Chart from 'chart.js/auto';
-import 'chartjs-adapter-moment';
+import annotationPlugin from 'chartjs-plugin-annotation';
 import flatpickr from 'flatpickr';
 import * as moment from 'moment';
+import 'chartjs-adapter-moment';
 
 import { LocalStorageService } from 'src/app/core/services/local-storage/local-storage.service';
 
 import { ISerializedMeasure, Measure } from 'src/app/core/models/measure/measure.model';
+
+export enum UnitType {
+  Kg = 0,
+  Lbs
+}
 
 @Component({
   selector: 'app-weight-monitoring',
@@ -19,6 +25,8 @@ export class WeightMonitoringComponent {
   data: any;
 
   measures: Measure[];
+  measureUnit: UnitType;
+  healthWeight: number;
 
   date: moment.Moment;
   weight: number;
@@ -27,9 +35,13 @@ export class WeightMonitoringComponent {
     private localStorageService: LocalStorageService
   ) {
     this.measures = [];
+    this.measureUnit = UnitType.Kg;
+    this.healthWeight = 4;
 
     this.date = moment();
     this.weight = 0;
+
+    Chart.register(annotationPlugin);
 
     this.loadMeasures();
   }
@@ -48,6 +60,15 @@ export class WeightMonitoringComponent {
       document.getElementById('weightChart') as HTMLCanvasElement,
       this.getChartConfig()
     );
+  }
+
+  getMeasureUnitLabel(): string {
+    switch(this.measureUnit) {
+      case UnitType.Kg:
+        return "Kg";
+      case UnitType.Lbs:
+        return "Lbs";
+    }
   }
 
   isInvalidDate(): boolean {
@@ -83,45 +104,69 @@ export class WeightMonitoringComponent {
       y: measure.weigth
     };
 
-    this.chart.data.datasets[0].data.push(dataPoint);
-    this.chart.update();
     this.weight = 0;
+    this.saveMeasures();
 
-    let serializedMeasures: ISerializedMeasure[] = [];
-    this.measures.forEach(measure => {
-      serializedMeasures.push(measure.serializeForSave());
-    });
-
-    this.localStorageService.setItem('weight-pacha-data', { measures: serializedMeasures });
+    this.chart.data.datasets[0].data.push(dataPoint);
+    this.updateChart();
   }
 
   deleteMeasure(measureToDelete: Measure) {
     this.measures = this.measures.filter(measure => !measure.date.isSame(measureToDelete.date, 'day'));
 
+    this.saveMeasures();
+
     this.chart.data.datasets[0].data = this.chart.data.datasets[0].data.filter((dataPoint: { x: moment.MomentInput, y: number }) => !moment(dataPoint.x).isSame(measureToDelete.date, 'day'));
-    this.chart.update();
+    this.updateChart();
+  }
 
-    let serializedMeasures: ISerializedMeasure[] = [];
-    this.measures.forEach(measure => {
-      serializedMeasures.push(measure.serializeForSave());
-    });
+  updateMeasureUnit() {
+    const healthWeightLabel = this.chart.options.plugins.annotation.annotations.label;
+    healthWeightLabel.content = `Poids santé : ${this.healthWeight} ${this.getMeasureUnitLabel()}`;
 
-    this.localStorageService.setItem('weight-pacha-data', { measures: serializedMeasures });
+    this.saveMeasures();
+
+    this.updateChart();
+  }
+
+  updateHealthWeigth() {
+    const healthWeightLine = this.chart.options.plugins.annotation.annotations.healthWeightLine;
+    healthWeightLine.yMin = this.healthWeight;
+    healthWeightLine.yMax = this.healthWeight;
+
+    const healthWeightLabel = this.chart.options.plugins.annotation.annotations.label;
+    healthWeightLabel.content = `Poids santé : ${this.healthWeight} ${this.getMeasureUnitLabel()}`;
+
+    this.saveMeasures();
+    this.updateChart();
   }
 
   private loadMeasures() {
     if (this.localStorageService.isItemExist('weight-pacha-data')) {
       let measuresJSON = this.localStorageService.getItem('weight-pacha-data');
+
+      this.healthWeight = measuresJSON.healthWeight;
+      this.measureUnit = measuresJSON.measureUnit;
+
       measuresJSON.measures.forEach((measureJSON: ISerializedMeasure) => {
         let measure = new Measure(moment(), null);
         measure.deserilizeFromSave(measureJSON);
         this.measures.push(measure);
       });
     } else {
-      this.localStorageService.setItem('weight-pacha-data', []);
+      this.localStorageService.setItem('weight-pacha-data', { healthWeight: this.healthWeight, measureUnit: this.measureUnit, measures: [] });
     }
 
     this.initChartData();
+  }
+
+  private saveMeasures() {
+    let serializedMeasures: ISerializedMeasure[] = [];
+    this.measures.forEach(measure => {
+      serializedMeasures.push(measure.serializeForSave());
+    });
+
+    this.localStorageService.setItem('weight-pacha-data', { healthWeight: this.healthWeight, measureUnit: this.measureUnit, measures: serializedMeasures });
   }
 
   private initChartData() {
@@ -210,10 +255,32 @@ export class WeightMonitoringComponent {
             suggestedMin: 0,
             suggestedMax: this.getSuggestedMax()
           }
+        },
+        plugins: {
+          annotation: {
+            annotations: {
+              healthWeightLine: {
+                type: 'line',
+                yMin: this.healthWeight,
+                yMax: this.healthWeight,
+                borderColor: 'rgb(107, 201, 255)',
+                borderWidth: 2
+              },
+              label: {
+                backgroundColor: 'grey',
+                content: `Poids santé : ${this.healthWeight} ${this.getMeasureUnitLabel()}`,
+                display: true
+              }
+            }
+          }
         }
-      },
+      }
     };
     return config;
+  }
+
+  private updateChart() {
+    this.chart.update();
   }
 
 }
