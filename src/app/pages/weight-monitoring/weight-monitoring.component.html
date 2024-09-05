@@ -12,10 +12,12 @@
     <h2 class="title">Mesures</h2>
 
     <div class="measures-container">
-      <div *ngFor="let measure of measures" class="box measure-content">
-        <p>Date : {{ measure.date.format('DD/MM/YYYY HH:mm') }}</p>
-        <p *ngIf="measure.weigth">Poids : {{ measure.weigth }} {{ getMeasureUnitLabel() }}</p> <p *ngIf="!measure.weigth">Non pesé</p>
-        <button type="button" class="delete" (click)="deleteMeasure(measure)"></button>
+      <ng-container *ngFor="let measure of measures">
+       <app-measure [measure]="measure" (deleteMeasureEvent)="onDeleteMeasure($event)"></app-measure>
+      </ng-container>
+
+      <div *ngIf="measures?.length == 0" class="box measure-content has-text-centered">
+        <small>Ajouter une mesure pour débuter le suivi du poids</small>
       </div>
     </div>
   </div>

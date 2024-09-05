@@ -108,12 +108,12 @@ export class WeightMonitoringComponent {
     this.updateChart();
   }
 
-  deleteMeasure(measureToDelete: Measure) {
-    this.measures = this.measures.filter(measure => !measure.date.isSame(measureToDelete.date, 'day'));
+  onDeleteMeasure(event: { measure: Measure }) {
+    this.measures = this.measures.filter(measure => !measure.date.isSame(event.measure.date, 'day'));
 
     this.saveMeasures();
 
-    this.chart.data.datasets[0].data = this.chart.data.datasets[0].data.filter((dataPoint: { x: moment.MomentInput, y: number }) => !moment(dataPoint.x).isSame(measureToDelete.date, 'day'));
+    this.chart.data.datasets[0].data = this.chart.data.datasets[0].data.filter((dataPoint: { x: moment.MomentInput, y: number }) => !moment(dataPoint.x).isSame(event.measure.date, 'day'));
     this.updateChart();
   }
 

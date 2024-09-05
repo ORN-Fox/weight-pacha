@@ -48,17 +48,6 @@
     .measures-container {
         max-height: 50vh;
         overflow-y: scroll;
-
-        .measure-content {
-            position: relative;
-            margin: .5rem;
-
-            .delete {
-                position: absolute;
-                top: .5rem;
-                right: .5rem;
-            }
-        }
     }
 }
 
