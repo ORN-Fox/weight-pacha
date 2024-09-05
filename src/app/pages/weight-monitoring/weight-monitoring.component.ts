@@ -187,7 +187,7 @@ export class WeightMonitoringComponent {
     this.data = {
       datasets: [
         {
-          label: 'Poids (Kg)',
+          label: "Poids",
           data: this.computeDataPoints(),
           cubicInterpolationMode: 'monotone',
           pointStyle: 'circle',
@@ -267,8 +267,15 @@ export class WeightMonitoringComponent {
               },
               label: {
                 backgroundColor: 'grey',
-                content: `Poids santé : ${this.healthWeight} ${this.getMeasureUnitLabel()}`,
+                content: this.computeWeightHealthLabel(),
                 display: true
+              }
+            }
+          },
+          tooltip: {
+            callbacks: {
+              label: (context: { dataset: { label: string; }; parsed: { y: number | bigint | null; }; }) => {
+                return `${context.dataset.label} : ${context.parsed.y} ${this.getMeasureUnitLabel()}`;
               }
             }
           }
