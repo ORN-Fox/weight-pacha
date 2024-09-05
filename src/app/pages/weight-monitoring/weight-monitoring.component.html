@@ -13,7 +13,7 @@
 
     <div class="measures-container">
       <ng-container *ngFor="let measure of measures">
-       <app-measure [measure]="measure" (deleteMeasureEvent)="onDeleteMeasure($event)"></app-measure>
+       <app-measure [measure]="measure" [measureUnitLabel]="getMeasureUnitLabel()" (deleteMeasureEvent)="onDeleteMeasure($event)"></app-measure>
       </ng-container>
 
       <div *ngIf="measures?.length == 0" class="box measure-content has-text-centered">
