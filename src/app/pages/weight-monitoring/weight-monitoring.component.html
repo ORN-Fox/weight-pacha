@@ -45,9 +45,9 @@
       </div>
     </div>
 
-    <div class="field">
+    <div class="field has-text-centered">
       <div class="control">
-        <button type="button" class="button is-primary" (click)="addMeasure()" [disabled]="shouldDisableAddMeasureButton()">Ajouter</button>
+        <button type="button" class="button is-primary add-measure-button" (click)="addMeasure()" [disabled]="shouldDisableAddMeasureButton()">Ajouter</button>
         <p *ngIf="isExistingMeasureOnSelectedDate()" class="help is-danger">Une mesure existe à cette date</p>
       </div>
     </div>
