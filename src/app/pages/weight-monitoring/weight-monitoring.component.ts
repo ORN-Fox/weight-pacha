@@ -18,6 +18,8 @@ import { ISerializedMeasure, Measure } from 'src/app/core/models/measure/measure
 })
 export class WeightMonitoringComponent {
 
+  APP_STORAGE_KEY: string;
+
   chart: any;
   data: any;
 
@@ -31,6 +33,8 @@ export class WeightMonitoringComponent {
   constructor(
     private localStorageService: LocalStorageService
   ) {
+    this.APP_STORAGE_KEY = 'weight-pacha-data';
+
     this.measures = [];
     this.measureUnit = UnitType.Kg;
     this.healthWeight = 4;
@@ -76,7 +80,7 @@ export class WeightMonitoringComponent {
   }
 
   isInvalidWeight(): boolean {
-    return this.weight < 0;
+    return this.weight <= 0;
   }
 
   isExistingMeasureOnSelectedDate(): boolean {
@@ -137,8 +141,8 @@ export class WeightMonitoringComponent {
   }
 
   private loadMeasures() {
-    if (this.localStorageService.isItemExist('weight-pacha-data')) {
-      let measuresJSON = this.localStorageService.getItem('weight-pacha-data');
+    if (this.localStorageService.isItemExist(this.APP_STORAGE_KEY)) {
+      let measuresJSON = this.localStorageService.getItem(this.APP_STORAGE_KEY);
 
       this.healthWeight = measuresJSON.healthWeight;
       this.measureUnit = measuresJSON.measureUnit;
@@ -149,7 +153,7 @@ export class WeightMonitoringComponent {
         this.measures.push(measure);
       });
     } else {
-      this.localStorageService.setItem('weight-pacha-data', { healthWeight: this.healthWeight, measureUnit: this.measureUnit, measures: [] });
+      this.localStorageService.setItem(this.APP_STORAGE_KEY, { healthWeight: this.healthWeight, measureUnit: this.measureUnit, measures: [] });
     }
 
     this.initChartData();
@@ -161,7 +165,7 @@ export class WeightMonitoringComponent {
       serializedMeasures.push(measure.serializeForSave());
     });
 
-    this.localStorageService.setItem('weight-pacha-data', { healthWeight: this.healthWeight, measureUnit: this.measureUnit, measures: serializedMeasures });
+    this.localStorageService.setItem(this.APP_STORAGE_KEY, { healthWeight: this.healthWeight, measureUnit: this.measureUnit, measures: serializedMeasures });
   }
 
   private initChartData() {
