@@ -33,10 +33,11 @@ p {
   }
 
   .github-icon {
+    fill: white;
     margin: 0 16px;
 
     &:hover {
-      fill: white;
+      fill: #e2e2e2;
     }
   }
 
