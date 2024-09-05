@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-root',
@@ -7,6 +8,18 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
 
-  constructor() {}
+  locales: string[];
+  locale!: string;
+
+  constructor(private translateService: TranslateService) {
+    this.locales = ['en-US', 'fr-FR'];
+
+    this.changeLocale('fr-FR');
+  }
+
+  changeLocale(locale: string) {
+    this.locale = locale;
+    this.translateService.use(this.locale);
+  }
 
 }

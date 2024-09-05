@@ -39,5 +39,18 @@ p {
       fill: white;
     }
   }
+
+  .dropdown-languages {
+    .dropdown-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+
+      img {
+        margin: 0;
+        width: 2rem;
+      }
+    }
+  }
 }
 
