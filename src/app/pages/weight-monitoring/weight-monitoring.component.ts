@@ -83,6 +83,10 @@ export class WeightMonitoringComponent {
     return this.weight <= 0;
   }
 
+  isInvalidHealthWeight(): boolean {
+    return this.healthWeight <= 0;
+  }
+
   isExistingMeasureOnSelectedDate(): boolean {
     return this.measures.filter(measure => measure.date.isSame(this.date, 'day')).length > 0;
   }
@@ -125,6 +129,10 @@ export class WeightMonitoringComponent {
   }
 
   updateHealthWeigth() {
+    if (this.isInvalidHealthWeight()) {
+      return;
+    }
+
     const healthWeightLine = this.chart.options.plugins.annotation.annotations.healthWeightLine;
     healthWeightLine.yMin = this.healthWeight;
     healthWeightLine.yMax = this.healthWeight;

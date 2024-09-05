@@ -91,6 +91,7 @@
         <span class="icon is-small is-right">
           {{ getMeasureUnitLabel() }}
         </span>
+        <p *ngIf="isInvalidHealthWeight()" class="help is-danger">Le poids doit être positif</p>
       </div>
     </div>
   </div>
