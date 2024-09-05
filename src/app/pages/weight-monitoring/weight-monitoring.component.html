@@ -31,16 +31,25 @@
 
     <div class="field">
       <label class="label">Date</label>
-      <div class="control">
+      <div class="control has-icons-left">
         <input type="text" name="date" id="measureDate" class="input" [ngClass]="{'is-danger': isInvalidDate()}">
+        <span class="icon is-small is-left">
+          <i class="far fa-calendar"></i>
+        </span>
         <p *ngIf="isInvalidDate()" class="help is-danger">La date est invalide</p>
       </div>
     </div>
 
     <div class="field">
       <label class="label">Poids</label>
-      <div class="control">
+      <div class="control has-icons-left has-icons-right">
         <input type="number" name="weight" class="input" [ngClass]="{'is-danger': isInvalidWeight()}" [(ngModel)]="weight" step=".25" min="0" max="50" placeholder="2">
+        <span class="icon is-small is-left">
+          <i class="far fa-weight-hanging"></i>
+        </span>
+        <span class="icon is-small is-right">
+          {{ getMeasureUnitLabel() }}
+        </span>
         <p *ngIf="isInvalidWeight()" class="help is-danger">Le poids doit être positif</p>
       </div>
     </div>
@@ -74,8 +83,14 @@
 
     <div class="field">
       <label class="label">Poids santé</label>
-      <div class="control">
+      <div class="control has-icons-left has-icons-right">
         <input type="number" name="healthWeight" class="input" [(ngModel)]="healthWeight" (ngModelChange)="updateHealthWeigth()" step=".25" min="1" max="20" placeholder="4">
+        <span class="icon is-small is-left">
+          <i class="far fa-weight-hanging"></i>
+        </span>
+        <span class="icon is-small is-right">
+          {{ getMeasureUnitLabel() }}
+        </span>
       </div>
     </div>
   </div>
