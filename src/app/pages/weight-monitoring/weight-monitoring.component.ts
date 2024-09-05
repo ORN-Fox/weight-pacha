@@ -114,10 +114,9 @@ export class WeightMonitoringComponent {
 
   updateMeasureUnit() {
     const healthWeightLabel = this.chart.options.plugins.annotation.annotations.label;
-    healthWeightLabel.content = `Poids santé : ${this.healthWeight} ${this.getMeasureUnitLabel()}`;
+    healthWeightLabel.content = this.computeWeightHealthLabel();
 
     this.saveMeasures();
-
     this.updateChart();
   }
 
@@ -127,10 +126,14 @@ export class WeightMonitoringComponent {
     healthWeightLine.yMax = this.healthWeight;
 
     const healthWeightLabel = this.chart.options.plugins.annotation.annotations.label;
-    healthWeightLabel.content = `Poids santé : ${this.healthWeight} ${this.getMeasureUnitLabel()}`;
+    healthWeightLabel.content = this.computeWeightHealthLabel();
 
     this.saveMeasures();
     this.updateChart();
+  }
+
+  private computeWeightHealthLabel(): string {
+    return `Poids santé : ${this.healthWeight} ${this.getMeasureUnitLabel()}`;
   }
 
   private loadMeasures() {
