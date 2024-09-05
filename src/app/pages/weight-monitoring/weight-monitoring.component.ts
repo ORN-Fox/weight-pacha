@@ -40,7 +40,7 @@ export class WeightMonitoringComponent {
     this.healthWeight = 4;
 
     this.date = moment();
-    this.weight = 0;
+    this.weight = 4;
 
     Chart.register(annotationPlugin);
 
