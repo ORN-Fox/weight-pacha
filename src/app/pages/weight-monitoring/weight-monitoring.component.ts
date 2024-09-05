@@ -7,12 +7,9 @@ import 'chartjs-adapter-moment';
 
 import { LocalStorageService } from 'src/app/core/services/local-storage/local-storage.service';
 
-import { ISerializedMeasure, Measure } from 'src/app/core/models/measure/measure.model';
+import { UnitType } from 'src/app/core/enums/unit-type/unit-type.enum';
 
-export enum UnitType {
-  Kg = 0,
-  Lbs
-}
+import { ISerializedMeasure, Measure } from 'src/app/core/models/measure/measure.model';
 
 @Component({
   selector: 'app-weight-monitoring',
