@@ -88,12 +88,7 @@ export class WeightMonitoringComponent {
   }
 
   addMeasure() {
-    let weight: number | null = this.weight;
-    if (weight == 0) {
-      weight = null;
-    }
-
-    let measure = new Measure(this.date, weight);
+    let measure = new Measure(this.date,  this.weight);
     this.measures.push(measure);
 
     let dataPoint = {
@@ -174,13 +169,6 @@ export class WeightMonitoringComponent {
       return undefined;
     }
 
-    const skipped = (ctx: { p0: { skip: any; }; p1: { skip: any; }; }, value: string | number[]): string | number[] | undefined => {
-      if (ctx.p0.skip || ctx.p1.skip) {
-        return value;
-      }
-      return undefined;
-    }
-
     this.data = {
       datasets: [
         {
@@ -192,8 +180,7 @@ export class WeightMonitoringComponent {
           pointHoverRadius: 10,
           borderColor: 'rgb(75, 192, 192)',
           segment: {
-            borderColor: (ctx: any) => down(ctx, 'rgb(192,75,75)') || skipped(ctx, 'rgb(0,0,0,.2)'),
-            borderDash: (ctx: any) => skipped(ctx, [6, 6]),
+            borderColor: (ctx: any) => down(ctx, 'rgb(192,75,75)')
           },
           spanGaps: true
         }

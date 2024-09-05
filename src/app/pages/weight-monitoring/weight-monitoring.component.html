@@ -38,7 +38,7 @@
     </div>
 
     <div class="field">
-      <label class="label">Poids (Mettre 0 pour sauter une mesure)</label>
+      <label class="label">Poids</label>
       <div class="control">
         <input type="number" name="weight" class="input" [ngClass]="{'is-danger': isInvalidWeight()}" [(ngModel)]="weight" step=".25" min="0" max="50" placeholder="2">
         <p *ngIf="isInvalidWeight()" class="help is-danger">Le poids doit être positif</p>
