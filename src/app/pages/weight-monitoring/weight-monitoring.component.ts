@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import Chart from 'chart.js/auto';
 import annotationPlugin from 'chartjs-plugin-annotation';
 import flatpickr from 'flatpickr';
@@ -31,7 +32,8 @@ export class WeightMonitoringComponent {
   weight: number;
 
   constructor(
-    private localStorageService: LocalStorageService
+    private localStorageService: LocalStorageService,
+    private translateService: TranslateService
   ) {
     this.APP_STORAGE_KEY = 'weight-pacha-data';
 
@@ -145,7 +147,7 @@ export class WeightMonitoringComponent {
   }
 
   private computeWeightHealthLabel(): string {
-    return `Poids santé : ${this.healthWeight} ${this.getMeasureUnitLabel()}`;
+    return `${this.translateService.instant('pages.weightMonitoring.healthyWeight')} : ${this.healthWeight} ${this.getMeasureUnitLabel()}`;
   }
 
   private loadMeasures() {
@@ -187,7 +189,7 @@ export class WeightMonitoringComponent {
     this.data = {
       datasets: [
         {
-          label: "Poids",
+          label: this.translateService.instant('pages.weightMonitoring.weight'),
           data: this.computeDataPoints(),
           cubicInterpolationMode: 'monotone',
           pointStyle: 'circle',

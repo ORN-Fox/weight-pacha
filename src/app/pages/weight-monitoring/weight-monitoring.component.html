@@ -1,6 +1,6 @@
 <div class="card highlight-card card-small">
   <img src="/assets/images/cat.png" alt="">
-  <h1 class="title">Suivi du poids</h1>
+  <h1 class="title">{{"pages.weightMonitoring.weightTracking" | translate}}</h1>
 </div>
 
 <div class="columns">
@@ -9,7 +9,7 @@
   </div>
 
   <div class="column measures">
-    <h2 class="title">Mesures</h2>
+    <h2 class="title">{{"pages.weightMonitoring.measures" | translate}}</h2>
 
     <div class="measures-container">
       <ng-container *ngFor="let measure of measures">
@@ -17,31 +17,31 @@
       </ng-container>
 
       <div *ngIf="measures?.length == 0" class="box measure-content has-text-centered">
-        <small>Ajouter une mesure pour débuter le suivi du poids</small>
+        <small>{{"pages.weightMonitoring.addMeasureToStartWeightTracking" | translate}}</small>
       </div>
     </div>
   </div>
 </div>
 
 <div class="columns">
-  <div class="column"></div>
+  <div class="column">{{"pages.weightMonitoring.date" | translate}}</div>
 
   <div class="column is-two-fifths add-measure">
-    <h2 class="title">Ajouter une mesure</h2>
+    <h2 class="title">{{"pages.weightMonitoring.addMeasure" | translate}}</h2>
 
     <div class="field">
-      <label class="label">Date</label>
+      <label class="label"></label>
       <div class="control has-icons-left">
         <input type="text" name="date" id="measureDate" class="input" [ngClass]="{'is-danger': isInvalidDate()}">
         <span class="icon is-small is-left">
           <i class="far fa-calendar"></i>
         </span>
-        <p *ngIf="isInvalidDate()" class="help is-danger">La date est invalide</p>
+        <p *ngIf="isInvalidDate()" class="help is-danger">{{"pages.weightMonitoring.invalidDate" | translate}}</p>
       </div>
     </div>
 
     <div class="field">
-      <label class="label">Poids</label>
+      <label class="label">{{"pages.weightMonitoring.weight" | translate}}</label>
       <div class="control has-icons-left has-icons-right">
         <input type="number" name="weight" class="input" [ngClass]="{'is-danger': isInvalidWeight()}" [(ngModel)]="weight" step=".25" min="0" max="50" placeholder="2">
         <span class="icon is-small is-left">
@@ -50,14 +50,14 @@
         <span class="icon is-small is-right">
           {{ getMeasureUnitLabel() }}
         </span>
-        <p *ngIf="isInvalidWeight()" class="help is-danger">Le poids doit être positif</p>
+        <p *ngIf="isInvalidWeight()" class="help is-danger">{{"pages.weightMonitoring.weightMustBePositive" | translate}}</p>
       </div>
     </div>
 
     <div class="field has-text-centered">
       <div class="control">
-        <button type="button" class="button is-primary add-measure-button" (click)="addMeasure()" [disabled]="shouldDisableAddMeasureButton()">Ajouter</button>
-        <p *ngIf="isExistingMeasureOnSelectedDate()" class="help is-danger">Une mesure existe à cette date</p>
+        <button type="button" class="button is-primary add-measure-button" (click)="addMeasure()" [disabled]="shouldDisableAddMeasureButton()">{{"pages.weightMonitoring.add" | translate}}</button>
+        <p *ngIf="isExistingMeasureOnSelectedDate()" class="help is-danger">{{"pages.weightMonitoring.measureExistsOnThisDate" | translate}}</p>
       </div>
     </div>
   </div>
@@ -65,10 +65,10 @@
   <div class="column"></div>
 
   <div class="column">
-    <h2 class="title">Paramètres</h2>
+    <h2 class="title">{{"pages.weightMonitoring.settings" | translate}}</h2>
 
     <div class="field">
-      <label class="label">Unité de poids</label>
+      <label class="label">{{"pages.weightMonitoring.weightUnit" | translate}}</label>
       <div class="radios">
         <label class="radio">
           <input type="radio" name="measureUnit" [(ngModel)]="measureUnit" (ngModelChange)="updateMeasureUnit()" [value]="0" />
@@ -82,7 +82,7 @@
     </div>
 
     <div class="field">
-      <label class="label">Poids santé</label>
+      <label class="label">{{"pages.weightMonitoring.healthyWeight" | translate}}</label>
       <div class="control has-icons-left has-icons-right">
         <input type="number" name="healthWeight" class="input" [(ngModel)]="healthWeight" (ngModelChange)="updateHealthWeigth()" step=".25" min="1" max="20" placeholder="4">
         <span class="icon is-small is-left">
@@ -91,7 +91,7 @@
         <span class="icon is-small is-right">
           {{ getMeasureUnitLabel() }}
         </span>
-        <p *ngIf="isInvalidHealthWeight()" class="help is-danger">Le poids doit être positif</p>
+        <p *ngIf="isInvalidHealthWeight()" class="help is-danger">{{"pages.weightMonitoring.weightMustBePositive" | translate}}</p>
       </div>
     </div>
   </div>

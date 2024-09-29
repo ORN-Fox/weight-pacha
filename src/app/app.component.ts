@@ -13,11 +13,10 @@ export class AppComponent {
 
   constructor(private translateService: TranslateService) {
     this.locales = ['en-US', 'fr-FR'];
-
-    this.changeLocale('fr-FR');
+    this.updateLocale('fr-FR');
   }
 
-  changeLocale(locale: string) {
+  updateLocale(locale: string) {
     this.locale = locale;
     this.translateService.use(this.locale);
   }

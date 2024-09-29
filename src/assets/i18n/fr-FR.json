@@ -1,3 +1,20 @@
 {
-    "hello": "Bonjour"
+  "languages": "Langues",
+  "pages": {
+    "weightMonitoring": {
+      "add": "Ajouter",
+      "addMeasure": "Ajouter une mesure",
+      "addMeasureToStartWeightTracking": "Ajouter une mesure pour débuter le suivi du poids",
+      "date": "Date",
+      "healthyWeight": "Poids santé",
+      "invalidDate": "La date est invalide",
+      "measureExistsOnThisDate": "Une mesure existe à cette date",
+      "measures": "Mesures",
+      "settings": "Paramètres",
+      "weight": "Poids",
+      "weightMustBePositive": "Le poids doit être positif",
+      "weightTracking": "Suivi du poids",
+      "weightUnit": "Unité de poids"
+    }
+  }
 }
