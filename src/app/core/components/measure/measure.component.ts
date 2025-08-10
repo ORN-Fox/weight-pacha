@@ -3,9 +3,10 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Measure } from '../../models/measure/measure.model';
 
 @Component({
-  selector: 'app-measure',
-  templateUrl: './measure.component.html',
-  styleUrls: ['./measure.component.scss']
+    selector: 'app-measure',
+    templateUrl: './measure.component.html',
+    styleUrls: ['./measure.component.scss'],
+    standalone: false
 })
 export class MeasureComponent {
 

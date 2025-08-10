@@ -13,9 +13,10 @@ import { UnitType } from 'src/app/core/enums/unit-type/unit-type.enum';
 import { ISerializedMeasure, Measure } from 'src/app/core/models/measure/measure.model';
 
 @Component({
-  selector: 'app-weight-monitoring',
-  templateUrl: './weight-monitoring.component.html',
-  styleUrls: ['./weight-monitoring.component.scss']
+    selector: 'app-weight-monitoring',
+    templateUrl: './weight-monitoring.component.html',
+    styleUrls: ['./weight-monitoring.component.scss'],
+    standalone: false
 })
 export class WeightMonitoringComponent {
 
