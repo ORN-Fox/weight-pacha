@@ -3,7 +3,7 @@ import { TranslateService } from '@ngx-translate/core';
 import Chart from 'chart.js/auto';
 import annotationPlugin from 'chartjs-plugin-annotation';
 import flatpickr from 'flatpickr';
-import * as moment from 'moment';
+import moment from 'moment';
 import 'chartjs-adapter-moment';
 
 import { LocalStorageService } from 'src/app/core/services/local-storage/local-storage.service';
