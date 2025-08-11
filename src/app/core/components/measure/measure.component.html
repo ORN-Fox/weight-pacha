@@ -1,7 +1,11 @@
 <div class="box measure-content">
-    <p>Date : {{ measure.date.format('DD/MM/YYYY HH:mm') }}</p>
-    <p *ngIf="measure.weigth">Poids : {{ measure.weigth }} {{ measureUnitLabel }}</p>
-    <p *ngIf="!measure.weigth">Non pesé</p>
+  <p>Date : {{ measure.date.format('DD/MM/YYYY HH:mm') }}</p>
+  @if (measure.weigth) {
+    <p>Poids : {{ measure.weigth }} {{ measureUnitLabel }}</p>
+  }
+  @if (!measure.weigth) {
+    <p>Non pesé</p>
+  }
 
-    <button type="button" class="delete" (click)="deleteMeasure()"></button>
+  <button type="button" class="delete" (click)="deleteMeasure()"></button>
 </div>

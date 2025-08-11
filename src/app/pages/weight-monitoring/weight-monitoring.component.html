@@ -12,13 +12,15 @@
     <h2 class="title">{{"pages.weightMonitoring.measures" | translate}}</h2>
 
     <div class="measures-container">
-      <ng-container *ngFor="let measure of measures">
-       <app-measure [measure]="measure" [measureUnitLabel]="getMeasureUnitLabel()" (deleteMeasureEvent)="onDeleteMeasure($event)"></app-measure>
-      </ng-container>
+      @for (measure of measures; track measure) {
+        <app-measure [measure]="measure" [measureUnitLabel]="getMeasureUnitLabel()" (deleteMeasureEvent)="onDeleteMeasure($event)"></app-measure>
+      }
 
-      <div *ngIf="measures?.length == 0" class="box measure-content has-text-centered">
-        <small>{{"pages.weightMonitoring.addMeasureToStartWeightTracking" | translate}}</small>
-      </div>
+      @if (measures.length == 0) {
+        <div class="box measure-content has-text-centered">
+          <small>{{"pages.weightMonitoring.addMeasureToStartWeightTracking" | translate}}</small>
+        </div>
+      }
     </div>
   </div>
 </div>
@@ -36,7 +38,9 @@
         <span class="icon is-small is-left">
           <i class="far fa-calendar"></i>
         </span>
-        <p *ngIf="isInvalidDate()" class="help is-danger">{{"pages.weightMonitoring.invalidDate" | translate}}</p>
+        @if (isInvalidDate()) {
+          <p class="help is-danger">{{"pages.weightMonitoring.invalidDate" | translate}}</p>
+        }
       </div>
     </div>
 
@@ -50,14 +54,18 @@
         <span class="icon is-small is-right">
           {{ getMeasureUnitLabel() }}
         </span>
-        <p *ngIf="isInvalidWeight()" class="help is-danger">{{"pages.weightMonitoring.weightMustBePositive" | translate}}</p>
+        @if (isInvalidWeight()) {
+          <p class="help is-danger">{{"pages.weightMonitoring.weightMustBePositive" | translate}}</p>
+        }
       </div>
     </div>
 
     <div class="field has-text-centered">
       <div class="control">
         <button type="button" class="button is-primary add-measure-button" (click)="addMeasure()" [disabled]="shouldDisableAddMeasureButton()">{{"pages.weightMonitoring.add" | translate}}</button>
-        <p *ngIf="isExistingMeasureOnSelectedDate()" class="help is-danger">{{"pages.weightMonitoring.measureExistsOnThisDate" | translate}}</p>
+        @if (isExistingMeasureOnSelectedDate()) {
+          <p class="help is-danger">{{"pages.weightMonitoring.measureExistsOnThisDate" | translate}}</p>
+        }
       </div>
     </div>
   </div>
@@ -91,7 +99,9 @@
         <span class="icon is-small is-right">
           {{ getMeasureUnitLabel() }}
         </span>
-        <p *ngIf="isInvalidHealthWeight()" class="help is-danger">{{"pages.weightMonitoring.weightMustBePositive" | translate}}</p>
+        @if (isInvalidHealthWeight()) {
+          <p class="help is-danger">{{"pages.weightMonitoring.weightMustBePositive" | translate}}</p>
+        }
       </div>
     </div>
   </div>
