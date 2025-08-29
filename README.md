@@ -1,6 +1,8 @@
 # MyCatApp
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.1.4.
+![Preview](./preview.jpg)
+
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.1.4. Upgrade to angular version 20
 
 ## Development server
 
