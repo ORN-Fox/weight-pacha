@@ -1,0 +1,206 @@
+<div class="card-page-title highlight-card card-small">
+    <img src="https://cdn-icons-png.flaticon.com/128/2829/2829740.png" alt="">
+    <h1 class="title">Informations</h1>
+</div>
+
+<form #f="ngForm" (ngSubmit)="saveChanges(petRecord)">
+    <div class="field is-horizontal">
+        <div class="field-label is-normal">
+            <label class="label">Prenom</label>
+        </div>
+        <div class="field-body">
+            <div class="field">
+                <div class="control is-expanded has-icons-left">
+                    <input class="input" type="text" name="firstName" [(ngModel)]="petRecord.firstName" required>
+                    <span class="icon is-small is-left">
+                        <i class="far fa-heart"></i>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="field is-horizontal">
+        <div class="field-label is-normal">
+            <label class="label">Espece</label>
+        </div>
+        <div class="field-body">
+            <div class="field">
+                <div class="control radios">
+                    <label class="radio custom-radio-with-icon" [ngClass]="{'active': petRecord.specie == 0}">
+                        <input type="radio" name="specie" [(ngModel)]="petRecord.specie" value="0" />
+                        <img src="https://cdn-icons-png.flaticon.com/32/2829/2829823.png" alt="" > Chien
+                    </label>
+                    <label class="radio custom-radio-with-icon" [ngClass]="{'active': petRecord.specie == 1}">
+                        <input type="radio" name="specie" [(ngModel)]="petRecord.specie" value="1" />
+                        <img src="https://cdn-icons-png.flaticon.com/32/2829/2829740.png" alt=""> Chat
+                    </label>
+                    <label class="radio custom-radio-with-icon" [ngClass]="{'active': petRecord.specie == 2}">
+                        <input type="radio" name="specie" [(ngModel)]="petRecord.specie" value="2" />
+                        <img src="https://cdn-icons-png.flaticon.com/32/4185/4185015.png" alt=""> Lapin
+                    </label>
+                    <label class="radio custom-radio-with-icon" [ngClass]="{'active': petRecord.specie == 3}">
+                        <input type="radio" name="specie" [(ngModel)]="petRecord.specie" value="3" />
+                        <img src="https://cdn-icons-png.flaticon.com/32/427/427487.png" alt=""> Autres
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="field is-horizontal">
+        <div class="field-label is-normal">
+            <label class="label">Race</label>
+        </div>
+        <div class="field-body">
+            <div class="field">
+                <div class="control is-expanded has-icons-left">
+                    <input class="input" type="text" name="breed" [(ngModel)]="petRecord.breed">
+                    <span class="icon is-small is-left">
+                        <i class="far fa-quote-right"></i>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="field is-horizontal">
+        <div class="field-label is-normal">
+            <label class="label">Couleur</label>
+        </div>
+        <div class="field-body">
+            <div class="field">
+                <div class="control is-expanded has-icons-left">
+                    <input class="input" type="text" name="color" [(ngModel)]="petRecord.color">
+                    <span class="icon is-small is-left">
+                        <i class="far fa-palette"></i>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="field is-horizontal">
+        <div class="field-label">
+            <label class="label">Sexe</label>
+        </div>
+        <div class="field-body">
+            <div class="field">
+                <div class="control radios">
+                    <label class="radio custom-radio-with-icon" [ngClass]="{'active': petRecord.sex == 0}">
+                        <input type="radio" name="sex" [(ngModel)]="petRecord.sex" value="0">
+                        <img src="https://cdn-icons-png.flaticon.com/32/2404/2404482.png" alt=""> Femelle
+                    </label>
+                    <label class="radio custom-radio-with-icon" [ngClass]="{'active': petRecord.sex == 1}">
+                        <input type="radio" name="sex" [(ngModel)]="petRecord.sex" value="1">
+                        <img src="https://cdn-icons-png.flaticon.com/32/9220/9220623.png" alt=""> Male
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="field is-horizontal">
+        <div class="field-label is-normal">
+            <label class="label">Date de naissance</label>
+        </div>
+        <div class="field-body">
+            <div class="field">
+                <div class="control is-expanded has-icons-left">
+                    <input id="birthDateInput" class="input" type="text" name="birthDate" [(ngModel)]="petRecord.birthDate">
+                    <span class="icon is-small is-left">
+                        <i class="far fa-calendar"></i>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="field is-horizontal">
+        <div class="field-label is-normal">
+            <label class="label">Date d'adoption</label>
+        </div>
+        <div class="field-body">
+            <div class="field">
+                <div class="control is-expanded has-icons-left">
+                    <input id="adoptedDateInput" class="input" type="text" name="adoptedDate" [(ngModel)]="petRecord.adoptedDate">
+                    <span class="icon is-small is-left">
+                        <i class="far fa-calendar"></i>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="field is-horizontal">
+        <div class="field-label">
+            <label class="label">Sterilize ?</label>
+        </div>
+        <div class="field-body">
+            <div class="field">
+                <div class="control radios">
+                    <label class="radio">
+                        <input type="checkbox" name="sterilize" [(ngModel)]="petRecord.sterilise">
+                        Oui
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="field is-horizontal">
+        <div class="field-label is-normal">
+            <label class="label">N' Micropuce / Tatouage</label>
+        </div>
+        <div class="field-body">
+            <div class="field">
+                <div class="control is-expanded has-icons-left">
+                    <input class="input" type="text" name="tagNumber" [(ngModel)]="petRecord.tagNumber">
+                    <span class="icon is-small is-left">
+                        <i class="far fa-tag"></i>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="field is-horizontal">
+        <div class="field-label is-normal">
+            <label class="label">N' Medaille de Rage</label>
+        </div>
+        <div class="field-body">
+            <div class="field">
+                <div class="control is-expanded has-icons-left">
+                    <input class="input" type="text" name="tagRageNumber" [(ngModel)]="petRecord.tagRageNumber">
+                    <span class="icon is-small is-left">
+                        <i class="far fa-tag"></i>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="field is-horizontal">
+        <div class="field-label is-normal">
+            <label class="label">Description</label>
+        </div>
+        <div class="field-body">
+            <div class="field">
+                <div class="control">
+                    <textarea class="textarea" name="description" [(ngModel)]="petRecord.description" rows="4" placeholder="Quelques lignes sur votre animal (details importants, allergies, preferences, etc...)"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="field is-horizontal">
+        <div class="field-label"></div>
+        <div class="field-body">
+            <div class="field">
+                <div class="control">
+                    <button type="submit" class="button is-primary">Enregistrer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

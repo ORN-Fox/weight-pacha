@@ -1,0 +1,20 @@
+.custom-radio-with-icon {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    padding: .5rem 2rem;
+    border: 1px solid #d6d9e0;
+    border-radius: 0.375rem;
+
+    &:hover, &.active {
+        border-color: #4258ff;
+    }
+
+    input {
+        visibility: hidden;
+    }
+
+    img {
+        margin-bottom: .5rem;
+    }
+}
