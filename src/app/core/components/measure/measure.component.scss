@@ -2,9 +2,18 @@
     position: relative;
     margin: .5rem;
 
-    .delete {
+    &:hover .actions {
+        display: block;
+    }
+
+    .actions {
+        display: none;
         position: absolute;
         top: .5rem;
         right: .5rem;
+    }
+
+    .delete:hover {
+        background-color: #ff0000cc;
     }
 }
