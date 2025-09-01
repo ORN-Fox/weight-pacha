@@ -1,3 +1,44 @@
 /* You can add global styles to this file, and also import other style files */
 @import 'bulma/css/versions/bulma-no-dark-mode.css';
 @import url('https://cdn.jsdelivr.net/gh/hung1001/font-awesome-pro@4cac1a6/css/all.css');
+
+.card-page-title {
+    all: unset;
+    border-radius: 4px;
+    border: 1px solid #eee;
+    background-color: #fafafa;
+    height: 40px;
+    width: 200px;
+    margin: 0 8px 16px;
+    padding: 16px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    transition: all .2s ease-in-out;
+    line-height: 24px;
+
+    &.highlight-card {
+        background-color: #1976d2;
+        color: white;
+        font-weight: 600;
+        border: none;
+        width: auto;
+        min-width: 30%;
+        position: relative;
+        margin: 3rem 0;
+
+        span {
+            margin-left: 60px;
+        }
+
+        img {
+            height: 8rem;
+        }
+
+        .title {
+            color: white;
+            margin: 0;
+        }
+    }
+}

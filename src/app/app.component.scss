@@ -15,43 +15,10 @@ p {
   margin: 0;
 }
 
-.spacer {
-  flex: 1;
+svg#clouds {
+  position: fixed;
+  bottom: -160px;
+  left: -230px;
+  z-index: -10;
+  width: 1920px;
 }
-
-.toolbar {
-  height: 60px;
-  display: flex;
-  align-items: center;
-  background-color: #1976d2;
-  color: white;
-  font-weight: 600;
-  margin-bottom: 2rem;
-
-  img {
-    margin: 0 16px;
-  }
-
-  .github-icon {
-    fill: white;
-    margin: 0 16px;
-
-    &:hover {
-      fill: #e2e2e2;
-    }
-  }
-
-  .dropdown-languages {
-    .dropdown-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-around;
-
-      img {
-        margin: 0;
-        width: 2rem;
-      }
-    }
-  }
-}
-

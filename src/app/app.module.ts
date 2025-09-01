@@ -12,20 +12,27 @@ import { AppComponent } from './app.component';
 import { MeasureComponent } from './core/components/measure/measure.component';
 
 // Pages
+import { HomeComponent } from './pages/home/home.component';
+import { InformationsComponent } from './pages/informations/informations.component';
 import { WeightMonitoringComponent } from './pages/weight-monitoring/weight-monitoring.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
 }
 
-@NgModule({ declarations: [
+@NgModule({ 
+    declarations: [
         AppComponent,
         // Components
         MeasureComponent,
         // Pages
+        HomeComponent,
+        InformationsComponent,
         WeightMonitoringComponent
     ],
-    bootstrap: [AppComponent], imports: [BrowserModule,
+    bootstrap: [AppComponent], 
+    imports: [
+        BrowserModule,
         FormsModule,
         TranslateModule.forRoot({
             loader: {
@@ -34,5 +41,10 @@ export function HttpLoaderFactory(http: HttpClient) {
                 deps: [HttpClient]
             }
         }),
-        AppRoutingModule], providers: [provideHttpClient(withInterceptorsFromDi())] })
+        AppRoutingModule
+    ],
+    providers: [
+        provideHttpClient(withInterceptorsFromDi())
+    ]
+})
 export class AppModule { }
