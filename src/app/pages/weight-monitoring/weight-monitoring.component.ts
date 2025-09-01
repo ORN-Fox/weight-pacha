@@ -2,9 +2,11 @@ import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import Chart from 'chart.js/auto';
 import annotationPlugin from 'chartjs-plugin-annotation';
-import flatpickr from 'flatpickr';
-import moment from 'moment';
 import 'chartjs-adapter-moment';
+import flatpickr from 'flatpickr';
+import { Instance } from 'flatpickr/dist/types/instance';
+import moment from 'moment';
+import { cloneDeep } from 'lodash';
 
 import { LocalStorageService } from 'src/app/core/services/local-storage/local-storage.service';
 
@@ -25,9 +27,12 @@ export class WeightMonitoringComponent {
   chart: any;
   data: any;
 
+  sourceMeasures: Measure[];
   measures: Measure[];
   measureUnit: UnitType;
   healthWeight: number;
+
+  rangeDateInputInstance: Instance;
 
   date: moment.Moment;
   weight: number;
@@ -36,11 +41,14 @@ export class WeightMonitoringComponent {
     private localStorageService: LocalStorageService,
     private translateService: TranslateService
   ) {
-    this.APP_STORAGE_KEY = 'weight-pacha-data';
+    this.APP_STORAGE_KEY = 'weight-pacha-data-measures';
 
+    this.sourceMeasures = [];
     this.measures = [];
     this.measureUnit = UnitType.Kg;
     this.healthWeight = 4;
+
+    this.rangeDateInputInstance = new Object() as Instance;
 
     this.date = moment();
     this.weight = 4;
@@ -51,7 +59,16 @@ export class WeightMonitoringComponent {
   }
 
   ngAfterViewInit() {
-    flatpickr('#measureDate', {
+    this.rangeDateInputInstance = flatpickr('#rangeDatesInput', {
+      mode: "range",
+      dateFormat: 'Y-m-d',
+      defaultDate: this.getRangeDates(),
+      onChange: (selectedDates: Date[]) => {
+        this.onChangeRangeDates(selectedDates);
+      }
+    }) as Instance;
+
+    flatpickr('#measureDateInput', {
       enableTime: true,
       dateFormat: 'Y-m-d H:i',
       defaultDate: this.date.toDate(),
@@ -66,6 +83,14 @@ export class WeightMonitoringComponent {
     );
   }
 
+  onChangeRangeDates(selectedDates: Date[]) {
+    if (selectedDates.length > 1) {
+      this.measures = this.sourceMeasures.filter((measure) => measure.date.isBetween(selectedDates[0], selectedDates[1], 'day', '[]'));
+      this.chart.data.datasets[0].data = this.computeDataPoints();
+      this.updateChart();
+    }
+  }
+
   getMeasureUnitLabel(): string {
     switch(this.measureUnit) {
       case UnitType.Kg:
@@ -75,6 +100,41 @@ export class WeightMonitoringComponent {
     }
   }
 
+  getRangeDates(): Date[] {
+    let today = moment();
+    let oldestDate = today.clone();
+    let latestDate = today.clone();
+
+    if (this.sourceMeasures.length > 0) {
+
+      this.sourceMeasures.forEach((measure) => {
+        if (measure.date.isBefore(oldestDate, 'day')) {
+          oldestDate = measure.date.clone();
+        }
+
+        if (measure.date.isAfter(latestDate, 'day')) {
+          latestDate = measure.date.clone();
+        }
+      });
+
+      return [
+        oldestDate.toDate(),
+        latestDate.toDate()
+      ];
+    }
+
+    return [
+      oldestDate.subtract(1, 'month').toDate(),
+      latestDate.add(1, 'month').toDate()
+    ];
+  }
+
+  updateRangeDates() {
+    let rangeDates = this.getRangeDates();
+    this.rangeDateInputInstance.setDate(rangeDates);
+    this.onChangeRangeDates(rangeDates);
+  }
+
   isInvalidDate(): boolean {
     if (this.date) {
       return !moment(this.date).isValid();
@@ -82,12 +142,8 @@ export class WeightMonitoringComponent {
     return false;
   }
 
-  isInvalidWeight(): boolean {
-    return this.weight <= 0;
-  }
-
-  isInvalidHealthWeight(): boolean {
-    return this.healthWeight <= 0;
+  isInvalidWeight(weight: number): boolean {
+    return weight <= 0;
   }
 
   isExistingMeasureOnSelectedDate(): boolean {
@@ -95,11 +151,12 @@ export class WeightMonitoringComponent {
   }
 
   shouldDisableAddMeasureButton(): boolean {
-    return this.isInvalidWeight() || this.isExistingMeasureOnSelectedDate();
+    return this.isInvalidWeight(this.weight) || this.isExistingMeasureOnSelectedDate();
   }
 
   addMeasure() {
     let measure = new Measure(this.date,  this.weight);
+    this.sourceMeasures.push(measure);
     this.measures.push(measure);
 
     let dataPoint = {
@@ -107,20 +164,21 @@ export class WeightMonitoringComponent {
       y: measure.weigth
     };
 
-    this.weight = 0;
     this.saveMeasures();
 
     this.chart.data.datasets[0].data.push(dataPoint);
-    this.updateChart();
+    this.updateRangeDates();
   }
 
   onDeleteMeasure(event: { measure: Measure }) {
-    this.measures = this.measures.filter(measure => !measure.date.isSame(event.measure.date, 'day'));
+    let rangeDates = this.getRangeDates();
 
+    this.sourceMeasures = this.sourceMeasures.filter(measure => !measure.date.isSame(event.measure.date, 'day'));
+    this.measures = this.sourceMeasures.filter((measure) => measure.date.isBetween(rangeDates[0], rangeDates[1], 'day', '[]'))
     this.saveMeasures();
 
     this.chart.data.datasets[0].data = this.chart.data.datasets[0].data.filter((dataPoint: { x: moment.MomentInput, y: number }) => !moment(dataPoint.x).isSame(event.measure.date, 'day'));
-    this.updateChart();
+    this.updateRangeDates();
   }
 
   updateMeasureUnit() {
@@ -132,7 +190,7 @@ export class WeightMonitoringComponent {
   }
 
   updateHealthWeigth() {
-    if (this.isInvalidHealthWeight()) {
+    if (this.isInvalidWeight(this.healthWeight)) {
       return;
     }
 
@@ -161,8 +219,9 @@ export class WeightMonitoringComponent {
       measuresJSON.measures.forEach((measureJSON: ISerializedMeasure) => {
         let measure = new Measure(moment(), null);
         measure.deserilizeFromSave(measureJSON);
-        this.measures.push(measure);
+        this.sourceMeasures.push(measure);
       });
+      this.measures = cloneDeep(this.sourceMeasures);
     } else {
       this.localStorageService.setItem(this.APP_STORAGE_KEY, { healthWeight: this.healthWeight, measureUnit: this.measureUnit, measures: [] });
     }
@@ -172,7 +231,7 @@ export class WeightMonitoringComponent {
 
   private saveMeasures() {
     let serializedMeasures: ISerializedMeasure[] = [];
-    this.measures.forEach(measure => {
+    this.sourceMeasures.forEach(measure => {
       serializedMeasures.push(measure.serializeForSave());
     });
 
@@ -219,24 +278,39 @@ export class WeightMonitoringComponent {
     return dataPoints;
   };
 
-  private getSuggestedMax(): number {
+  private getSuggestedMin(): number {
+    let min = 999999;
     if (this.data) {
-      let max = 0;
-      let suggestedMaxGap = .5;
+      let suggestedMinGap = .25;
+      this.data.datasets[0].data.forEach((dataPoint: { x: moment.Moment, y: number }) => {
+        if (dataPoint.y < min) {
+          min = dataPoint.y;
+        }
+      });
+      min -= suggestedMinGap;
+    }
+    return min;
+  }
+
+  private getSuggestedMax(): number {
+    let max = 0;
+    if (this.data) {
+      let suggestedMaxGap = .25;
       this.data.datasets[0].data.forEach((dataPoint: { x: moment.Moment, y: number }) => {
         if (dataPoint.y > max) {
           max = dataPoint.y;
         }
       });
-      return max + suggestedMaxGap;
+      max += suggestedMaxGap;
     }
-    return 5;
+    return max;
   }
 
   private getChartConfig(): any {
     const config = {
       type: 'line',
       data: this.data,
+      locale: 'fr-FR',
       options: {
         scales: {
           x: {
@@ -246,15 +320,15 @@ export class WeightMonitoringComponent {
             },
             title: {
               display: true,
-              text: 'Date'
+              text: this.translateService.instant('pages.weightMonitoring.date')
             }
           },
           y: {
             title: {
               display: true,
-              text: 'Poids'
+              text: this.translateService.instant('pages.weightMonitoring.weight')
             },
-            suggestedMin: 0,
+            suggestedMin: this.getSuggestedMin(),
             suggestedMax: this.getSuggestedMax()
           }
         },
@@ -293,3 +367,4 @@ export class WeightMonitoringComponent {
   }
 
 }
+
