@@ -26,7 +26,6 @@ export class InformationsComponent implements AfterViewInit {
   ) {
     this.APP_STORAGE_KEY = 'weight-pacha-data-pet-record';
     this.loadPetRecord();
-    this.initForm();
   }
 
   ngAfterViewInit() {
@@ -80,6 +79,8 @@ export class InformationsComponent implements AfterViewInit {
       const serializedPetRecord = this.petRecord.serializeForSave();
       this.localStorageService.setItem(this.APP_STORAGE_KEY, { petRecord: serializedPetRecord });
     }
+
+    this.initForm();
   }
 
   saveChanges() {
