@@ -3,7 +3,7 @@
     <h1 class="title">Informations</h1>
 </div>
 
-<form #f="ngForm" (ngSubmit)="saveChanges(petRecord)">
+<form [formGroup]="petForm" (ngSubmit)="saveChanges()">
     <div class="field is-horizontal">
         <div class="field-label is-normal">
             <label class="label">Prenom</label>
@@ -11,11 +11,15 @@
         <div class="field-body">
             <div class="field">
                 <div class="control is-expanded has-icons-left">
-                    <input class="input" type="text" name="firstName" [(ngModel)]="petRecord.firstName" required>
+                    <input class="input" type="text" formControlName="firstName"
+                           [ngClass]="{'is-danger': petForm.get('firstName')?.errors?.['required'] && petForm.get('firstName')?.touched}">
                     <span class="icon is-small is-left">
                         <i class="far fa-heart"></i>
                     </span>
                 </div>
+                <p class="help is-danger" *ngIf="petForm.get('firstName')?.errors?.['required'] && petForm.get('firstName')?.touched">
+                    Le prénom est requis
+                </p>
             </div>
         </div>
     </div>
@@ -27,20 +31,20 @@
         <div class="field-body">
             <div class="field">
                 <div class="control radios">
-                    <label class="radio custom-radio-with-icon" [ngClass]="{'active': petRecord.specie == 0}">
-                        <input type="radio" name="specie" [(ngModel)]="petRecord.specie" value="0" />
+                    <label class="radio custom-radio-with-icon" [ngClass]="{'active': petForm.get('specie')?.value == 0}">
+                        <input type="radio" formControlName="specie" value="0" />
                         <img src="https://cdn-icons-png.flaticon.com/32/2829/2829823.png" alt="" > Chien
                     </label>
-                    <label class="radio custom-radio-with-icon" [ngClass]="{'active': petRecord.specie == 1}">
-                        <input type="radio" name="specie" [(ngModel)]="petRecord.specie" value="1" />
+                    <label class="radio custom-radio-with-icon" [ngClass]="{'active': petForm.get('specie')?.value == 1}">
+                        <input type="radio" formControlName="specie" value="1" />
                         <img src="https://cdn-icons-png.flaticon.com/32/2829/2829740.png" alt=""> Chat
                     </label>
-                    <label class="radio custom-radio-with-icon" [ngClass]="{'active': petRecord.specie == 2}">
-                        <input type="radio" name="specie" [(ngModel)]="petRecord.specie" value="2" />
+                    <label class="radio custom-radio-with-icon" [ngClass]="{'active': petForm.get('specie')?.value == 2}">
+                        <input type="radio" formControlName="specie" value="2" />
                         <img src="https://cdn-icons-png.flaticon.com/32/4185/4185015.png" alt=""> Lapin
                     </label>
-                    <label class="radio custom-radio-with-icon" [ngClass]="{'active': petRecord.specie == 3}">
-                        <input type="radio" name="specie" [(ngModel)]="petRecord.specie" value="3" />
+                    <label class="radio custom-radio-with-icon" [ngClass]="{'active': petForm.get('specie')?.value == 3}">
+                        <input type="radio" formControlName="specie" value="3" />
                         <img src="https://cdn-icons-png.flaticon.com/32/427/427487.png" alt=""> Autres
                     </label>
                 </div>
@@ -55,7 +59,7 @@
         <div class="field-body">
             <div class="field">
                 <div class="control is-expanded has-icons-left">
-                    <input class="input" type="text" name="breed" [(ngModel)]="petRecord.breed">
+                    <input class="input" type="text" formControlName="breed">
                     <span class="icon is-small is-left">
                         <i class="far fa-quote-right"></i>
                     </span>
@@ -71,7 +75,7 @@
         <div class="field-body">
             <div class="field">
                 <div class="control is-expanded has-icons-left">
-                    <input class="input" type="text" name="color" [(ngModel)]="petRecord.color">
+                    <input class="input" type="text" formControlName="color">
                     <span class="icon is-small is-left">
                         <i class="far fa-palette"></i>
                     </span>
@@ -87,12 +91,12 @@
         <div class="field-body">
             <div class="field">
                 <div class="control radios">
-                    <label class="radio custom-radio-with-icon" [ngClass]="{'active': petRecord.sex == 0}">
-                        <input type="radio" name="sex" [(ngModel)]="petRecord.sex" value="0">
+                    <label class="radio custom-radio-with-icon" [ngClass]="{'active': petForm.get('sex')?.value == 0}">
+                        <input type="radio" formControlName="sex" value="0">
                         <img src="https://cdn-icons-png.flaticon.com/32/2404/2404482.png" alt=""> Femelle
                     </label>
-                    <label class="radio custom-radio-with-icon" [ngClass]="{'active': petRecord.sex == 1}">
-                        <input type="radio" name="sex" [(ngModel)]="petRecord.sex" value="1">
+                    <label class="radio custom-radio-with-icon" [ngClass]="{'active': petForm.get('sex')?.value == 1}">
+                        <input type="radio" formControlName="sex" value="1">
                         <img src="https://cdn-icons-png.flaticon.com/32/9220/9220623.png" alt=""> Male
                     </label>
                 </div>
@@ -107,7 +111,7 @@
         <div class="field-body">
             <div class="field">
                 <div class="control is-expanded has-icons-left">
-                    <input id="birthDateInput" class="input" type="text" name="birthDate" [(ngModel)]="petRecord.birthDate">
+                    <input id="birthDateInput" class="input" type="text" formControlName="birthDate">
                     <span class="icon is-small is-left">
                         <i class="far fa-calendar"></i>
                     </span>
@@ -123,7 +127,7 @@
         <div class="field-body">
             <div class="field">
                 <div class="control is-expanded has-icons-left">
-                    <input id="adoptedDateInput" class="input" type="text" name="adoptedDate" [(ngModel)]="petRecord.adoptedDate">
+                    <input id="adoptedDateInput" class="input" type="text" formControlName="adoptedDate">
                     <span class="icon is-small is-left">
                         <i class="far fa-calendar"></i>
                     </span>
@@ -138,12 +142,11 @@
         </div>
         <div class="field-body">
             <div class="field">
-                <div class="control radios">
-                    <label class="radio">
-                        <input type="checkbox" name="sterilize" [(ngModel)]="petRecord.sterilise">
-                        Oui
-                    </label>
-                </div>
+                <label class="switch is-outlined">
+                    <input type="checkbox" formControlName="sterilise">
+                    <span class="check"></span>
+                    <span class="control-label">{{petForm.get('sterilise')?.value == true ? 'Oui' : 'Non'}}</span>
+                </label>
             </div>
         </div>
     </div>
@@ -155,7 +158,7 @@
         <div class="field-body">
             <div class="field">
                 <div class="control is-expanded has-icons-left">
-                    <input class="input" type="text" name="tagNumber" [(ngModel)]="petRecord.tagNumber">
+                    <input class="input" type="text" formControlName="tagNumber">
                     <span class="icon is-small is-left">
                         <i class="far fa-tag"></i>
                     </span>
@@ -171,7 +174,7 @@
         <div class="field-body">
             <div class="field">
                 <div class="control is-expanded has-icons-left">
-                    <input class="input" type="text" name="tagRageNumber" [(ngModel)]="petRecord.tagRageNumber">
+                    <input class="input" type="text" formControlName="tagRageNumber">
                     <span class="icon is-small is-left">
                         <i class="far fa-tag"></i>
                     </span>
@@ -187,7 +190,9 @@
         <div class="field-body">
             <div class="field">
                 <div class="control">
-                    <textarea class="textarea" name="description" [(ngModel)]="petRecord.description" rows="4" placeholder="Quelques lignes sur votre animal (details importants, allergies, preferences, etc...)"></textarea>
+                    <textarea class="textarea" formControlName="description" rows="4" 
+                              placeholder="Quelques lignes sur votre animal (details importants, allergies, preferences, etc...)">
+                    </textarea>
                 </div>
             </div>
         </div>
