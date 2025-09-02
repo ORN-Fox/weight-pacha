@@ -1,5 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
-@import 'bulma/css/versions/bulma-no-dark-mode.css';
+@import "../node_modules/bulma";
+@import "../node_modules/bulma-switch-control";
+
 @import url('https://cdn.jsdelivr.net/gh/hung1001/font-awesome-pro@4cac1a6/css/all.css');
 
 .card-page-title {
