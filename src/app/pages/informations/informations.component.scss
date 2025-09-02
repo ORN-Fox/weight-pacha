@@ -14,7 +14,19 @@
         visibility: hidden;
     }
 
-    img {
+    img, .far {
         margin-bottom: .5rem;
     }
+}
+
+.radio-female, .radio-male {
+    text-align: center;
+}
+
+.radio-female .far {
+    color: #e86ada;
+}
+
+.radio-male .far {
+    color: #82c9f4;
 }

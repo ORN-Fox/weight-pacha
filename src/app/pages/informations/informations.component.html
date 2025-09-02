@@ -91,13 +91,13 @@
         <div class="field-body">
             <div class="field">
                 <div class="control radios">
-                    <label class="radio custom-radio-with-icon" [ngClass]="{'active': petForm.get('sex')?.value == 0}">
+                    <label class="radio custom-radio-with-icon radio-female" [ngClass]="{'active': petForm.get('sex')?.value == 0}">
                         <input type="radio" formControlName="sex" value="0">
-                        <img src="https://cdn-icons-png.flaticon.com/32/2404/2404482.png" alt=""> Femelle
+                        <i class="far fa-venus fa-2x"></i> Femelle
                     </label>
-                    <label class="radio custom-radio-with-icon" [ngClass]="{'active': petForm.get('sex')?.value == 1}">
+                    <label class="radio custom-radio-with-icon radio-male" [ngClass]="{'active': petForm.get('sex')?.value == 1}">
                         <input type="radio" formControlName="sex" value="1">
-                        <img src="https://cdn-icons-png.flaticon.com/32/9220/9220623.png" alt=""> Male
+                        <i class="far fa-mars fa-2x"></i> Male
                     </label>
                 </div>
             </div>
