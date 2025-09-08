@@ -14,7 +14,10 @@ import { MeasureComponent } from './core/components/measure/measure.component';
 // Pages
 import { HomeComponent } from './pages/home/home.component';
 import { InformationsComponent } from './pages/informations/informations.component';
+import { NotesComponent } from './pages/notes/notes.component';
+import { VaccinesComponent } from './pages/vaccines/vaccines.component';
 import { WeightMonitoringComponent } from './pages/weight-monitoring/weight-monitoring.component';
+import { SettingsComponent } from './pages/settings/settings.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -28,7 +31,10 @@ export function HttpLoaderFactory(http: HttpClient) {
         // Pages
         HomeComponent,
         InformationsComponent,
-        WeightMonitoringComponent
+        NotesComponent,
+        VaccinesComponent,
+        WeightMonitoringComponent,
+        SettingsComponent
     ],
     bootstrap: [AppComponent], 
     imports: [
