@@ -12,15 +12,25 @@ export class LocalStorageService {
   }
 
   getItem(key: string): any | null {
-    let result = localStorage.getItem(key);
-    if (result) {
-      return JSON.parse(result);
+    let fallbackValue = null;
+
+    try { 
+      let result = localStorage.getItem(key);
+      if (result) {
+        return JSON.parse(result);
+      }
+      return fallbackValue;
+    } catch(e) {
+      return fallbackValue;
     }
-    return null;
   }
 
   setItem(key: string, data: object) {
-    localStorage.setItem(key, JSON.stringify(data));
+    try {
+      localStorage.setItem(key, JSON.stringify(data));
+    } catch(e) {
+      console.error('Unable to set item in local storage', key);
+    }
   }
 
 }
