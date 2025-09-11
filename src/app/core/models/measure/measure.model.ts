@@ -1,32 +1,46 @@
 import moment from "moment";
 
-export interface ISerializedMeasure {
+import { DateService } from '../../services/date/date.service';
+
+import { ISerializeModel, SerializeModel } from '../serialize.model';
+
+export interface ISerializedMeasure extends ISerializeModel {
     date: string,
-    weight: number | null;
+    weight: number;
 }
 
-export class Measure {
+export class Measure extends SerializeModel {
 
     date: moment.Moment;
-    weigth: number | null;
+    weigth: number;
 
-    constructor(date: moment.Moment, weigth: number | null) {
+    constructor(date: moment.Moment, weigth: number) {
+        super();
+
         this.date = date;
         this.weigth = weigth;
     }
 
-    serializeForSave(): ISerializedMeasure {
-        let serializeMeasure: ISerializedMeasure = {
-          date: this.date.toISOString(),
-          weight: this.weigth
+    override serializeForSave(): ISerializedMeasure {
+        let serializeFields = {
+            date: DateService.getStringDateFromMoment(this.date) as string,
+            weight: this.weigth
         };
+
+        let serializeMeasure: ISerializedMeasure = Object.assign(serializeFields, super.serializeForSave());
 
         return serializeMeasure;
     }
 
-    deserilizeFromSave(serializeMeasure: ISerializedMeasure) {
-        this.date = moment(serializeMeasure.date);
-        this.weigth = serializeMeasure.weight;
+    override deserilizeFromSave(serializeMeasure: ISerializedMeasure) {
+        try {
+            super.deserilizeFromSave(serializeMeasure);
+            
+            this.date = DateService.getMomentFromStringDate(serializeMeasure.date) as moment.Moment;
+            this.weigth = serializeMeasure.weight;
+        } catch (exception) {
+            console.error('Exception on deserialize measure model', exception);
+        }
     }
 
 }
