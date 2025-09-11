@@ -15,10 +15,10 @@ import { UnitType } from 'src/app/core/enums/unit-type/unit-type.enum';
 import { ISerializedMeasure, Measure } from 'src/app/core/models/measure/measure.model';
 
 @Component({
-    selector: 'app-weight-monitoring',
-    templateUrl: './weight-monitoring.component.html',
-    styleUrls: ['./weight-monitoring.component.scss'],
-    standalone: false
+  selector: 'app-weight-monitoring',
+  templateUrl: './weight-monitoring.component.html',
+  styleUrls: ['./weight-monitoring.component.scss'],
+  standalone: false
 })
 export class WeightMonitoringComponent {
 
@@ -168,6 +168,22 @@ export class WeightMonitoringComponent {
 
     this.chart.data.datasets[0].data.push(dataPoint);
     this.updateRangeDates();
+    
+  }
+
+  onUpdateMeasure(event: { measure: Measure }) {
+    let rangeDates = this.getRangeDates();
+
+    const index = this.sourceMeasures.findIndex(measure => measure.id === event.measure.id);
+    if (index !== -1) {
+      this.sourceMeasures[index] = event.measure;
+    }
+
+    this.measures = this.sourceMeasures.filter((measure) => measure.date.isBetween(rangeDates[0], rangeDates[1], 'day', '[]'))
+    this.saveMeasures();
+
+    this.chart.data.datasets[0].data = this.chart.data.datasets[0].data.filter((dataPoint: { x: moment.MomentInput, y: number }) => !moment(dataPoint.x).isSame(event.measure.date, 'day'));
+    this.updateRangeDates();
   }
 
   onDeleteMeasure(event: { measure: Measure }) {
@@ -217,13 +233,13 @@ export class WeightMonitoringComponent {
       this.measureUnit = measuresJSON.measureUnit;
 
       measuresJSON.measures.forEach((measureJSON: ISerializedMeasure) => {
-        let measure = new Measure(moment(), null);
+        let measure = new Measure(moment(), 0);
         measure.deserilizeFromSave(measureJSON);
         this.sourceMeasures.push(measure);
       });
       this.measures = cloneDeep(this.sourceMeasures);
     } else {
-      this.localStorageService.setItem(this.APP_STORAGE_KEY, { healthWeight: this.healthWeight, measureUnit: this.measureUnit, measures: [] });
+      this.localStorageService.setItem(this.APP_STORAGE_KEY, { healthWeight: this.healthWeight, measureUnit: this.measureUnit, measures: this.sourceMeasures });
     }
 
     this.initChartData();

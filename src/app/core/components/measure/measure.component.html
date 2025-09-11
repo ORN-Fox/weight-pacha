@@ -1,13 +1,64 @@
 <div class="box measure-content">
-  <p>Date : {{ measure.date.format('DD/MM/YYYY HH:mm') }}</p>
-  @if (measure.weigth) {
-    <p>Poids : {{ measure.weigth }} {{ measureUnitLabel }}</p>
-  }
-  @if (!measure.weigth) {
-    <p>Non pesé</p>
+  @if (editMode) {
+    <div>
+      <div class="add-measure">
+        <div class="field">
+          <label class="label">{{ "pages.weightMonitoring.date" | translate }}</label>
+          <div class="control has-icons-left">
+            <input type="text" name="measureDate" id="measureDateInput_{{ measure.id }}" class="input"
+              [ngClass]="{'is-danger': isInvalidDate()}">
+            <span class="icon is-small is-left">
+              <i class="far fa-calendar"></i>
+            </span>
+            @if (isInvalidDate()) {
+              <p class="help is-danger">{{ "pages.weightMonitoring.invalidDate" | translate }}</p>
+            }
+          </div>
+        </div>
+    
+        <div class="field">
+          <label class="label">{{ "pages.weightMonitoring.weight" | translate }}</label>
+          <div class="control has-icons-left has-icons-right">
+            <input type="number" name="weight" class="input" [ngClass]="{'is-danger': isInvalidWeight(measure.weigth)}"
+              [(ngModel)]="measure.weigth" step="any" min="0" placeholder="2">
+            <span class="icon is-small is-left">
+              <i class="far fa-weight-hanging"></i>
+            </span>
+            <span class="icon is-small is-right">
+              {{ measureUnitLabel }}
+            </span>
+            @if (isInvalidWeight(measure.weigth)) {
+              <p class="help is-danger">{{ "pages.weightMonitoring.weightMustBePositive" | translate }}</p>
+            }
+          </div>
+        </div>
+    
+        <div class="field has-text-centered">
+          <div class="control">
+            <button type="button" class="button is-primary add-measure-button" (click)="saveMeasure()"
+              [disabled]="shouldDisableAddMeasureButton()">{{ "pages.commons.actions.save" | translate }}</button>
+              @if (isExistingMeasureOnSelectedDate()) {
+                <p class="help is-danger">{{ "pages.weightMonitoring.measureExistsOnThisDate" | translate }}</p>
+              }
+          </div>
+        </div>
+      </div>
+    </div>
+  } @else {
+    <div>
+      <p>Date : {{ measure.date.format('DD/MM/YYYY HH:mm') }}</p>
+      @if (measure.weigth) {
+        <p>Poids : {{ measure.weigth }} {{ measureUnitLabel }} ({{ getDiffWithPreviousMeasure() }} {{ measureUnitLabel }}) </p>
+      } @else {
+        <p>Non pesé</p>
+      }
+    </div>
   }
 
   <div class="actions">
+    <button type="button" class="edit" (click)="updateMeasure()">
+      <i class="far fa-pencil-alt fa-lg"></i>
+    </button>
     <button type="button" class="delete" (click)="deleteMeasure()"></button>
   </div>
 </div>

@@ -11,6 +11,10 @@
         position: absolute;
         top: .5rem;
         right: .5rem;
+
+        button {
+            margin: 0 .25rem;
+        }
     }
 
     .delete:hover {

@@ -13,7 +13,13 @@
 
     <div class="measures-container">
       @for (measure of measures; track measure) {
-        <app-measure [measure]="measure" [measureUnitLabel]="getMeasureUnitLabel()" (deleteMeasureEvent)="onDeleteMeasure($event)"></app-measure>
+        <app-measure 
+          [measures]="measures"
+          [measure]="measure" 
+          [measureUnitLabel]="getMeasureUnitLabel()" 
+          (updateMeasureEvent)="onUpdateMeasure($event)"
+          (deleteMeasureEvent)="onDeleteMeasure($event)"
+        />
       }
 
       @if (measures.length == 0) {
@@ -62,7 +68,7 @@
 
     <div class="field has-text-centered">
       <div class="control">
-        <button type="button" class="button is-primary add-measure-button" (click)="addMeasure()" [disabled]="shouldDisableAddMeasureButton()">{{"pages.weightMonitoring.add" | translate}}</button>
+        <button type="button" class="button is-primary add-measure-button" (click)="addMeasure()" [disabled]="shouldDisableAddMeasureButton()"><i class="far fa-bookmark mr-2"></i> {{ "pages.weightMonitoring.add" | translate }}</button>
         @if (isExistingMeasureOnSelectedDate()) {
           <p class="help is-danger">{{"pages.weightMonitoring.measureExistsOnThisDate" | translate}}</p>
         }
