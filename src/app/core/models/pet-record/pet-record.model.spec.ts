@@ -1,4 +1,4 @@
-import { PetRecord } from './pet-record';
+import { PetRecord } from './pet-record.model';
 
 describe('PetRecord', () => {
   it('should create an instance', () => {

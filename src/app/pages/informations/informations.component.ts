@@ -5,7 +5,7 @@ import moment from 'moment';
 
 import { LocalStorageService } from 'src/app/core/services/local-storage/local-storage.service';
 
-import { PetRecord } from 'src/app/core/models/pet-record/pet-record';
+import { PetRecord } from 'src/app/core/models/pet-record/pet-record.model';
 
 @Component({
   selector: 'app-informations',
@@ -86,6 +86,7 @@ export class InformationsComponent implements AfterViewInit {
   saveChanges() {
     if (this.petForm.valid) {
       Object.assign(this.petRecord, this.petForm.value);
+      this.petRecord.updatedAt = moment();
       const serializedPetRecord = this.petRecord.serializeForSave();
       this.localStorageService.setItem(this.APP_STORAGE_KEY, serializedPetRecord);
     }
