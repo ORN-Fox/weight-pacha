@@ -20,7 +20,7 @@ export class NotesComponent {
 
   sourceNotes: Note[];
   notes: Note[];
-  selectedNote: Note;
+  selectedNote: Note | null;
   noteForm: FormGroup;
 
   searchText: string;
@@ -43,10 +43,12 @@ export class NotesComponent {
     this.selectNote(note);
   }
 
-  selectNote(note: Note) {
+  selectNote(note: Note | null) {
     this.selectedNote = note;
-
-    this.initNoteForm();
+    
+    if (note) {
+      this.initNoteForm();
+    }
   }
 
   duplicateNote(note: Note) {
@@ -58,7 +60,7 @@ export class NotesComponent {
   }
 
   saveChanges() {
-    if (this.noteForm.valid) {
+    if (this.noteForm.valid && this.selectedNote) {
       Object.assign(this.selectedNote, this.noteForm.value);
       this.selectedNote.updatedAt = moment();
       this.saveNotes();
@@ -67,6 +69,11 @@ export class NotesComponent {
 
   deleteNote(event: Event, id: string) {
     event.stopImmediatePropagation();
+
+    if (this.selectedNote?.id == id) {
+      this.selectNote(null);
+    }
+
     this.notes = this.notes.filter((note) => note.id != id);
     this.saveNotes();
   }
@@ -81,8 +88,8 @@ export class NotesComponent {
 
   private initNoteForm() {
     this.noteForm = this.formBuilder.group({
-      title: [this.selectedNote.title, [Validators.required]],
-      description: [this.selectedNote.description]
+      title: [this.selectedNote?.title, [Validators.required]],
+      description: [this.selectedNote?.description]
     });
   }  
   
