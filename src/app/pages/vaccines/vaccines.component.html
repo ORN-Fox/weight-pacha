@@ -2,3 +2,89 @@
     <img src="https://cdn-icons-png.flaticon.com/128/2829/2829740.png" alt="">
     <h1 class="title">Vaccins</h1>
 </div>
+
+<button class="button is-primary mb-3" (click)="addVaccine()"><i class="far fa-pencil-alt"></i></button>
+
+<div>
+    <div class="table-container">
+        <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+            <thead>
+                <tr>
+                    @for (tableHeader of tableHeaders; track tableHeader) {
+                        <th class="is-primary">{{ tableHeader }}</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @for (vaccine of vaccines; track vaccine) {
+                    <tr>
+                        <td>
+                            @if (vaccine.editMode) {
+                                <div class="control has-icons-left">
+                                    <input type="text" id="vaccineInjectionDateInput_{{vaccine.id}}" class="input" name="injectionDate" [(ngModel)]="vaccine.injectionDate">
+                                    <span class="icon is-small is-left">
+                                        <i class="far fa-calendar"></i>
+                                    </span>
+                                </div>
+                            } @else {
+                                {{ vaccine.injectionDate.format('DD/MM/YYYY') }}
+                            }
+                        </td>
+                        <td>
+                            @if (vaccine.editMode) {
+                                <div class="control has-icons-left">
+                                    <input type="text" class="input" name="name" [(ngModel)]="vaccine.name">
+                                    <span class="icon is-small is-left">
+                                        <i class="far fa-tag"></i>
+                                    </span>
+                                </div>
+                            } @else {
+                                {{ vaccine.name }}
+                            }
+                        </td>
+                        <td>
+                            @if (vaccine.editMode) {
+                                <div class="control has-icons-left">
+                                    <input type="text" id="vaccineReminderDateInput_{{vaccine.id}}" class="input" name="reminderDate" [(ngModel)]="vaccine.reminderDate">
+                                    <span class="icon is-small is-left">
+                                        <i class="far fa-calendar"></i>
+                                    </span>
+                                </div>
+                            } @else {
+                                {{ vaccine.reminderDate?.format('DD/MM/YYYY') }}
+                            }
+                        </td>
+                        <td>
+                            @if (vaccine.editMode) {
+                                <textarea class="textarea" name="description" [(ngModel)]="vaccine.description" rows="4"></textarea>
+                            } @else {
+                                {{ vaccine.description }}
+                            }
+                        </td>
+                        <td>
+                            {{ vaccine.editMode ? '' : vaccine.age }}
+                        </td>
+                        <td>
+                            @if (vaccine.editMode) {
+                                <button type="button" class="button" (click)="saveChanges(vaccine)">
+                                    <i class="far fa-bookmark fa-lg"></i>
+                                </button>
+                            } @else {
+                                <button type="button" class="edit" (click)="updateVaccine(vaccine)">
+                                    <i class="far fa-pencil-alt fa-lg"></i>
+                                </button>
+                            }
+                            <button type="button" class="delete ml-2" (click)="deleteVaccine(vaccine.id)"></button>
+                        </td>
+                    </tr>
+                }
+
+                @if (vaccines.length == 0) {
+                    <tr>
+                        <td colspan="7" class="has-text-centered">Aucun vaccin. Ajouter un vaccin pour commencer le suivi</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
