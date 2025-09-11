@@ -1,4 +1,4 @@
-# MyCatApp
+# Weight-Pacha
 
 ![Preview](./preview.jpg)
 
