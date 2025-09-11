@@ -2,3 +2,68 @@
     <img src="https://cdn-icons-png.flaticon.com/128/2829/2829740.png" alt="">
     <h1 class="title">Notes</h1>
 </div>
+
+<div class="columns">
+    <div class="column is-one-third">
+        <nav class="panel is-primary">
+            <div class="panel-block">
+                <p class="control has-icons-left">
+                    <input class="input" type="text" [(ngModel)]="searchText" (ngModelChange)="search(searchText)" placeholder="Search" />
+                    <span class="icon is-left">
+                        <i class="far fa-search" aria-hidden="true"></i>
+                    </span>
+                </p>
+
+                <button class="button is-primary button-add-note" (click)="addNote()"><i class="far fa-pencil-alt"></i></button>
+            </div>
+            
+            <div class="panel-scrollable">
+                @for (note of notes; track note) {
+                    <a class="panel-block" [ngClass]="{'is-active': selectedNote && selectedNote.id == note.id }" (click)="selectNote(note)">
+                        <span class="panel-icon">
+                            <i class="far fa-book" aria-hidden="true"></i>
+                        </span>
+                        {{ note.title }}
+
+                        <button type="button" class="delete" (click)="deleteNote($event, note.id)"></button>
+                    </a>
+                }
+
+                @if (notes.length == 0) {
+                    <a class="panel-block" disabled>
+                        {{ searchText ? 'Aucun resultat' : 'Aucune note. Ajouter une note pour commencer' }}
+                    </a>
+                }
+            </div>
+        </nav>
+    </div>
+
+    <div class="column">
+        @if (selectedNote) {
+            <form [formGroup]="noteForm" (ngSubmit)="saveChanges()">
+                <div class="field">
+                    <div class="control is-expanded has-icons-left">
+                        <input class="input" type="text" formControlName="title"
+                            [ngClass]="{'is-danger': noteForm.get('title')?.errors?.['required'] && noteForm.get('title')?.touched}">
+                        <span class="icon is-small is-left">
+                            <i class="far fa-book"></i>
+                        </span>
+                    </div>
+                    <p class="help is-danger" *ngIf="noteForm.get('title')?.errors?.['required'] && noteForm.get('title')?.touched">
+                        Le titre est requis
+                    </p>
+                </div>
+
+                <div class="field">
+                    <textarea class="textarea" formControlName="description" rows="20"></textarea>
+                </div>
+            
+                <div class="field">
+                    <div class="control">
+                        <button type="submit" class="button is-primary"><i class="far fa-bookmark mr-2"></i> Enregistrer</button>
+                    </div>
+                </div>
+            </form>
+        }
+    </div>
+</div>

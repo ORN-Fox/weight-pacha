@@ -1,0 +1,28 @@
+.panel-scrollable {
+    max-height: 58vh;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.panel-block {
+    position: relative;
+    
+    .delete {
+        display: none;
+        position: absolute;
+        right: 1rem;
+    }
+
+    &:hover .delete {
+        display: block;
+
+        &:hover {
+            background-color: red;
+        }
+    }
+}
+
+.button-add-note {
+    margin-left: .5rem;
+    padding: .75rem 1rem;
+}
