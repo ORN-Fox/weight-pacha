@@ -1,4 +1,4 @@
-import { AfterViewInit, Component } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import flatpickr from 'flatpickr';
 import moment from 'moment';
@@ -13,7 +13,7 @@ import { PetRecord } from 'src/app/core/models/pet-record/pet-record.model';
   styleUrl: './informations.component.scss',
   standalone: false
 })
-export class InformationsComponent implements AfterViewInit {
+export class InformationsComponent {
 
   APP_STORAGE_KEY: string;
 
@@ -25,32 +25,42 @@ export class InformationsComponent implements AfterViewInit {
     private localStorageService: LocalStorageService,
   ) {
     this.APP_STORAGE_KEY = 'weight-pacha-data-pet-record';
+    
     this.loadPetRecord();
   }
 
-  ngAfterViewInit() {
-    flatpickr('#birthDateInput', {
-      enableTime: true,
-      dateFormat: 'Y-m-d H:i',
-      defaultDate: this.petForm.get('birthDate')?.value?.toDate(),
-      onChange: (_selectedDates: Object, date: string) => {
-        this.petForm.patchValue({ birthDate: moment(date) });
-      }
-    });
+  saveChanges() {
+    if (this.petForm.valid) {
+      console.log('ici')
+      Object.assign(this.petRecord, this.petForm.value);
+      this.petRecord.updatedAt = moment();
+      const serializedPetRecord = this.petRecord.serializeForSave();
+      this.localStorageService.setItem(this.APP_STORAGE_KEY, serializedPetRecord);
+    }
+  }
 
-    flatpickr('#adoptedDateInput', {
-      enableTime: true,
-      dateFormat: 'Y-m-d H:i',
-      defaultDate: this.petForm.get('adoptedDate')?.value?.toDate(),
-      onChange: (_selectedDates: Object, date: string) => {
-        this.petForm.patchValue({ adoptedDate: moment(date) });
-      }
-    });
+  private initDatePickers() {
+    setTimeout(() => {
+      flatpickr('#birthDateInput', {
+        enableTime: true,
+        dateFormat: 'Y-m-d H:i',
+        defaultDate: this.petForm.get('birthDate')?.value?.toDate(),
+        onChange: (selectedDates: Date[]) => {
+          const selectedDate = selectedDates[0];
+          this.petForm.get('birthDate')?.setValue(moment(selectedDate), { emitEvent: false });
+        }
+      });
 
-    // Subscribe to form changes to update petRecord
-    this.petForm.valueChanges.subscribe(formValue => {
-      Object.assign(this.petRecord, formValue);
-    });
+      flatpickr('#adoptedDateInput', {
+        enableTime: true,
+        dateFormat: 'Y-m-d H:i',
+        defaultDate: this.petForm.get('adoptedDate')?.value?.toDate(),
+        onChange: (selectedDates: Date[]) => {
+          const selectedDate = selectedDates[0];
+          this.petForm.get('adoptedDate')?.setValue(moment(selectedDate), { emitEvent: false });
+        }
+      });
+    }, 100);
   }
 
   private initForm() {
@@ -81,15 +91,7 @@ export class InformationsComponent implements AfterViewInit {
     }
 
     this.initForm();
-  }
-
-  saveChanges() {
-    if (this.petForm.valid) {
-      Object.assign(this.petRecord, this.petForm.value);
-      this.petRecord.updatedAt = moment();
-      const serializedPetRecord = this.petRecord.serializeForSave();
-      this.localStorageService.setItem(this.APP_STORAGE_KEY, serializedPetRecord);
-    }
+    this.initDatePickers();
   }
 
 }
