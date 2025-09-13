@@ -22,7 +22,7 @@ export class Vaccine extends SerializeModel {
     editMode: boolean;
     age: number;
 
-    constructor(name: string, injectionDate: moment.Moment, reminderDate?: moment.Moment | null) {
+    constructor(name: string = '', injectionDate: moment.Moment = moment(), reminderDate?: moment.Moment | null) {
         super();
         
         this.name = name;

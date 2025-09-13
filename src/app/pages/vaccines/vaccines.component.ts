@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import flatpickr from 'flatpickr';
 import moment from 'moment';
 
 import { LocalStorageService } from 'src/app/core/services/local-storage/local-storage.service';
 
 import { ISerializedVaccine, Vaccine } from 'src/app/core/models/vaccine/vaccine.model';
-import flatpickr from 'flatpickr';
 
 @Component({
   selector: 'app-vaccines',
@@ -42,7 +42,7 @@ export class VaccinesComponent {
   }
 
   addVaccine() {
-    let vaccine = new Vaccine('', moment());
+    let vaccine = new Vaccine();
     vaccine.editMode = true;
     this.vaccines.push(vaccine);
 
@@ -105,7 +105,7 @@ export class VaccinesComponent {
       let vaccinesJSON = this.localStorageService.getItem(this.APP_STORAGE_KEY);
 
       vaccinesJSON.vaccines.forEach((vaccineJSON: ISerializedVaccine) => {
-        let vaccine = new Vaccine('name', moment(), null);
+        let vaccine = new Vaccine();
         vaccine.deserilizeFromSave(vaccineJSON);
         this.vaccines.push(vaccine);
       });
