@@ -2,7 +2,8 @@
 
 ![Preview](./preview.jpg)
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.1.4. Upgrade to angular version 20
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.1.4.
+Current project version is version 20.1.6
 
 ## Development server
 
