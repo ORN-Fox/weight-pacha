@@ -2,7 +2,7 @@
     <div class="grid is-gap-6">
         @for (page of pages; track page) {
             <div class="cell">
-                <a class="card is-flex is-justify-content-center is-align-content-center has-text-centered" routerLink="/{{page.path}}">
+                <a class="card is-flex is-justify-content-center is-align-content-center has-text-centered" routerLink="/{{ page.enabled ? page.path : '#' }}" [ngClass]="{'disabled': !page.enabled}">
                     <div class="card-content">
                         <img [src]="page.iconSrc" alt="">
                         <h1 class="title">{{ page.title }}</h1>
