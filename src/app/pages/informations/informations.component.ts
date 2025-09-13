@@ -31,8 +31,9 @@ export class InformationsComponent {
 
   saveChanges() {
     if (this.petForm.valid) {
-      console.log('ici')
       Object.assign(this.petRecord, this.petForm.value);
+      this.petRecord.birthDate = moment(this.petRecord.birthDate);
+      this.petRecord.adoptedDate = this.petRecord.adoptedDate ? moment(this.petRecord.adoptedDate) : null,
       this.petRecord.updatedAt = moment();
       const serializedPetRecord = this.petRecord.serializeForSave();
       this.localStorageService.setItem(this.APP_STORAGE_KEY, serializedPetRecord);
@@ -44,21 +45,13 @@ export class InformationsComponent {
       flatpickr('#birthDateInput', {
         enableTime: true,
         dateFormat: 'Y-m-d H:i',
-        defaultDate: this.petForm.get('birthDate')?.value?.toDate(),
-        onChange: (selectedDates: Date[]) => {
-          const selectedDate = selectedDates[0];
-          this.petForm.get('birthDate')?.setValue(moment(selectedDate), { emitEvent: false });
-        }
+        defaultDate: this.petForm.get('birthDate')?.value?.toDate()
       });
 
       flatpickr('#adoptedDateInput', {
         enableTime: true,
         dateFormat: 'Y-m-d H:i',
-        defaultDate: this.petForm.get('adoptedDate')?.value?.toDate(),
-        onChange: (selectedDates: Date[]) => {
-          const selectedDate = selectedDates[0];
-          this.petForm.get('adoptedDate')?.setValue(moment(selectedDate), { emitEvent: false });
-        }
+        defaultDate: this.petForm.get('adoptedDate')?.value?.toDate()
       });
     }, 100);
   }
