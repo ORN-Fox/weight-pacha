@@ -56,11 +56,10 @@ export class VaccinesComponent {
   }
 
   saveChanges(vaccine: Vaccine) {
-    console.log('save', vaccine);
-    // vaccine.editMode = false;
+    vaccine.editMode = false;
     vaccine.age = this.getAgeFromVaccineDate(vaccine);
     vaccine.updatedAt = moment();
-    // this.saveVaccines();
+    this.saveVaccines();
   }
 
   deleteVaccine(id: string) {
@@ -72,9 +71,10 @@ export class VaccinesComponent {
     // TODO: use real birthdate
     const birthdate = moment('2023-06-01');
     // TODO: compute days, weeks, months value for handle babies
-    console.log(vaccine)
-    const age = vaccine.injectionDate?.diff(birthdate, 'years', false);
-    return age;
+    if (vaccine.injectionDate) {
+      return vaccine.injectionDate?.diff(birthdate, 'years', false);
+    }
+    return -1;
   }
 
   private initDatePickers(vaccine: Vaccine) {
@@ -84,7 +84,6 @@ export class VaccinesComponent {
         defaultDate: vaccine.injectionDate.toDate(),
         onChange: (_selectedDates: Object, date: string) => {
           vaccine.injectionDate = moment(date);
-          console.log('vac change', date, vaccine)
         }
       });
 
@@ -107,6 +106,7 @@ export class VaccinesComponent {
       vaccinesJSON.vaccines.forEach((vaccineJSON: ISerializedVaccine) => {
         let vaccine = new Vaccine();
         vaccine.deserilizeFromSave(vaccineJSON);
+        vaccine.age = this.getAgeFromVaccineDate(vaccine);
         this.vaccines.push(vaccine);
       });
     } else {
