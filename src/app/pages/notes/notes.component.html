@@ -1,6 +1,6 @@
 <div class="card-page-title highlight-card card-small">
     <img src="https://cdn-icons-png.flaticon.com/128/2829/2829740.png" alt="">
-    <h1 class="title">Notes</h1>
+    <h1 class="title">{{ "pages.notes.title" | translate }}</h1>
 </div>
 
 <div class="columns">
@@ -8,7 +8,7 @@
         <nav class="panel is-primary">
             <div class="panel-block">
                 <p class="control has-icons-left">
-                    <input class="input" type="text" [(ngModel)]="searchText" (ngModelChange)="search(searchText)" placeholder="Search" />
+                    <input class="input" type="text" [(ngModel)]="searchText" (ngModelChange)="search(searchText)" placeholder="{{ 'commons.actions.search' | translate }}" />
                     <span class="icon is-left">
                         <i class="far fa-search" aria-hidden="true"></i>
                     </span>
@@ -31,7 +31,7 @@
 
                 @if (notes.length == 0) {
                     <div class="panel-block">
-                        {{ searchText ? 'Aucun resultat' : 'Aucune note. Ajouter une note pour commencer' }}
+                        {{ (searchText ? 'pages.notes.noResults' : 'pages.notes.noNoteAddNewNoteForStart') | translate }}
                     </div>
                 }
             </div>
@@ -43,24 +43,24 @@
             <form [formGroup]="noteForm" (ngSubmit)="saveChanges()">
                 <div class="field">
                     <div class="control is-expanded has-icons-left">
-                        <input class="input" type="text" formControlName="title" placeholder="Titre"
+                        <input class="input" type="text" formControlName="title" placeholder="{{ 'pages.notes.placeholders.title' | translate }}"
                             [ngClass]="{'is-danger': noteForm.get('title')?.errors?.['required'] && noteForm.get('title')?.touched}">
                         <span class="icon is-small is-left">
                             <i class="far fa-book"></i>
                         </span>
                     </div>
                     <p class="help is-danger" *ngIf="noteForm.get('title')?.errors?.['required'] && noteForm.get('title')?.touched">
-                        Le titre est requis
+                        {{ "pages.notes.errors.titleRequired" }}
                     </p>
                 </div>
 
                 <div class="field">
-                    <textarea class="textarea" formControlName="description" rows="20" placeholder="Contenu"></textarea>
+                    <textarea class="textarea" formControlName="description" rows="20" placeholder="{{ 'pages.notes.placeholders.description' | translate }}"></textarea>
                 </div>
             
                 <div class="field">
                     <div class="control">
-                        <button type="submit" class="button is-primary"><i class="far fa-bookmark mr-2"></i> Enregistrer</button>
+                        <button type="submit" class="button is-primary"><i class="far fa-bookmark mr-2"></i> {{ "commons.actions.add" | translate }}</button>
                     </div>
                 </div>
             </form>

@@ -39,7 +39,18 @@
       "tagRageNumber": "Tag rage number",
       "title": "Informations"
     },
-    "notes": {},
+    "notes": {
+      "errors": {
+        "titleRequired": "Title is required"
+      },
+      "noNoteAddNewNoteForStart": "No note. Add new note for start",
+      "noResults": "No results",
+      "placeholders": {
+        "description": "Description",
+        "title": "Title"
+      },
+      "title": "Notes"
+    },
     "vaccines": {},
     "weightMonitoring": {
       "add": "Add",

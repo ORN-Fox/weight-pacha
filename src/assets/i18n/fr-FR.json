@@ -39,7 +39,18 @@
       "tagRageNumber": "Médaille de Rage",
       "title": "Informations"
     },
-    "notes": {},
+    "notes": {
+      "errors": {
+        "titleRequired": "Le titre est requis"
+      },
+      "noNoteAddNewNoteForStart": "Aucune note. Ajouter une note pour commencer",
+      "noResults": "Aucun résultats",
+      "placeholders": {
+        "description": "Description",
+        "title": "Titre"
+      },
+      "title": "Notes"
+    },
     "vaccines": {},
     "weightMonitoring": {
       "add": "Ajouter",
