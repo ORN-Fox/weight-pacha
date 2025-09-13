@@ -11,6 +11,9 @@
   },
   "languages": "Languages",
   "pages": {
+    "antiflea": {
+      "title": "Antiflea"
+    },
     "informations": {
       "adoptedDate": "Adopted date",
       "birthDate": "birthDate",
@@ -51,6 +54,9 @@
       },
       "title": "Notes"
     },
+    "settings": {
+      "title": "Settings"
+    },
     "vaccines": {
       "noVaccineAddNewForStartTracking": "No vaccine. Add new for start tracking",
       "tableHeaders": {
@@ -73,9 +79,9 @@
       "measureExistsOnThisDate": "A measure exists on this date",
       "measures": "Measures",
       "settings": "Settings",
+      "title": "Weight tracking",
       "weight": "Weight",
       "weightMustBePositive": "Weight must be positive",
-      "weightTracking": "Weight tracking",
       "weightUnit": "Weight unit"
     }
   }

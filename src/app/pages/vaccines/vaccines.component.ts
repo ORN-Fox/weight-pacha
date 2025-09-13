@@ -33,7 +33,7 @@ export class VaccinesComponent {
   private setupTableHeaders() {
     this.tableHeaders = [
       'date',
-      'name',
+      'title',
       'reminderDate',
       'description',
       'age',

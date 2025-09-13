@@ -11,6 +11,9 @@
   },
   "languages": "Langues",
   "pages": {
+    "antiflea": {
+      "title": "Vermifuges"
+    },
     "informations": {
       "adoptedDate": "Date d'adoption",
       "birthDate": "Date de naissance",
@@ -51,6 +54,9 @@
       },
       "title": "Notes"
     },
+    "settings": {
+      "title": "Paramètres"
+    },
     "vaccines": {
       "noVaccineAddNewForStartTracking": "Aucun vaccin. Ajouter un vaccin pour commencer le suivi",
       "tableHeaders": {
@@ -73,9 +79,9 @@
       "measureExistsOnThisDate": "Une mesure existe à cette date",
       "measures": "Mesures",
       "settings": "Paramètres",
+      "title": "Suivi du poids",
       "weight": "Poids",
       "weightMustBePositive": "Le poids doit être positif",
-      "weightTracking": "Suivi du poids",
       "weightUnit": "Unité de poids"
     }
   }

@@ -1,6 +1,6 @@
 <div class="card-page-title highlight-card card-small">
     <img src="https://cdn-icons-png.flaticon.com/128/2829/2829740.png" alt="">
-    <h1 class="title">Vaccins</h1>
+    <h1 class="title">{{ "pages.vaccines.title" | translate }}</h1>
 </div>
 
 <button class="button is-primary mb-3" (click)="addVaccine()"><i class="far fa-pencil-alt"></i></button>
@@ -11,14 +11,14 @@
             <thead>
                 <tr>
                     @for (tableHeader of tableHeaders; track tableHeader) {
-                        <th class="is-primary">{{ tableHeader }}</th>
+                        <th class="is-primary" align="center">{{ ('pages.vaccines.tableHeaders.' + tableHeader) | translate }}</th>
                     }
                 </tr>
             </thead>
             <tbody>
                 @for (vaccine of vaccines; track vaccine) {
-                    <tr>
-                        <td>
+                    <tr class="vaccine">
+                        <td class="has-text-centered">
                             @if (vaccine.editMode) {
                                 <div class="control has-icons-left">
                                     <input type="text" id="vaccineInjectionDateInput_{{vaccine.id}}" class="input" name="injectionDate" [(ngModel)]="vaccine.injectionDate">
@@ -42,7 +42,7 @@
                                 {{ vaccine.name }}
                             }
                         </td>
-                        <td>
+                        <td class="has-text-centered">
                             @if (vaccine.editMode) {
                                 <div class="control has-icons-left">
                                     <input type="text" id="vaccineReminderDateInput_{{vaccine.id}}" class="input" name="reminderDate" [(ngModel)]="vaccine.reminderDate">
@@ -58,19 +58,19 @@
                             @if (vaccine.editMode) {
                                 <textarea class="textarea" name="description" [(ngModel)]="vaccine.description" rows="4"></textarea>
                             } @else {
-                                {{ vaccine.description }}
+                                <div class="description">{{ vaccine.description }}</div>
                             }
                         </td>
-                        <td>
+                        <td class="has-text-centered">
                             {{ vaccine.editMode ? '' : vaccine.age }}
                         </td>
-                        <td>
+                        <td class="has-text-centered">
                             @if (vaccine.editMode) {
-                                <button type="button" class="button" (click)="saveChanges(vaccine)">
+                                <button type="button" (click)="saveChanges(vaccine)">
                                     <i class="far fa-bookmark fa-lg"></i>
                                 </button>
                             } @else {
-                                <button type="button" class="edit" (click)="updateVaccine(vaccine)">
+                                <button type="button" (click)="updateVaccine(vaccine)">
                                     <i class="far fa-pencil-alt fa-lg"></i>
                                 </button>
                             }
@@ -81,7 +81,7 @@
 
                 @if (vaccines.length == 0) {
                     <tr>
-                        <td colspan="7" class="has-text-centered">Aucun vaccin. Ajouter un vaccin pour commencer le suivi</td>
+                        <td colspan="7" class="has-text-centered">{{ "pages.vaccines.noVaccineAddNewForStartTracking" | translate }}</td>
                     </tr>
                 }
             </tbody>
