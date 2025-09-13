@@ -43,7 +43,7 @@
             <form [formGroup]="noteForm" (ngSubmit)="saveChanges()">
                 <div class="field">
                     <div class="control is-expanded has-icons-left">
-                        <input class="input" type="text" formControlName="title"
+                        <input class="input" type="text" formControlName="title" placeholder="Titre"
                             [ngClass]="{'is-danger': noteForm.get('title')?.errors?.['required'] && noteForm.get('title')?.touched}">
                         <span class="icon is-small is-left">
                             <i class="far fa-book"></i>
@@ -55,7 +55,7 @@
                 </div>
 
                 <div class="field">
-                    <textarea class="textarea" formControlName="description" rows="20"></textarea>
+                    <textarea class="textarea" formControlName="description" rows="20" placeholder="Contenu"></textarea>
                 </div>
             
                 <div class="field">
