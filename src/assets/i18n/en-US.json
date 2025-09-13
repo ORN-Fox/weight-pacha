@@ -1,6 +1,46 @@
 {
+  "commons": {
+    "actions": {
+      "add": "Add",
+      "displayAll": "Display all",
+      "no": "No",
+      "save": "Save",
+      "search": "Search",
+      "yes": "Yes"
+    }
+  },
   "languages": "Languages",
   "pages": {
+    "informations": {
+      "adoptedDate": "Adopted date",
+      "birthDate": "birthDate",
+      "breed": "Breed",
+      "cat": "Cat",
+      "color": "Color",
+      "description": "Description",
+      "dog": "Dog",
+      "errors": {
+        "firstNameRequired": "Firstname is required",
+        "specieRequired": "Specie required"
+      },
+      "female": "Female",
+      "firstname": "Firstname",
+      "male": "Male",
+      "others": "Others",
+      "placeholders": {
+        "description": "A few lines about your pet (important details, allergies, preferences, etc.)",
+        "firstName": "Rex, Bobby, Toast ..."
+      },
+      "rabbit": "Rabbit",
+      "sex": "Sex",
+      "specie": "Specie",
+      "sterialize": "Sterialize",
+      "tagNumber": "Tag number",
+      "tagRageNumber": "Tag rage number",
+      "title": "Informations"
+    },
+    "notes": {},
+    "vaccines": {},
     "weightMonitoring": {
       "add": "Add",
       "addMeasure": "Add measure",

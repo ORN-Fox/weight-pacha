@@ -1,6 +1,46 @@
 {
+  "commons": {
+    "actions": {
+      "add": "Ajouter",
+      "displayAll": "Afficher tout",
+      "no": "Non",
+      "save": "Enregistrer",
+      "search": "Rechercher",
+      "yes": "Oui"
+    }
+  },
   "languages": "Langues",
   "pages": {
+    "informations": {
+      "adoptedDate": "Date d'adoption",
+      "birthDate": "Date de naissance",
+      "breed": "Race",
+      "cat": "Chat",
+      "color": "Couleur",
+      "description": "Description",
+      "dog": "Chien",
+      "errors": {
+        "firstNameRequired": "Le prénom est requis",
+        "specieRequired": "L'espèce est requise"
+      },
+      "female": "Femelle",
+      "firstname": "Prénom",
+      "male": "Male",
+      "others": "Autres",
+      "placeholders": {
+        "description": "Quelques lignes sur votre animal (détails importants, allergies, préférences, etc...)",
+        "firstName": "Boris, Lilou, Caramel ..."
+      },
+      "rabbit": "Lapin",
+      "sex": "Sexe",
+      "specie": "Espèce",
+      "sterialize": "Stérilizé",
+      "tagNumber": "Numéro de micropuce",
+      "tagRageNumber": "Médaille de Rage",
+      "title": "Informations"
+    },
+    "notes": {},
+    "vaccines": {},
     "weightMonitoring": {
       "add": "Ajouter",
       "addMeasure": "Ajouter une mesure",

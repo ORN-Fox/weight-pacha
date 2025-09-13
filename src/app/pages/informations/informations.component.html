@@ -1,24 +1,24 @@
 <div class="card-page-title highlight-card card-small">
     <img src="https://cdn-icons-png.flaticon.com/128/2829/2829740.png" alt="">
-    <h1 class="title">Informations</h1>
+    <h1 class="title">{{ "pages.informations.title" | translate }}</h1>
 </div>
 
 <form class="mb-5" [formGroup]="petForm" (ngSubmit)="saveChanges()">
     <div class="field is-horizontal">
         <div class="field-label is-normal">
-            <label class="label">Prenom</label>
+            <label class="label">{{ "pages.informations.firstname" | translate }}</label>
         </div>
         <div class="field-body">
             <div class="field">
                 <div class="control is-expanded has-icons-left">
-                    <input class="input" type="text" formControlName="firstName" placeholder="Boris, Lilou, Caramel ..."
+                    <input class="input" type="text" formControlName="firstName" placeholder="{{ 'pages.informations.placeholders.firstName' }}"
                            [ngClass]="{'is-danger': petForm.get('firstName')?.errors?.['required'] && petForm.get('firstName')?.touched}">
                     <span class="icon is-small is-left">
                         <i class="far fa-heart"></i>
                     </span>
                 </div>
                 <p class="help is-danger" *ngIf="petForm.get('firstName')?.errors?.['required'] && petForm.get('firstName')?.touched">
-                    Le prénom est requis
+                    {{ "pages.informations.errors.firstNameRequired" | translate }}
                 </p>
             </div>
         </div>
@@ -26,30 +26,30 @@
     
     <div class="field is-horizontal">
         <div class="field-label is-normal">
-            <label class="label">Espece</label>
+            <label class="label">{{ "pages.informations.specie" | translate }}</label>
         </div>
         <div class="field-body">
             <div class="field">
                 <div class="control radios">
-                    <label class="radio custom-radio-with-icon" [ngClass]="{'active': petForm.get('specie')?.value == 0}">
+                    <label class="radio custom-radio-with-icon has-text-centered" [ngClass]="{'active': petForm.get('specie')?.value == 0}">
                         <input type="radio" formControlName="specie" value="0" />
-                        <img src="https://cdn-icons-png.flaticon.com/32/2829/2829823.png" alt="" > Chien
+                        <img src="https://cdn-icons-png.flaticon.com/64/2829/2829823.png" alt="" > {{ "pages.informations.dog" | translate }}
                     </label>
-                    <label class="radio custom-radio-with-icon" [ngClass]="{'active': petForm.get('specie')?.value == 1}">
+                    <label class="radio custom-radio-with-icon has-text-centered" [ngClass]="{'active': petForm.get('specie')?.value == 1}">
                         <input type="radio" formControlName="specie" value="1" />
-                        <img src="https://cdn-icons-png.flaticon.com/32/2829/2829740.png" alt=""> Chat
+                        <img src="https://cdn-icons-png.flaticon.com/64/2829/2829740.png" alt=""> {{ "pages.informations.cat" | translate }}
                     </label>
-                    <label class="radio custom-radio-with-icon" [ngClass]="{'active': petForm.get('specie')?.value == 2}">
+                    <label class="radio custom-radio-with-icon has-text-centered" [ngClass]="{'active': petForm.get('specie')?.value == 2}">
                         <input type="radio" formControlName="specie" value="2" />
-                        <img src="https://cdn-icons-png.flaticon.com/32/4185/4185015.png" alt=""> Lapin
+                        <img src="https://cdn-icons-png.flaticon.com/64/4185/4185015.png" alt=""> {{ "pages.informations.rabbit" | translate }}
                     </label>
-                    <label class="radio custom-radio-with-icon" [ngClass]="{'active': petForm.get('specie')?.value == 3}">
+                    <label class="radio custom-radio-with-icon has-text-centered" [ngClass]="{'active': petForm.get('specie')?.value == 3}">
                         <input type="radio" formControlName="specie" value="3" />
-                        <img src="https://cdn-icons-png.flaticon.com/32/427/427487.png" alt=""> Autres
+                        <img src="https://cdn-icons-png.flaticon.com/64/427/427487.png" alt=""> {{ "pages.informations.others" | translate }}
                     </label>
                 </div>
                 <p class="help is-danger" *ngIf="petForm.get('specie')?.errors?.['required'] && petForm.get('specie')?.touched">
-                    Le prénom est requis
+                    {{ "pages.informations.errors.specieRequired" | translate }}
                 </p>
             </div>
         </div>
@@ -57,7 +57,7 @@
 
     <div class="field is-horizontal">
         <div class="field-label is-normal">
-            <label class="label">Race</label>
+            <label class="label">{{ "pages.informations.breed" | translate }}</label>
         </div>
         <div class="field-body">
             <div class="field">
@@ -73,7 +73,7 @@
 
     <div class="field is-horizontal">
         <div class="field-label is-normal">
-            <label class="label">Couleur</label>
+            <label class="label">{{ "pages.informations.color" | translate }}</label>
         </div>
         <div class="field-body">
             <div class="field">
@@ -89,18 +89,18 @@
     
     <div class="field is-horizontal">
         <div class="field-label">
-            <label class="label">Sexe</label>
+            <label class="label">{{ "pages.informations.sex" | translate }}</label>
         </div>
         <div class="field-body">
             <div class="field">
                 <div class="control radios">
                     <label class="radio custom-radio-with-icon radio-female" [ngClass]="{'active': petForm.get('sex')?.value == 0}">
                         <input type="radio" formControlName="sex" value="0">
-                        <i class="far fa-venus fa-2x"></i> Femelle
+                        <i class="far fa-venus fa-2x"></i> {{ "pages.informations.female" | translate }}
                     </label>
                     <label class="radio custom-radio-with-icon radio-male" [ngClass]="{'active': petForm.get('sex')?.value == 1}">
                         <input type="radio" formControlName="sex" value="1">
-                        <i class="far fa-mars fa-2x"></i> Male
+                        <i class="far fa-mars fa-2x"></i> {{ "pages.informations.male" | translate }}
                     </label>
                 </div>
             </div>
@@ -109,7 +109,7 @@
     
     <div class="field is-horizontal">
         <div class="field-label is-normal">
-            <label class="label">Date de naissance</label>
+            <label class="label">{{ "pages.informations.birthDate" | translate }}</label>
         </div>
         <div class="field-body">
             <div class="field">
@@ -125,7 +125,7 @@
     
     <div class="field is-horizontal">
         <div class="field-label is-normal">
-            <label class="label">Date d'adoption</label>
+            <label class="label">{{ "pages.informations.adoptedDate" | translate }}</label>
         </div>
         <div class="field-body">
             <div class="field">
@@ -141,14 +141,14 @@
     
     <div class="field is-horizontal">
         <div class="field-label">
-            <label class="label">Sterilize ?</label>
+            <label class="label">{{ "pages.informations.sterialize" | translate }} ?</label>
         </div>
         <div class="field-body">
             <div class="field">
                 <label class="switch is-outlined">
                     <input type="checkbox" formControlName="sterilise">
                     <span class="check"></span>
-                    <span class="control-label">{{petForm.get('sterilise')?.value == true ? 'Oui' : 'Non'}}</span>
+                    <span class="control-label">{{ (petForm.get('sterilise')?.value == true ? 'commons.actions.yes' : 'commons.actions.no') | translate }}</span>
                 </label>
             </div>
         </div>
@@ -156,7 +156,7 @@
     
     <div class="field is-horizontal">
         <div class="field-label is-normal">
-            <label class="label">N' Micropuce / Tatouage</label>
+            <label class="label">{{ "pages.informations.tagNumber" | translate }}</label>
         </div>
         <div class="field-body">
             <div class="field">
@@ -172,7 +172,7 @@
     
     <div class="field is-horizontal">
         <div class="field-label is-normal">
-            <label class="label">N' Medaille de Rage</label>
+            <label class="label">{{ "pages.informations.tagRageNumber" | translate }}</label>
         </div>
         <div class="field-body">
             <div class="field">
@@ -188,13 +188,13 @@
 
     <div class="field is-horizontal">
         <div class="field-label is-normal">
-            <label class="label">Description</label>
+            <label class="label">{{ "pages.informations.description" | translate }}</label>
         </div>
         <div class="field-body">
             <div class="field">
                 <div class="control">
                     <textarea class="textarea" formControlName="description" rows="4" 
-                              placeholder="Quelques lignes sur votre animal (details importants, allergies, preferences, etc...)">
+                              placeholder="{{ 'pages.informations.placeholders.description' | translate }}">
                     </textarea>
                 </div>
             </div>
@@ -206,7 +206,7 @@
         <div class="field-body">
             <div class="field">
                 <div class="control">
-                    <button type="submit" class="button is-primary"><i class="far fa-bookmark mr-2"></i> Enregistrer</button>
+                    <button type="submit" class="button is-primary"><i class="far fa-bookmark mr-2"></i> {{ "commons.actions.save" | translate }}</button>
                 </div>
             </div>
         </div>

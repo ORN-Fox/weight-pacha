@@ -42,6 +42,8 @@ export class InformationsComponent {
 
   private initDatePickers() {
     setTimeout(() => {
+      // No onChange here because petForm change event interfer with date format rendering
+
       flatpickr('#birthDateInput', {
         enableTime: true,
         dateFormat: 'Y-m-d H:i',
