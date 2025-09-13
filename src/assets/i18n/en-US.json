@@ -51,7 +51,18 @@
       },
       "title": "Notes"
     },
-    "vaccines": {},
+    "vaccines": {
+      "noVaccineAddNewForStartTracking": "No vaccine. Add new for start tracking",
+      "tableHeaders": {
+        "actions": "Actions",
+        "age": "Age",
+        "date": "Date",
+        "description": "Description",
+        "reminderDate": "Reminder date",
+        "title": "Title"
+      },
+      "title": "Vaccines"
+    },
     "weightMonitoring": {
       "add": "Add",
       "addMeasure": "Add measure",
