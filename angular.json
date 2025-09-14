@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "my-cat-app": {
+    "weight-pacha": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -18,7 +18,7 @@
           "builder": "@angular/build:application",
           "options": {
             "outputPath": {
-              "base": "dist/my-cat-app"
+              "base": "dist/weight-pacha"
             },
             "index": "src/index.html",
             "polyfills": [
@@ -72,10 +72,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "my-cat-app:build:production"
+              "buildTarget": "weight-pacha:build:production"
             },
             "development": {
-              "buildTarget": "my-cat-app:build:development"
+              "buildTarget": "weight-pacha:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -83,7 +83,7 @@
         "extract-i18n": {
           "builder": "@angular/build:extract-i18n",
           "options": {
-            "buildTarget": "my-cat-app:build"
+            "buildTarget": "weight-pacha:build"
           }
         },
         "test": {
