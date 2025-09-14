@@ -80,7 +80,7 @@ export class NotesComponent {
 
   search(searchText: string) {
     if (searchText?.trim()) {
-      this.notes = this.sourceNotes.filter((note) => note.title.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").includes(searchText.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")));
+      this.notes = this.sourceNotes.filter((note) => note.title?.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").includes(searchText.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")));
     } else {
       this.notes = cloneDeep(this.sourceNotes);
     }
