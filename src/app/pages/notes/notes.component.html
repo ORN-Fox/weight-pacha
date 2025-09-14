@@ -50,7 +50,7 @@
                         </span>
                     </div>
                     @if (noteForm.get('title')?.errors?.['required'] && noteForm.get('title')?.touched) {
-                        <p class="help is-danger">{{ "pages.notes.errors.titleRequired" }}</p>
+                        <p class="help is-danger">{{ "pages.notes.errors.titleRequired" | translate }}</p>
                     }
                 </div>
 
