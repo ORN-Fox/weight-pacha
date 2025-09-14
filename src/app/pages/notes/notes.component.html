@@ -23,7 +23,11 @@
                         <span class="panel-icon">
                             <i class="far fa-book" aria-hidden="true"></i>
                         </span>
-                        {{ note.title }}
+                        @if (note.title) {
+                            {{ note.title }}
+                        } @else {
+                            <span class="has-text-grey-light">{{ "pages.notes.placeholders.title" | translate }}</span>
+                        }
 
                         <button type="button" class="delete" (click)="deleteNote($event, note.id)"></button>
                     </a>
