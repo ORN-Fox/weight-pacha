@@ -23,11 +23,11 @@
       "description": "Description",
       "dog": "Dog",
       "errors": {
-        "firstNameRequired": "Firstname is required",
+        "firstNameRequired": "First Name is required",
         "specieRequired": "Specie required"
       },
       "female": "Female",
-      "firstname": "Firstname",
+      "firstName": "First Name",
       "male": "Male",
       "others": "Others",
       "placeholders": {

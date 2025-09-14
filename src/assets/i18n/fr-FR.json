@@ -27,7 +27,7 @@
         "specieRequired": "L'espèce est requise"
       },
       "female": "Femelle",
-      "firstname": "Prénom",
+      "firstName": "Prénom",
       "male": "Male",
       "others": "Autres",
       "placeholders": {
