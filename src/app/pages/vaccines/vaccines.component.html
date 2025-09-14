@@ -56,7 +56,7 @@
                         </td>
                         <td>
                             @if (vaccine.editMode) {
-                                <textarea class="textarea" name="description" [(ngModel)]="vaccine.description" rows="4"></textarea>
+                                <textarea class="textarea" name="description" [(ngModel)]="vaccine.description" rows="1"></textarea>
                             } @else {
                                 <div class="description">{{ vaccine.description }}</div>
                             }
