@@ -64,7 +64,7 @@
         "age": "Age",
         "date": "Date",
         "description": "Description",
-        "reminderDate": "Date de rappel",
+        "reminderDate": "Rappel",
         "title": "Titre"
       },
       "title": "Vaccins"

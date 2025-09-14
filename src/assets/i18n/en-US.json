@@ -64,7 +64,7 @@
         "age": "Age",
         "date": "Date",
         "description": "Description",
-        "reminderDate": "Reminder date",
+        "reminderDate": "Reminder",
         "title": "Title"
       },
       "title": "Vaccines"
