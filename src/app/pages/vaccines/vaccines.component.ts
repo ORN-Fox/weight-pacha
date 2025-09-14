@@ -49,6 +49,7 @@ export class VaccinesComponent {
   addVaccine() {
     let vaccine = new Vaccine();
     vaccine.editMode = true;
+    vaccine.age = this.getAgeFromVaccineDate(vaccine);
     this.vaccines.push(vaccine);
 
     this.initDatePickers(vaccine);
@@ -89,6 +90,7 @@ export class VaccinesComponent {
         defaultDate: vaccine.injectionDate.toDate(),
         onChange: (_selectedDates: Object, date: string) => {
           vaccine.injectionDate = moment(date);
+          vaccine.age = this.getAgeFromVaccineDate(vaccine);
         }
       });
 
