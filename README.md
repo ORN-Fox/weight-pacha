@@ -1,6 +1,8 @@
 # Weight-Pacha
 
-![Preview](./preview.jpg)
+![Preview](./preview.png)
+![Preview Informations Page](./preview_informations.png)
+![Preview Weight Tracking Page](./preview_weight_tracking.png)
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.1.4.
 Current project version is version 20.1.6
