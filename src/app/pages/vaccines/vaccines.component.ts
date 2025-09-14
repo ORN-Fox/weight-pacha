@@ -7,6 +7,11 @@ import { LocalStorageService } from 'src/app/core/services/local-storage/local-s
 
 import { ISerializedVaccine, Vaccine } from 'src/app/core/models/vaccine/vaccine.model';
 
+export interface ITableHeader {
+  title: string;
+  width: string;
+}
+
 @Component({
   selector: 'app-vaccines',
   templateUrl: './vaccines.component.html',
@@ -17,7 +22,7 @@ export class VaccinesComponent {
 
   APP_STORAGE_KEY: string;
 
-  tableHeaders: string[];
+  tableHeaders: ITableHeader[];
   vaccines: Vaccine[];
 
   constructor(
@@ -32,12 +37,12 @@ export class VaccinesComponent {
 
   private setupTableHeaders() {
     this.tableHeaders = [
-      'date',
-      'title',
-      'reminderDate',
-      'description',
-      'age',
-      'actions'
+      { title: 'date', width: '12%' },
+      { title: 'title', width: '' },
+      { title: 'reminderDate', width: '12%' },
+      { title: 'description', width: '' },
+      { title: 'age', width: '' },
+      { title: 'actions', width: '' }
     ];
   }
 

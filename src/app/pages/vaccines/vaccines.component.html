@@ -11,7 +11,7 @@
             <thead>
                 <tr>
                     @for (tableHeader of tableHeaders; track tableHeader) {
-                        <th class="is-primary" align="center">{{ ('pages.vaccines.tableHeaders.' + tableHeader) | translate }}</th>
+                        <th class="is-primary" align="center" [ngStyle]="{'width': tableHeader.width}">{{ ('pages.vaccines.tableHeaders.' + tableHeader.title) | translate }}</th>
                     }
                 </tr>
             </thead>
