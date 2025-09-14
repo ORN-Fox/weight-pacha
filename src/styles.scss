@@ -1,5 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 @use "../node_modules/bulma";
+@use "../node_modules/bulma-checkbox";
+@use "../node_modules/bulma-radio";
 @use "../node_modules/bulma-switch-control";
 
 @import url('https://cdn.jsdelivr.net/gh/hung1001/font-awesome-pro@4cac1a6/css/all.css');
