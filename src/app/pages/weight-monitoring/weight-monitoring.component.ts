@@ -222,7 +222,7 @@ export class WeightMonitoringComponent {
   }
 
   private computeWeightHealthLabel(): string {
-    return `${this.translateService.instant('pages.weightMonitoring.healthyWeight')} : ${this.healthWeight} ${this.getMeasureUnitLabel()}`;
+    return `${this.translateService.instant('pages.weight.healthyWeight')} : ${this.healthWeight} ${this.getMeasureUnitLabel()}`;
   }
 
   private loadMeasures() {
@@ -265,7 +265,7 @@ export class WeightMonitoringComponent {
     this.data = {
       datasets: [
         {
-          label: this.translateService.instant('pages.weightMonitoring.weight'),
+          label: this.translateService.instant('pages.weight.weight'),
           data: this.computeDataPoints(),
           cubicInterpolationMode: 'monotone',
           pointStyle: 'circle',
@@ -336,13 +336,13 @@ export class WeightMonitoringComponent {
             },
             title: {
               display: true,
-              text: this.translateService.instant('pages.weightMonitoring.date')
+              text: this.translateService.instant('pages.weight.date')
             }
           },
           y: {
             title: {
               display: true,
-              text: this.translateService.instant('pages.weightMonitoring.weight')
+              text: this.translateService.instant('pages.weight.weight')
             },
             suggestedMin: this.getSuggestedMin(),
             suggestedMax: this.getSuggestedMax()

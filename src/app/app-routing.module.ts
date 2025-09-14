@@ -13,7 +13,7 @@ const routes: Routes = [
   { path: 'informations', component: InformationsComponent },
   { path: 'notes', component: NotesComponent },
   { path: 'vaccines', component: VaccinesComponent },
-  { path: 'weigth', component: WeightMonitoringComponent },
+  { path: 'weight', component: WeightMonitoringComponent },
   { path: 'settings', component: SettingsComponent },
   { path: '**', redirectTo: '/home' }
 ];

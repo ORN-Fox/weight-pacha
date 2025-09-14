@@ -69,7 +69,7 @@
       },
       "title": "Vaccins"
     },
-    "weightMonitoring": {
+    "weight": {
       "add": "Ajouter",
       "addMeasure": "Ajouter une mesure",
       "addMeasureToStartWeightTracking": "Ajouter une mesure pour débuter le suivi du poids",
