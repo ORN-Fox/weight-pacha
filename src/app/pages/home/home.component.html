@@ -4,8 +4,8 @@
             <div class="cell">
                 <a class="card is-flex is-justify-content-center is-align-content-center has-text-centered" routerLink="/{{ page.enabled ? page.path : '#' }}" [ngClass]="{'disabled': !page.enabled}">
                     <div class="card-content">
-                        <img [src]="page.iconSrc" alt="">
-                        <h1 class="title">{{ page.title | translate }}</h1>
+                        <img [src]="'./assets/images/' + page.title + '.png'" alt="">
+                        <h1 class="title">{{ 'pages.' + page.title + '.title' | translate }}</h1>
                     </div>
                 </a>
             </div>
