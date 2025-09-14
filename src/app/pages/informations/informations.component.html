@@ -17,9 +17,9 @@
                         <i class="far fa-heart"></i>
                     </span>
                 </div>
-                <p class="help is-danger" *ngIf="petForm.get('firstName')?.errors?.['required'] && petForm.get('firstName')?.touched">
-                    {{ "pages.informations.errors.firstNameRequired" | translate }}
-                </p>
+                @if (petForm.get('firstName')?.errors?.['required'] && petForm.get('firstName')?.touched) {
+                    <p class="help is-danger">{{ "pages.informations.errors.firstNameRequired" | translate }}</p>
+                }
             </div>
         </div>
     </div>
@@ -48,9 +48,9 @@
                         <img src="https://cdn-icons-png.flaticon.com/64/427/427487.png" alt=""> {{ "pages.informations.others" | translate }}
                     </label>
                 </div>
-                <p class="help is-danger" *ngIf="petForm.get('specie')?.errors?.['required'] && petForm.get('specie')?.touched">
-                    {{ "pages.informations.errors.specieRequired" | translate }}
-                </p>
+                @if (petForm.get('specie')?.errors?.['required'] && petForm.get('specie')?.touched) {
+                    <p class="help is-danger">{{ "pages.informations.errors.specieRequired" | translate }}</p>
+                }
             </div>
         </div>
     </div>
