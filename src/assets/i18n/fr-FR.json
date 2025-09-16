@@ -31,6 +31,8 @@
       "male": "Male",
       "others": "Autres",
       "placeholders": {
+        "breed": "Domestique, Belier, Golden ...",
+        "color": "Crème, Noir, Blanc ...",
         "description": "Quelques lignes sur votre animal (détails importants, allergies, préférences, etc...)",
         "firstName": "Boris, Lilou, Caramel ..."
       },

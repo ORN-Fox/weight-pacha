@@ -16,7 +16,7 @@
     },
     "informations": {
       "adoptedDate": "Adopted date",
-      "birthDate": "birthDate",
+      "birthDate": "Birth date",
       "breed": "Breed",
       "cat": "Cat",
       "color": "Color",
@@ -31,8 +31,10 @@
       "male": "Male",
       "others": "Others",
       "placeholders": {
+        "breed": "Domestic, Aries, Golden...",
+        "color": "Cream, Black, White...",
         "description": "A few lines about your pet (important details, allergies, preferences, etc.)",
-        "firstName": "Rex, Bobby, Toast ..."
+        "firstName": "Rex, Bobby, Toast..."
       },
       "rabbit": "Rabbit",
       "sex": "Sex",
