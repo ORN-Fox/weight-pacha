@@ -27,7 +27,7 @@
                                     </span>
                                 </div>
                             } @else {
-                                {{ vaccine.injectionDate.format('DD/MM/YYYY') }}
+                                {{ vaccine.injectionDate ? vaccine.injectionDate.format('DD/MM/YYYY') : '' }}
                             }
                         </td>
                         <td>
@@ -51,7 +51,7 @@
                                     </span>
                                 </div>
                             } @else {
-                                {{ vaccine.reminderDate?.format('DD/MM/YYYY') }}
+                                {{ vaccine.reminderDate ? vaccine.reminderDate.format('DD/MM/YYYY') : '' }}
                             }
                         </td>
                         <td>
