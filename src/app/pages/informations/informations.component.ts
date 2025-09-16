@@ -5,7 +5,14 @@ import moment from 'moment';
 
 import { LocalStorageService } from 'src/app/core/services/local-storage/local-storage.service';
 
+import { PetType } from 'src/app/core/enums/pet-type/pet-type.enum';
+
 import { PetRecord } from 'src/app/core/models/pet-record/pet-record.model';
+
+interface ISpecie {
+  key: string;
+  value: number;
+}
 
 @Component({
   selector: 'app-informations',
@@ -20,12 +27,15 @@ export class InformationsComponent {
   petForm: FormGroup;
   petRecord: PetRecord;
 
+  species: ISpecie[];
+
   constructor(
     private formBuilder: FormBuilder,
     private localStorageService: LocalStorageService,
   ) {
     this.APP_STORAGE_KEY = 'weight-pacha-data-pet-record';
     
+    this.loadSpecies();
     this.loadPetRecord();
   }
 
@@ -87,6 +97,15 @@ export class InformationsComponent {
 
     this.initForm();
     this.initDatePickers();
+  }
+
+  private loadSpecies() {
+    this.species = [
+      { key: 'dog', value: PetType.Dog },
+      { key: 'cat', value: PetType.Cat },
+      { key: 'rabbit', value: PetType.Rabbit },
+      { key: 'others', value: PetType.Others },
+    ];
   }
 
 }

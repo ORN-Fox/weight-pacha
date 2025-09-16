@@ -31,22 +31,12 @@
         <div class="field-body">
             <div class="field">
                 <div class="control radios">
-                    <label class="radio custom-radio-with-icon has-text-centered" [ngClass]="{'active': petForm.get('specie')?.value == 0}">
-                        <input type="radio" formControlName="specie" value="0" />
-                        <img src="https://cdn-icons-png.flaticon.com/64/2829/2829823.png" alt="" > {{ "pages.informations.dog" | translate }}
-                    </label>
-                    <label class="radio custom-radio-with-icon has-text-centered" [ngClass]="{'active': petForm.get('specie')?.value == 1}">
-                        <input type="radio" formControlName="specie" value="1" />
-                        <img src="https://cdn-icons-png.flaticon.com/64/2829/2829740.png" alt=""> {{ "pages.informations.cat" | translate }}
-                    </label>
-                    <label class="radio custom-radio-with-icon has-text-centered" [ngClass]="{'active': petForm.get('specie')?.value == 2}">
-                        <input type="radio" formControlName="specie" value="2" />
-                        <img src="https://cdn-icons-png.flaticon.com/64/4185/4185015.png" alt=""> {{ "pages.informations.rabbit" | translate }}
-                    </label>
-                    <label class="radio custom-radio-with-icon has-text-centered" [ngClass]="{'active': petForm.get('specie')?.value == 3}">
-                        <input type="radio" formControlName="specie" value="3" />
-                        <img src="https://cdn-icons-png.flaticon.com/64/427/427487.png" alt=""> {{ "pages.informations.others" | translate }}
-                    </label>
+                    @for (specie of species; track specie) {
+                        <label class="radio custom-radio-with-icon has-text-centered" [ngClass]="{'active': petForm.get('specie')?.value == specie.value}">
+                            <input type="radio" formControlName="specie" value="{{ specie.value }}" />
+                            <img [src]="'./assets/images/animals/' + specie.key + '.png'" alt=""> {{ ("pages.informations." + specie.key) | translate }}
+                        </label>
+                    }
                 </div>
                 @if (petForm.get('specie')?.errors?.['required'] && petForm.get('specie')?.touched) {
                     <p class="help is-danger">{{ "pages.informations.errors.specieRequired" | translate }}</p>
