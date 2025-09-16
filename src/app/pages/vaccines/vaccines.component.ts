@@ -88,8 +88,8 @@ export class VaccinesComponent {
       flatpickr(`#vaccineInjectionDateInput_${vaccine.id}`, {
         dateFormat: 'Y-m-d',
         defaultDate: vaccine.injectionDate.toDate(),
-        onChange: (_selectedDates: Object, date: string) => {
-          vaccine.injectionDate = moment(date);
+        onChange: (selectedDates: Date[]) => {
+          vaccine.injectionDate = moment(selectedDates[0]);
           vaccine.age = this.getAgeFromVaccineDate(vaccine);
         }
       });

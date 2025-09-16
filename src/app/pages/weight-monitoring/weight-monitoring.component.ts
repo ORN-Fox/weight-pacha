@@ -69,11 +69,10 @@ export class WeightMonitoringComponent {
     }) as Instance;
 
     flatpickr('#measureDateInput', {
-      enableTime: true,
-      dateFormat: 'Y-m-d H:i',
+      dateFormat: 'Y-m-d',
       defaultDate: this.date.toDate(),
-      onChange: (_selectedDates: Object, date: string) => {
-        this.date = moment(date);
+      onChange: (selectedDates: Date[]) => {
+        this.date = moment(selectedDates[0]);
       }
     });
 
