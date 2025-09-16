@@ -14,7 +14,7 @@
                     </span>
                 </p>
 
-                <button class="button is-primary button-add-note" (click)="addNote()"><i class="far fa-pencil-alt"></i></button>
+                <button class="button is-primary btn-add-note" (click)="addNote()"><i class="far fa-pencil-alt"></i></button>
             </div>
             
             <div class="panel-scrollable">
@@ -29,7 +29,9 @@
                             <span class="has-text-grey-light">{{ "pages.notes.placeholders.title" | translate }}</span>
                         }
 
-                        <button type="button" class="delete" (click)="deleteNote($event, note.id)"></button>
+                        <button type="button" class="button btn-delete" (click)="deleteNote($event, note.id)">
+                            <i class="far fa-trash"></i>
+                        </button>
                     </a>
                 }
 

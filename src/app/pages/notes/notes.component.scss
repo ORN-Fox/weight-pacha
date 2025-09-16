@@ -7,22 +7,22 @@
 .panel-block {
     position: relative;
     
-    .delete {
+    .btn-delete {
         display: none;
         position: absolute;
         right: 1rem;
     }
 
-    &:hover .delete {
+    &:hover .btn-delete {
         display: block;
 
         &:hover {
-            background-color: red;
+            color: red;
         }
     }
 }
 
-.button-add-note {
+.btn-add-note {
     margin-left: .5rem;
     padding: .75rem 1rem;
 }
