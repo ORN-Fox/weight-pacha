@@ -66,15 +66,18 @@
                         </td>
                         <td class="has-text-centered">
                             @if (vaccine.editMode) {
-                                <button type="button" (click)="saveChanges(vaccine)">
-                                    <i class="far fa-bookmark fa-lg"></i>
+                                <button type="button" class="button" (click)="saveChanges(vaccine)">
+                                    <i class="far fa-bookmark"></i>
                                 </button>
                             } @else {
-                                <button type="button" (click)="updateVaccine(vaccine)">
-                                    <i class="far fa-pencil-alt fa-lg"></i>
+                                <button type="button" class="button" (click)="updateVaccine(vaccine)">
+                                    <i class="far fa-pencil-alt"></i>
                                 </button>
                             }
-                            <button type="button" class="delete ml-2" (click)="deleteVaccine(vaccine.id)"></button>
+
+                            <button type="button" class="button btn-delete ml-2" (click)="deleteVaccine(vaccine.id)">
+                                <i class="far fa-trash"></i>
+                            </button>
                         </td>
                     </tr>
                 }
