@@ -48,7 +48,10 @@
     <div>
       <p>Date : {{ measure.date.format('DD/MM/YYYY HH:mm') }}</p>
       @if (measure.weigth) {
-        <p>Poids : {{ measure.weigth }} {{ measureUnitLabel }} ({{ getDiffWithPreviousMeasure() }} {{ measureUnitLabel }}) </p>
+        <p>
+          <i class="far fa-weight-hanging mr-2"></i> {{ measure.weigth }} {{ measureUnitLabel }} 
+          <span class="tag {{ measureDiff?.colorClass }} is-light"><i class="far {{ measureDiff?.icon }} mr-2"></i> {{ measureDiff?.value }} {{ measureUnitLabel }}</span>
+        </p>
       } @else {
         <p>Non pesé</p>
       }
