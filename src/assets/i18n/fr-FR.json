@@ -7,6 +7,10 @@
       "save": "Enregistrer",
       "search": "Rechercher",
       "yes": "Oui"
+    },
+    "dateFormats": {
+      "flatpickrDateFormat": "d-m-Y",
+      "flatpickrDateTimeFormat": "d-m-Y H:i"
     }
   },
   "languages": "Langues",

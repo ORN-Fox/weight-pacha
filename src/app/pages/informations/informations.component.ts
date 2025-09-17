@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { TranslateService } from '@ngx-translate/core';
 import flatpickr from 'flatpickr';
 import moment from 'moment';
 
@@ -31,6 +32,7 @@ export class InformationsComponent {
 
   constructor(
     private formBuilder: FormBuilder,
+    private translateService: TranslateService,
     private localStorageService: LocalStorageService,
   ) {
     this.APP_STORAGE_KEY = 'weight-pacha-data-pet-record';
@@ -56,13 +58,13 @@ export class InformationsComponent {
 
       flatpickr('#birthDateInput', {
         enableTime: true,
-        dateFormat: 'Y-m-d H:i',
+        dateFormat: this.translateService.instant('commons.dateFormats.flatpickrDateTimeFormat'),
         defaultDate: this.petForm.get('birthDate')?.value?.toDate()
       });
 
       flatpickr('#adoptedDateInput', {
         enableTime: true,
-        dateFormat: 'Y-m-d H:i',
+        dateFormat: this.translateService.instant('commons.dateFormats.flatpickrDateTimeFormat'),
         defaultDate: this.petForm.get('adoptedDate')?.value?.toDate()
       });
     }, 100);

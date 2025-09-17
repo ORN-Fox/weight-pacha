@@ -86,7 +86,7 @@ export class VaccinesComponent {
   private initDatePickers(vaccine: Vaccine) {
     setTimeout(() => {
       flatpickr(`#vaccineInjectionDateInput_${vaccine.id}`, {
-        dateFormat: 'Y-m-d',
+        dateFormat: this.translateService.instant('commons.dateFormats.flatpickrDateFormat'),
         defaultDate: vaccine.injectionDate.toDate(),
         onChange: (selectedDates: Date[]) => {
           vaccine.injectionDate = moment(selectedDates[0]);
@@ -95,7 +95,7 @@ export class VaccinesComponent {
       });
 
       flatpickr(`#vaccineReminderDateInput_${vaccine.id}`, {
-        dateFormat: 'Y-m-d',
+        dateFormat: this.translateService.instant('commons.dateFormats.flatpickrDateFormat'),
         defaultDate: vaccine.reminderDate?.toDate(),
         onChange: (_selectedDates: Object, date: string) => {
           vaccine.reminderDate = date ? moment(date) : null;
