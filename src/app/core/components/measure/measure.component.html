@@ -50,7 +50,9 @@
       @if (measure.weigth) {
         <p>
           <i class="far fa-weight-hanging mr-2"></i> {{ measure.weigth }} {{ measureUnitLabel }} 
-          <span class="tag {{ measureDiff?.colorClass }} is-light"><i class="far {{ measureDiff?.icon }} mr-2"></i> {{ measureDiff?.value }} {{ measureUnitLabel }}</span>
+          @if (measureDiff) {
+            <span class="tag {{ measureDiff.colorClass }} is-light"><i class="far {{ measureDiff.icon }} mr-2"></i> {{ measureDiff.value }} {{ measureUnitLabel }}</span>
+          }
         </p>
       } @else {
         <p>{{ "pages.weight.noWeight" | translate }}</p>

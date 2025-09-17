@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import flatpickr from 'flatpickr';
 import moment from 'moment';
@@ -18,7 +18,7 @@ export interface IMeasureDiff {
     styleUrls: ['./measure.component.scss'],
     standalone: false
 })
-export class MeasureComponent implements AfterViewInit {
+export class MeasureComponent implements OnInit {
 
   @Input() measures: Measure[];
   @Input() measure: Measure;
@@ -37,7 +37,7 @@ export class MeasureComponent implements AfterViewInit {
     this.editMode = false;
   }
 
-  ngAfterViewInit() {
+  ngOnInit() {
     this.measureDiff = this.getDiffWithPreviousMeasure();
   }
 
