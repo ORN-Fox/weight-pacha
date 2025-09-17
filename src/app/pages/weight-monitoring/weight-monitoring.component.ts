@@ -154,7 +154,7 @@ export class WeightMonitoringComponent {
   }
 
   addMeasure() {
-    let measure = new Measure(this.date,  this.weight);
+    let measure = new Measure(this.date, this.weight);
     this.sourceMeasures.push(measure);
     this.measures.push(measure);
 
@@ -232,7 +232,7 @@ export class WeightMonitoringComponent {
       this.measureUnit = measuresJSON.measureUnit;
 
       measuresJSON.measures.forEach((measureJSON: ISerializedMeasure) => {
-        let measure = new Measure(moment(), 0);
+        let measure = new Measure();
         measure.deserilizeFromSave(measureJSON);
         this.sourceMeasures.push(measure);
       });

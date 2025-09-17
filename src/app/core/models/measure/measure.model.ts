@@ -14,7 +14,7 @@ export class Measure extends SerializeModel {
     date: moment.Moment;
     weigth: number;
 
-    constructor(date: moment.Moment, weigth: number) {
+    constructor(date: moment.Moment = moment(), weigth: number = 1) {
         super();
 
         this.date = date;
