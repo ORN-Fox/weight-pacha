@@ -48,6 +48,9 @@
       "tagRageNumber": "Tag rage number",
       "title": "Informations"
     },
+    "invoices": {
+      "title": "Invoices"
+    },
     "notes": {
       "errors": {
         "titleRequired": "Title is required"

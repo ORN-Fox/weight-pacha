@@ -21,6 +21,7 @@ export class HomeComponent {
       { path: 'informations', title: 'informations', enabled: true },
       { path: 'weight', title: 'weight', enabled: true },
       { path: 'notes', title: 'notes', enabled: true },
+      { path: 'invoices', title: 'invoices', enabled: false },
       { path: 'vaccines', title: 'vaccines', enabled: true },
       { path: 'antiflea', title: 'antiflea', enabled: false },
       { path: 'settings', title: 'settings', enabled: false }

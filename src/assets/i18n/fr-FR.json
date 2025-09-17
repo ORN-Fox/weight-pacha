@@ -48,6 +48,9 @@
       "tagRageNumber": "Médaille de Rage",
       "title": "Informations"
     },
+    "invoices": {
+      "title": "Factures"
+    },
     "notes": {
       "errors": {
         "titleRequired": "Le titre est requis"
