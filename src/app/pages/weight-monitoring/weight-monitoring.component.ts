@@ -8,12 +8,12 @@ import { Instance } from 'flatpickr/dist/types/instance';
 import moment from 'moment';
 import { cloneDeep } from 'lodash';
 
+import { DateService } from 'src/app/core/services/date/date.service';
 import { LocalStorageService } from 'src/app/core/services/local-storage/local-storage.service';
 
 import { UnitType } from 'src/app/core/enums/unit-type/unit-type.enum';
 
 import { ISerializedMeasure, Measure } from 'src/app/core/models/measure/measure.model';
-import { DateService } from 'src/app/core/services/date/date.service';
 
 export interface IChatDataSetPoint {
   x: moment.Moment,
@@ -283,7 +283,7 @@ export class WeightMonitoringComponent {
   }
 
   private computeDataPoints(): any[] {
-    let dataPoints: any[] = [];
+    let dataPoints: IChatDataSetPoint[] = [];
     this.measures.forEach(measure => {
       let dataPoint = {
         x: measure.date,
@@ -299,7 +299,7 @@ export class WeightMonitoringComponent {
     let min = 999999;
     if (this.data) {
       let suggestedMinGap = .25;
-      this.data.datasets[0].data.forEach((dataPoint: { x: moment.Moment, y: number }) => {
+      this.data.datasets[0].data.forEach((dataPoint: IChatDataSetPoint) => {
         if (dataPoint.y < min) {
           min = dataPoint.y;
         }
@@ -313,7 +313,7 @@ export class WeightMonitoringComponent {
     let max = 0;
     if (this.data) {
       let suggestedMaxGap = .25;
-      this.data.datasets[0].data.forEach((dataPoint: { x: moment.Moment, y: number }) => {
+      this.data.datasets[0].data.forEach((dataPoint: IChatDataSetPoint) => {
         if (dataPoint.y > max) {
           max = dataPoint.y;
         }
@@ -327,7 +327,7 @@ export class WeightMonitoringComponent {
     const config = {
       type: 'line',
       data: this.data,
-      locale: 'fr-FR',
+      locale: this.translateService.currentLang,
       options: {
         scales: {
           x: {
