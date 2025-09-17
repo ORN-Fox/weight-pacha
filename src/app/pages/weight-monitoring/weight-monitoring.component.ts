@@ -13,6 +13,7 @@ import { LocalStorageService } from 'src/app/core/services/local-storage/local-s
 import { UnitType } from 'src/app/core/enums/unit-type/unit-type.enum';
 
 import { ISerializedMeasure, Measure } from 'src/app/core/models/measure/measure.model';
+import { DateService } from 'src/app/core/services/date/date.service';
 
 @Component({
   selector: 'app-weight-monitoring',
@@ -135,10 +136,7 @@ export class WeightMonitoringComponent {
   }
 
   isInvalidDate(): boolean {
-    if (this.date) {
-      return !moment(this.date).isValid();
-    }
-    return false;
+    return DateService.isInvalidDate(this.date);
   }
 
   isInvalidWeight(weight: number): boolean {

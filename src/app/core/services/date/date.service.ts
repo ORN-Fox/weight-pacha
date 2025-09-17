@@ -21,5 +21,20 @@ export class DateService {
     }
     return null;
   }
+
+  static isValidDate(date: moment.Moment | null): boolean {
+    if (date) {
+      if (date instanceof Date) {
+        date = moment(date);
+      }
+
+      return date.isValid();
+    }
+    return false;
+  }
+
+  static isInvalidDate(date: moment.Moment | null): boolean {
+    return !this.isValidDate(date);
+  }
   
 }
