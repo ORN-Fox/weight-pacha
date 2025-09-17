@@ -15,6 +15,11 @@ import { UnitType } from 'src/app/core/enums/unit-type/unit-type.enum';
 import { ISerializedMeasure, Measure } from 'src/app/core/models/measure/measure.model';
 import { DateService } from 'src/app/core/services/date/date.service';
 
+export interface IChatDataSetPoint {
+  x: moment.Moment,
+  y: number
+}
+
 @Component({
   selector: 'app-weight-monitoring',
   templateUrl: './weight-monitoring.component.html',
@@ -155,13 +160,12 @@ export class WeightMonitoringComponent {
     let measure = new Measure(this.date, this.weight);
     this.sourceMeasures.push(measure);
     this.measures.push(measure);
+    this.saveMeasures();
 
-    let dataPoint = {
+    let dataPoint: IChatDataSetPoint = {
       x: measure.date,
       y: measure.weigth
     };
-
-    this.saveMeasures();
 
     this.chart.data.datasets[0].data.push(dataPoint);
     this.updateRangeDates();
@@ -179,7 +183,7 @@ export class WeightMonitoringComponent {
     this.measures = this.sourceMeasures.filter((measure) => measure.date.isBetween(rangeDates[0], rangeDates[1], 'day', '[]'))
     this.saveMeasures();
 
-    this.chart.data.datasets[0].data = this.chart.data.datasets[0].data.filter((dataPoint: { x: moment.MomentInput, y: number }) => !moment(dataPoint.x).isSame(event.measure.date, 'day'));
+    this.chart.data.datasets[0].data = this.chart.data.datasets[0].data.filter((dataPoint: IChatDataSetPoint) => !moment(dataPoint.x).isSame(event.measure.date, 'day'));
     this.updateRangeDates();
   }
 
@@ -190,7 +194,7 @@ export class WeightMonitoringComponent {
     this.measures = this.sourceMeasures.filter((measure) => measure.date.isBetween(rangeDates[0], rangeDates[1], 'day', '[]'))
     this.saveMeasures();
 
-    this.chart.data.datasets[0].data = this.chart.data.datasets[0].data.filter((dataPoint: { x: moment.MomentInput, y: number }) => !moment(dataPoint.x).isSame(event.measure.date, 'day'));
+    this.chart.data.datasets[0].data = this.chart.data.datasets[0].data.filter((dataPoint: IChatDataSetPoint) => !moment(dataPoint.x).isSame(event.measure.date, 'day'));
     this.updateRangeDates();
   }
 
