@@ -80,6 +80,7 @@
       "invalidDate": "La date est invalide",
       "measureExistsOnThisDate": "Une mesure existe à cette date",
       "measures": "Mesures",
+      "noWeight": "Non pesé",
       "settings": "Paramètres",
       "title": "Suivi du poids",
       "weight": "Poids",

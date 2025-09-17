@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, EventEmitter, Input, Output } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import flatpickr from 'flatpickr';
 import moment from 'moment';
 
@@ -28,7 +29,11 @@ export class MeasureComponent implements AfterViewInit {
 
   editMode: boolean;
 
-  constructor() {
+  measureDiff: IMeasureDiff;
+
+  constructor(
+    private translateService: TranslateService
+  ) {
     this.editMode = false;
   }
 
@@ -105,7 +110,7 @@ export class MeasureComponent implements AfterViewInit {
     setTimeout(() => {
       flatpickr(`#measureDateInput_${this.measure.id}`, {
         enableTime: true,
-        dateFormat: 'Y-m-d H:i',
+        dateFormat: this.translateService.instant('commons.dateFormats.flatpickrDateTimeFormat'),
         defaultDate: this.measure.date.toDate(),
         onChange: (_selectedDates: Object, date: string) => {
           this.measure.date = moment(date);
@@ -118,6 +123,7 @@ export class MeasureComponent implements AfterViewInit {
 
   saveMeasure() {
     // TODO handle validations
+    // TODO toggle edit affect value render without save data
     this.editMode = false;
     this.measure.updatedAt = moment();
     this.measureDiff = this.getDiffWithPreviousMeasure();
