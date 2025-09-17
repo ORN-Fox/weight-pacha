@@ -78,6 +78,7 @@ export class VaccinesComponent {
     const birthdate = moment('2023-06-01');
     // TODO: compute days, weeks, months value for handle babies
     if (vaccine.injectionDate) {
+      vaccine.injectionDate = moment(vaccine.injectionDate);
       return vaccine.injectionDate?.diff(birthdate, 'years', false);
     }
     return -1;
