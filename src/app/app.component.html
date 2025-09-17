@@ -21,7 +21,7 @@
         <a class="navbar-link">{{"languages" | translate}}</a>
         <div class="navbar-dropdown">
           @for (locale of locales; track locale) {
-            <a class="navbar-item" (click)="updateLocale(locale)"><img src="/assets/images/{{ locale }}.png" /> {{ locale }}</a>
+            <a class="navbar-item" [ngClass]="{'is-active': selectedLocale == locale}" (click)="updateLocale(locale)"><img src="/assets/images/{{ locale }}.png" /> {{ locale }}</a>
           }
         </div>
       </div>

@@ -13,7 +13,7 @@ import { French } from "flatpickr/dist/l10n/fr.js";
 export class AppComponent {
 
   locales: string[];
-  locale!: string;
+  selectedLocale!: string;
 
   constructor(private translateService: TranslateService) {
     this.locales = ['en-US', 'fr-FR'];
@@ -22,9 +22,9 @@ export class AppComponent {
   }
 
   updateLocale(locale: string) {
-    this.locale = locale;
-    this.translateService.use(this.locale);
-    flatpickr.localize(this.locale == 'en-US' ? english : French);
+    this.selectedLocale = locale;
+    this.translateService.use(this.selectedLocale);
+    flatpickr.localize(this.selectedLocale == 'en-US' ? english : French);
   }
 
 }
