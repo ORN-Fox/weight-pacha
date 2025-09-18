@@ -1,12 +1,13 @@
 <div class="home fixed-grid has-4-cols">
     <div class="grid is-gap-6">
         @for (page of pages; track page) {
-            <div class="cell">
-                <a class="card is-flex is-justify-content-center is-align-content-center has-text-centered" routerLink="/{{ page.enabled ? page.path : '#' }}" [ngClass]="{'disabled': !page.enabled}">
-                    <div class="card-content">
+            <div class="cell">                
+                <a routerLink="/{{ page.enabled ? page.path : '#' }}" class="card {{ page.title }}" [ngClass]="{'disabled': !page.enabled}">
+                    <div class="overlay"></div>
+                    <div class="circle">
                         <img [src]="'/assets/images/pages/' + page.title + '.png'" alt="">
-                        <h1 class="title">{{ 'pages.' + page.title + '.title' | translate }}</h1>
                     </div>
+                    <h1 class="title">{{ 'pages.' + page.title + '.title' | translate }}</h1>
                 </a>
             </div>
         }
