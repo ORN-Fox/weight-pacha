@@ -1,0 +1,97 @@
+<div class="card-page-title highlight-card card-small">
+    <img src="/assets/images/pages/anti-flea.png" alt="">
+    <h1 class="title">{{ "pages.antiFlea.title" | translate }}</h1>
+</div>
+
+<button class="button is-primary mb-3" (click)="addVaccine()"><i class="far fa-pencil-alt"></i></button>
+
+<div>
+    <div class="table-container">
+        <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+            <thead>
+                <tr>
+                    @for (tableHeader of tableHeaders; track tableHeader) {
+                    <th class="is-primary" align="center" [ngStyle]="{'width': tableHeader.width}">{{
+                        ('pages.vaccines.tableHeaders.' + tableHeader.title) | translate }}</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @for (vaccine of vaccines; track vaccine) {
+                <tr class="vaccine">
+                    <td class="has-text-centered">
+                        @if (vaccine.editMode) {
+                        <div class="control has-icons-left">
+                            <input type="text" id="vaccineInjectionDateInput_{{vaccine.id}}" class="input"
+                                name="injectionDate" [(ngModel)]="vaccine.injectionDate">
+                            <span class="icon is-small is-left">
+                                <i class="far fa-calendar"></i>
+                            </span>
+                        </div>
+                        } @else {
+                        {{ vaccine.injectionDate ? vaccine.injectionDate.format('DD/MM/YYYY') : '' }}
+                        }
+                    </td>
+                    <td>
+                        @if (vaccine.editMode) {
+                        <div class="control has-icons-left">
+                            <input type="text" class="input" name="name" [(ngModel)]="vaccine.name">
+                            <span class="icon is-small is-left">
+                                <i class="far fa-tag"></i>
+                            </span>
+                        </div>
+                        } @else {
+                        {{ vaccine.name }}
+                        }
+                    </td>
+                    <td class="has-text-centered">
+                        @if (vaccine.editMode) {
+                        <div class="control has-icons-left">
+                            <input type="text" id="vaccineReminderDateInput_{{vaccine.id}}" class="input"
+                                name="reminderDate" [(ngModel)]="vaccine.reminderDate">
+                            <span class="icon is-small is-left">
+                                <i class="far fa-calendar"></i>
+                            </span>
+                        </div>
+                        } @else {
+                        {{ vaccine.reminderDate ? vaccine.reminderDate.format('DD/MM/YYYY') : '' }}
+                        }
+                    </td>
+                    <td>
+                        @if (vaccine.editMode) {
+                        <textarea class="textarea" name="description" [(ngModel)]="vaccine.description"
+                            rows="1"></textarea>
+                        } @else {
+                        <div class="description">{{ vaccine.description }}</div>
+                        }
+                    </td>
+                    <td class="has-text-centered">
+                        {{ vaccine.age }}
+                    </td>
+                    <td class="has-text-centered">
+                        @if (vaccine.editMode) {
+                        <button type="button" class="button" (click)="saveChanges(vaccine)">
+                            <i class="far fa-bookmark"></i>
+                        </button>
+                        } @else {
+                        <button type="button" class="button" (click)="updateVaccine(vaccine)">
+                            <i class="far fa-pencil-alt"></i>
+                        </button>
+                        }
+
+                        <button type="button" class="button btn-delete ml-2" (click)="deleteVaccine(vaccine.id)">
+                            <i class="far fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+                }
+
+                @if (vaccines.length == 0) {
+                <tr>
+                    <td colspan="7" class="has-text-centered">{{ "pages.vaccines.noVaccineAddNewForStartTracking" | translate }}</td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
