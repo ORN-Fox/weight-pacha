@@ -66,10 +66,9 @@
     }
 
     .card {
-        width: 220px;
+        width: 100%;
         height: 321px;
         background: #fff;
-        border-top-right-radius: 10px;
         overflow: hidden;
         display: flex;
         flex-direction: column;
@@ -111,7 +110,6 @@
     }
 
     .card .title {
-        font-size: 17px;
         color: #4C5656;
         margin-top: 30px;
         z-index: 1000;
@@ -156,8 +154,8 @@
         height: 118px;
         border-radius: 50%;
         background: var(--bg-color);
-        top: 70px;
-        left: 50px;
+        top: 75px;
+        left: 90px;
         z-index: 0;
         transition: transform .3s ease-out;
     }
