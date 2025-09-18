@@ -67,7 +67,7 @@ export class WeightMonitoringComponent {
   ngAfterViewInit() {
     this.rangeDateInputInstance = flatpickr('#rangeDatesInput', {
       mode: "range",
-      dateFormat: this.translateService.instant('commons.dateFormats.flatpickrDateFormat'),
+      dateFormat: this.translateService.instant('commons.dateFormats.flatpickr.date'),
       defaultDate: this.getRangeDates(),
       onChange: (selectedDates: Date[]) => {
         this.onChangeRangeDates(selectedDates);
@@ -75,7 +75,7 @@ export class WeightMonitoringComponent {
     }) as Instance;
 
     flatpickr('#measureDateInput', {
-      dateFormat: this.translateService.instant('commons.dateFormats.flatpickrDateFormat'),
+      dateFormat: this.translateService.instant('commons.dateFormats.flatpickr.date'),
       defaultDate: this.date.toDate(),
       onChange: (selectedDates: Date[]) => {
         this.date = moment(selectedDates[0]);

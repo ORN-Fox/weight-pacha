@@ -110,7 +110,7 @@ export class MeasureComponent implements OnInit {
     setTimeout(() => {
       flatpickr(`#measureDateInput_${this.measure.id}`, {
         enableTime: true,
-        dateFormat: this.translateService.instant('commons.dateFormats.flatpickrDateTimeFormat'),
+        dateFormat: this.translateService.instant('commons.dateFormats.flatpickr.dateTime'),
         defaultDate: this.measure.date.toDate(),
         onChange: (_selectedDates: Object, date: string) => {
           this.measure.date = moment(date);
