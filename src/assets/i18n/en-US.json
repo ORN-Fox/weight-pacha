@@ -9,8 +9,12 @@
       "yes": "Yes"
     },
     "dateFormats": {
-      "flatpickrDateFormat": "Y-m-d",
-      "flatpickrDateTimeFormat": "Y-m-d H:i"
+      "date": "YYYY-MM-DD",
+      "dateTime": "YYYY-MM-DD hh:mm A",
+      "flatpickr": {
+        "date": "Y-m-d",
+        "dateTime": "Y-m-d H:i"
+      }
     }
   },
   "languages": "Languages",
