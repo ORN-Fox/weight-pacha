@@ -1,0 +1,92 @@
+<div class="card-page-title highlight-card card-small">
+    <img src="/assets/images/pages/wormables.png" alt="">
+    <h1 class="title">{{ "pages.wormables.title" | translate }}</h1>
+</div>
+
+<button class="button is-primary mb-3" (click)="addWormables()"><i class="far fa-pencil-alt"></i></button>
+
+<div>
+    <div class="table-container">
+        <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+            <thead>
+                <tr>
+                    @for (tableHeader of tableHeaders; track tableHeader) {
+                        <th class="is-primary" align="center" [ngStyle]="{'width': tableHeader.width}">{{ ('pages.wormables.tableHeaders.' + tableHeader.title) | translate }}</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @for (wormable of wormables; track wormable) {
+                <tr class="wormable">
+                    <td class="has-text-centered">
+                        @if (wormable.editMode) {
+                            <div class="control has-icons-left">
+                                <input type="text" id="wormableInjectionDateInput_{{ wormable.id }}" class="input"
+                                    name="injectionDate" [(ngModel)]="wormable.injectionDate">
+                                <span class="icon is-small is-left">
+                                    <i class="far fa-calendar"></i>
+                                </span>
+                            </div>
+                        } @else {
+                            {{ wormable.injectionDate ? wormable.injectionDate.format('DD/MM/YYYY') : '' }}
+                        }
+                    </td>
+                    <td>
+                        @if (wormable.editMode) {
+                            <div class="control has-icons-left">
+                                <input type="text" class="input" name="name" [(ngModel)]="wormable.name">
+                                <span class="icon is-small is-left">
+                                    <i class="far fa-tag"></i>
+                                </span>
+                            </div>
+                        } @else {
+                            {{ wormable.name }}
+                        }
+                    </td>
+                    <td class="has-text-centered">
+                        @if (wormable.editMode) {
+                            <div class="control has-icons-left">
+                                <input type="text" id="vaccineReminderDateInput_{{wormable.id}}" class="input"
+                                    name="reminderDate" [(ngModel)]="wormable.reminderDate">
+                                <span class="icon is-small is-left">
+                                    <i class="far fa-calendar"></i>
+                                </span>
+                            </div>
+                        } @else {
+                            {{ wormable.reminderDate ? wormable.reminderDate.format('DD/MM/YYYY') : '' }}
+                        }
+                    </td>
+                    <td>
+                        @if (wormable.editMode) {
+                            <textarea class="textarea" name="description" [(ngModel)]="wormable.description" rows="1"></textarea>
+                        } @else {
+                            <div class="description">{{ wormable.description }}</div>
+                        }
+                    </td>
+                    <td class="has-text-centered">
+                        @if (wormable.editMode) {
+                            <button type="button" class="button" (click)="saveChanges(wormable)">
+                                <i class="far fa-bookmark"></i>
+                            </button>
+                        } @else {
+                            <button type="button" class="button" (click)="updateWormables(wormable)">
+                                <i class="far fa-pencil-alt"></i>
+                            </button>
+                        }
+
+                        <button type="button" class="button btn-delete ml-2" (click)="deleteWormables(wormable.id)">
+                            <i class="far fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+                }
+
+                @if (wormables.length == 0) {
+                    <tr>
+                        <td colspan="7" class="has-text-centered">{{ "pages.wormables.noWormableAddNewForStartTracking" | translate }}</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

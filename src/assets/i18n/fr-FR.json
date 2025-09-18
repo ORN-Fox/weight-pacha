@@ -15,7 +15,15 @@
   },
   "languages": "Langues",
   "pages": {
-    "antiFlea": {
+    "wormables": {
+      "noWormableAddNewForStartTracking": "Aucun vermifuge. Ajouter un vaccin pour commencer le suivi",
+      "tableHeaders": {
+        "actions": "Actions",
+        "date": "Date",
+        "description": "Description",
+        "reminderDate": "Rappel",
+        "title": "Titre"
+      },
       "title": "Vermifuges"
     },
     "informations": {

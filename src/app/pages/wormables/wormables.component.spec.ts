@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AntiFleaComponent } from './anti-flea.component';
+import { WormablesComponent } from './wormables.component';
 
-describe('AntiFleaComponent', () => {
-  let component: AntiFleaComponent;
-  let fixture: ComponentFixture<AntiFleaComponent>;
+describe('WormablesComponent', () => {
+  let component: WormablesComponent;
+  let fixture: ComponentFixture<WormablesComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AntiFleaComponent]
+      imports: [WormablesComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(AntiFleaComponent);
+    fixture = TestBed.createComponent(WormablesComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

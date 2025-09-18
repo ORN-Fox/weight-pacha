@@ -23,7 +23,7 @@ export class HomeComponent {
       { path: 'notes', title: 'notes', enabled: true },
       { path: 'invoices', title: 'invoices', enabled: false },
       { path: 'vaccines', title: 'vaccines', enabled: true },
-      { path: 'anti-flea', title: 'antiFlea', enabled: true },
+      { path: 'wormables', title: 'wormables', enabled: true },
       { path: 'settings', title: 'settings', enabled: false }
     ];
   }

@@ -17,7 +17,7 @@ import { InformationsComponent } from './pages/informations/informations.compone
 import { NotesComponent } from './pages/notes/notes.component';
 import { VaccinesComponent } from './pages/vaccines/vaccines.component';
 import { WeightMonitoringComponent } from './pages/weight-monitoring/weight-monitoring.component';
-import { AntiFleaComponent } from './pages/anti-flea/anti-flea.component';
+import { WormablesComponent } from './pages/wormables/wormables.component';
 import { InvoicesComponent } from './pages/invoices/invoices.component';
 import { SettingsComponent } from './pages/settings/settings.component';
 
@@ -43,7 +43,7 @@ export function appInitializerFactory(translate: TranslateService) {
         NotesComponent,
         VaccinesComponent,
         WeightMonitoringComponent,
-        AntiFleaComponent,
+        WormablesComponent,
         InvoicesComponent,
         SettingsComponent
     ],
