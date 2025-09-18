@@ -30,11 +30,13 @@ export class MeasureComponent implements OnInit {
   editMode: boolean;
 
   measureDiff: IMeasureDiff;
+  dateTimeFormat: string;
 
   constructor(
     private translateService: TranslateService
   ) {
     this.editMode = false;
+    this.dateTimeFormat = this.translateService.instant('commons.dateFormats.dateTime');
   }
 
   ngOnInit() {

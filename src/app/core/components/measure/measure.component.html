@@ -46,7 +46,7 @@
     </div>
   } @else {
     <div>
-      <p><i class="far fa-calendar mr-2"></i> {{ measure.date.format('DD/MM/YYYY HH:mm') }}</p>
+      <p><i class="far fa-calendar mr-2"></i> {{ measure.date.format(dateTimeFormat) }}</p>
       @if (measure.weigth) {
         <p>
           <i class="far fa-weight-hanging mr-2"></i> {{ measure.weigth }} {{ measureUnitLabel }} 

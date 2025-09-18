@@ -25,11 +25,15 @@ export class WormablesComponent {
   tableHeaders: ITableHeader[];
   wormables: Wormable[];
 
+  dateFormat: string;
+
   constructor(
     private localStorageService: LocalStorageService,
     private translateService: TranslateService
   ) {
     this.APP_STORAGE_KEY = 'weight-pacha-wormables';
+
+    this.translateService.instant('commons.dateFormats.date');
 
     this.setupTableHeaders();
     this.loadWormables();

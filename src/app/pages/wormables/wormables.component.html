@@ -28,7 +28,7 @@
                                 </span>
                             </div>
                         } @else {
-                            {{ wormable.injectionDate ? wormable.injectionDate.format('DD/MM/YYYY') : '' }}
+                            {{ wormable.injectionDate ? wormable.injectionDate.format(dateFormat) : '' }}
                         }
                     </td>
                     <td>
@@ -53,7 +53,7 @@
                                 </span>
                             </div>
                         } @else {
-                            {{ wormable.reminderDate ? wormable.reminderDate.format('DD/MM/YYYY') : '' }}
+                            {{ wormable.reminderDate ? wormable.reminderDate.format(dateFormat) : '' }}
                         }
                     </td>
                     <td>

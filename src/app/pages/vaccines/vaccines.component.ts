@@ -25,11 +25,15 @@ export class VaccinesComponent {
   tableHeaders: ITableHeader[];
   vaccines: Vaccine[];
 
+  dateFormat: string;
+
   constructor(
     private localStorageService: LocalStorageService,
     private translateService: TranslateService
   ) {
     this.APP_STORAGE_KEY = 'weight-pacha-vaccines';
+
+    this.dateFormat = this.translateService.instant('commons.dateFormats.date');
 
     this.setupTableHeaders();
     this.loadVaccines();
