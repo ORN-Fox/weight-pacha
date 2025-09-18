@@ -1,5 +1,5 @@
-<div class="home fixed-grid has-4-cols">
-    <div class="grid is-gap-6">
+<div class="home">
+    <div class="grid is-gap-6 is-col-min-12">
         @for (page of pages; track page) {
             <div class="cell">                
                 <a routerLink="/{{ page.enabled ? page.path : '#' }}" class="card {{ page.title }}" [ngClass]="{'disabled': !page.enabled}">
