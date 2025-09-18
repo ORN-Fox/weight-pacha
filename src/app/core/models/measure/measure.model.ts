@@ -12,19 +12,19 @@ export interface ISerializedMeasure extends ISerializeModel {
 export class Measure extends SerializeModel {
 
     date: moment.Moment;
-    weigth: number;
+    weight: number;
 
     constructor(date: moment.Moment = moment(), weigth: number = 1) {
         super();
 
         this.date = date;
-        this.weigth = weigth;
+        this.weight = weigth;
     }
 
     override serializeForSave(): ISerializedMeasure {
         let serializeFields = {
             date: DateService.getStringDateFromMoment(this.date) as string,
-            weight: this.weigth
+            weight: this.weight
         };
 
         let serializeMeasure: ISerializedMeasure = Object.assign(serializeFields, super.serializeForSave());
@@ -37,7 +37,7 @@ export class Measure extends SerializeModel {
             super.deserilizeFromSave(serializeMeasure);
             
             this.date = DateService.getMomentFromStringDate(serializeMeasure.date) as moment.Moment;
-            this.weigth = serializeMeasure.weight;
+            this.weight = serializeMeasure.weight;
         } catch (exception) {
             console.error('Exception on deserialize measure model', exception);
         }

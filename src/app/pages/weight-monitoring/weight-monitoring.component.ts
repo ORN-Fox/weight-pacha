@@ -164,7 +164,7 @@ export class WeightMonitoringComponent {
 
     let dataPoint: IChatDataSetPoint = {
       x: measure.date,
-      y: measure.weigth
+      y: measure.weight
     };
 
     this.chart.data.datasets[0].data.push(dataPoint);
@@ -206,7 +206,7 @@ export class WeightMonitoringComponent {
     this.updateChart();
   }
 
-  updateHealthWeigth() {
+  updateHealthWeight() {
     if (this.isInvalidWeight(this.healthWeight)) {
       return;
     }
@@ -287,7 +287,7 @@ export class WeightMonitoringComponent {
     this.measures.forEach(measure => {
       let dataPoint = {
         x: measure.date,
-        y: measure.weigth
+        y: measure.weight
       }
       dataPoints.push(dataPoint);
     });

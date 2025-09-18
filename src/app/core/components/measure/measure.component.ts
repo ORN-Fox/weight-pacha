@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import flatpickr from 'flatpickr';
 import moment from 'moment';
@@ -29,10 +30,12 @@ export class MeasureComponent implements OnInit {
 
   editMode: boolean;
 
+  measureForm: FormGroup;
   measureDiff: IMeasureDiff;
   dateTimeFormat: string;
 
   constructor(
+    private formBuilder: FormBuilder,
     private translateService: TranslateService
   ) {
     this.editMode = false;
@@ -40,7 +43,7 @@ export class MeasureComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.measureDiff = this.getDiffWithPreviousMeasure();
+    this.measureDiff = this.getDiffWithPreviousMeasure(this.measure.date);
   }
 
   isInvalidDate(): boolean {
@@ -59,7 +62,7 @@ export class MeasureComponent implements OnInit {
   }
 
   shouldDisableAddMeasureButton(): boolean {
-    return this.isInvalidWeight(this.measure.weigth) || this.isExistingMeasureOnSelectedDate();
+    return this.isInvalidWeight(this.measure.weight) || this.isExistingMeasureOnSelectedDate();
   }
 
   getDiffIcon(diff: number): string {
@@ -82,9 +85,9 @@ export class MeasureComponent implements OnInit {
     }
   }
 
-  getDiffWithPreviousMeasure(): IMeasureDiff {
+  getDiffWithPreviousMeasure(date: moment.Moment): IMeasureDiff {
     const previousMeasure = this.measures.reduce((previousMeasure, measure) => {
-      if (measure.date.isBefore(this.measure.date, 'd')) {
+      if (measure.date.isBefore(date, 'd')) {
         if (!previousMeasure) {
           previousMeasure = measure;
         } else if (measure.date.isAfter(previousMeasure.date, 'd')) {
@@ -94,7 +97,7 @@ export class MeasureComponent implements OnInit {
       return previousMeasure;
     });
 
-    let weightDiff = (this.measure.weigth - previousMeasure.weigth);
+    let weightDiff = (this.measure.weight - previousMeasure.weight);
 
     let measureDiff: IMeasureDiff = {
       value: weightDiff == 0 ? weightDiff.toString() : weightDiff.toFixed(3),
@@ -108,32 +111,46 @@ export class MeasureComponent implements OnInit {
   updateMeasure() {
     this.editMode = !this.editMode;
 
-    // Wait dom rendering before init flatpickr
-    setTimeout(() => {
-      flatpickr(`#measureDateInput_${this.measure.id}`, {
-        enableTime: true,
-        dateFormat: this.translateService.instant('commons.dateFormats.flatpickr.dateTime'),
-        defaultDate: this.measure.date.toDate(),
-        onChange: (_selectedDates: Object, date: string) => {
-          this.measure.date = moment(date);
+    if (this.editMode) {
+      this.initForm();
 
-          this.measureDiff = this.getDiffWithPreviousMeasure();
-        }
-      });
-    }, 100);
+      // Wait dom rendering before init flatpickr
+      setTimeout(() => {
+
+        // No date update in onChange here because petForm change event interfer with date format rendering
+        flatpickr(`#measureDateInput_${this.measure.id}`, {
+          enableTime: true,
+          altFormat: this.translateService.instant('commons.dateFormats.flatpickr.dateTime'),
+          defaultDate: this.measureForm.get('date')?.value?.toDate(),
+          onChange: (selectedDates: Date[]) => {
+            this.measureDiff = this.getDiffWithPreviousMeasure(moment(selectedDates[0]));
+          }
+        });
+      }, 100);
+    }
   }
 
   saveMeasure() {
-    // TODO handle validations
-    // TODO toggle edit affect value render without save data
-    this.editMode = false;
-    this.measure.updatedAt = moment();
-    this.measureDiff = this.getDiffWithPreviousMeasure();
-    this.updateMeasureEvent.emit({ measure: this.measure })
+    if (this.measureForm.valid) {
+      this.editMode = false;
+
+      Object.assign(this.measure, this.measureForm.value);
+      this.measure.date = moment(this.measure.date);
+      this.measure.updatedAt = moment();
+      this.measureDiff = this.getDiffWithPreviousMeasure(this.measure.date);
+      this.updateMeasureEvent.emit({ measure: this.measure })
+    }
   }
 
   deleteMeasure() {
     this.deleteMeasureEvent.emit({ measure: this.measure });
+  }
+
+  private initForm() {
+    this.measureForm = this.formBuilder.group({
+      date: [this.measure.date, [Validators.required]],
+      weight: [this.measure.weight, [Validators.required, Validators.min(0)]]
+    });
   }
 
 }
