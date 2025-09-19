@@ -8,6 +8,7 @@
       "search": "Rechercher",
       "yes": "Oui"
     },
+    "areYouSure": "Es-tu sûr ?",
     "dateFormats": {
       "date": "DD-MM-YYYY",
       "dateTime": "DD-MM-YYYY HH:mm",
@@ -15,7 +16,8 @@
         "date": "d-m-Y",
         "dateTime": "d-m-Y H:i"
       }
-    }
+    },
+    "youWontBeAbleToRevertThis": "Tu ne pourras pas revenir en arrière !"
   },
   "languages": "Langues",
   "pages": {

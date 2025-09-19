@@ -4,6 +4,7 @@ import flatpickr from 'flatpickr';
 import moment from 'moment';
 
 import { LocalStorageService } from 'src/app/core/services/local-storage/local-storage.service';
+import { ToastService } from 'src/app/core/services/toast/toast.service';
 
 import { ISerializedWormable, Wormable } from 'src/app/core/models/wormable/wormable';
 
@@ -29,6 +30,7 @@ export class WormablesComponent {
 
   constructor(
     private localStorageService: LocalStorageService,
+    private toastService: ToastService,
     private translateService: TranslateService
   ) {
     this.APP_STORAGE_KEY = 'weight-pacha-wormables';
@@ -69,8 +71,12 @@ export class WormablesComponent {
   }
 
   deleteWormables(id: string) {
-    this.wormables = this.wormables.filter(wormable => wormable.id != id);
-    this.saveWormables();
+    this.toastService.showConfirm().then((result: { isConfirmed: boolean; }) => {
+      if (result.isConfirmed) {
+        this.wormables = this.wormables.filter(wormable => wormable.id != id);
+        this.saveWormables();
+      }
+    });
   }
 
   private initDatePickers(wormable: Wormable) {

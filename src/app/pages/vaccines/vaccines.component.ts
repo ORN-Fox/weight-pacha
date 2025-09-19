@@ -4,6 +4,7 @@ import flatpickr from 'flatpickr';
 import moment from 'moment';
 
 import { LocalStorageService } from 'src/app/core/services/local-storage/local-storage.service';
+import { ToastService } from 'src/app/core/services/toast/toast.service';
 
 import { ISerializedVaccine, Vaccine } from 'src/app/core/models/vaccine/vaccine.model';
 
@@ -29,6 +30,7 @@ export class VaccinesComponent {
 
   constructor(
     private localStorageService: LocalStorageService,
+    private toastService: ToastService,
     private translateService: TranslateService
   ) {
     this.APP_STORAGE_KEY = 'weight-pacha-vaccines';
@@ -73,8 +75,12 @@ export class VaccinesComponent {
   }
 
   deleteVaccine(id: string) {
-    this.vaccines = this.vaccines.filter(vaccine => vaccine.id != id);
-    this.saveVaccines();
+    this.toastService.showConfirm().then((result: { isConfirmed: boolean; }) => {
+      if (result.isConfirmed) {
+        this.vaccines = this.vaccines.filter(vaccine => vaccine.id != id);
+        this.saveVaccines();
+      }
+    });
   }
 
   getAgeFromVaccineDate(vaccine: Vaccine) {

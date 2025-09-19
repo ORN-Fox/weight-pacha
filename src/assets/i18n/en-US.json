@@ -8,6 +8,7 @@
       "search": "Search",
       "yes": "Yes"
     },
+    "areYouSure": "Are you sure?",
     "dateFormats": {
       "date": "YYYY-MM-DD",
       "dateTime": "YYYY-MM-DD hh:mm A",
@@ -15,7 +16,8 @@
         "date": "Y-m-d",
         "dateTime": "Y-m-d H:i"
       }
-    }
+    },
+    "youWontBeAbleToRevertThis": "You won't be able to revert this!"
   },
   "languages": "Languages",
   "pages": {

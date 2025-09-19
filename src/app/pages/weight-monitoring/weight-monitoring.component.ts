@@ -11,6 +11,7 @@ import { cloneDeep } from 'lodash';
 
 import { DateService } from 'src/app/core/services/date/date.service';
 import { LocalStorageService } from 'src/app/core/services/local-storage/local-storage.service';
+import { ToastService } from 'src/app/core/services/toast/toast.service';
 
 import { UnitType } from 'src/app/core/enums/unit-type/unit-type.enum';
 
@@ -46,6 +47,7 @@ export class WeightMonitoringComponent {
   constructor(
     private formBuilder: FormBuilder,
     private localStorageService: LocalStorageService,
+    private toastService: ToastService,
     private translateService: TranslateService
   ) {
     this.APP_STORAGE_KEY = 'weight-pacha-data-measures';
@@ -198,12 +200,16 @@ export class WeightMonitoringComponent {
   }
 
   onDeleteMeasure(event: { measure: Measure }) {
-    this.sourceMeasures = this.sourceMeasures.filter(measure => !measure.date.isSame(event.measure.date, 'day'));
-    this.measures = this.filterMeasuresInRangeDates();
-    this.saveMeasures();
+    this.toastService.showConfirm().then((result: { isConfirmed: boolean; }) => {
+      if (result.isConfirmed) {
+        this.sourceMeasures = this.sourceMeasures.filter(measure => !measure.date.isSame(event.measure.date, 'day'));
+        this.measures = this.filterMeasuresInRangeDates();
+        this.saveMeasures();
 
-    this.chart.data.datasets[0].data = this.chart.data.datasets[0].data.filter((dataPoint: IChatDataSetPoint) => !moment(dataPoint.x).isSame(event.measure.date, 'day'));
-    this.updateRangeDates();
+        this.chart.data.datasets[0].data = this.chart.data.datasets[0].data.filter((dataPoint: IChatDataSetPoint) => !moment(dataPoint.x).isSame(event.measure.date, 'day'));
+        this.updateRangeDates();
+      }
+    });
   }
 
   updateMeasureUnit() {

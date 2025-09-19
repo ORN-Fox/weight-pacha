@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { TranslateService } from '@ngx-translate/core';
 import { cloneDeep } from 'lodash';
 import moment from 'moment';
 
 import { LocalStorageService } from 'src/app/core/services/local-storage/local-storage.service';
+import { ToastService } from 'src/app/core/services/toast/toast.service';
 
 import { ISerializedNote, Note } from 'src/app/core/models/note/note.model';
 
@@ -28,7 +28,7 @@ export class NotesComponent {
   constructor(
     private formBuilder: FormBuilder,
     private localStorageService: LocalStorageService,
-    private translateService: TranslateService
+    private toastService: ToastService
   ) {
     this.APP_STORAGE_KEY = 'weight-pacha-notes';
 
@@ -70,12 +70,16 @@ export class NotesComponent {
   deleteNote(event: Event, id: string) {
     event.stopImmediatePropagation();
 
-    if (this.selectedNote?.id == id) {
-      this.selectNote(null);
-    }
+    this.toastService.showConfirm().then((result: { isConfirmed: boolean; }) => {
+      if (result.isConfirmed) {
+        if (this.selectedNote?.id == id) {
+          this.selectNote(null);
+        }
 
-    this.notes = this.notes.filter((note) => note.id != id);
-    this.saveNotes();
+        this.notes = this.notes.filter((note) => note.id != id);
+        this.saveNotes();
+      }
+    });
   }
 
   search(searchText: string) {
