@@ -21,17 +21,6 @@
   },
   "languages": "Languages",
   "pages": {
-    "wormables": {
-      "noWormableAddNewForStartTracking": "No wormable. Add new for start tracking",
-      "tableHeaders": {
-        "actions": "Actions",
-        "date": "Date",
-        "description": "Description",
-        "reminderDate": "Reminder",
-        "title": "Title"
-      },
-      "title": "Wormables"
-    },
     "informations": {
       "adoptedDate": "Adopted date",
       "birthDate": "Birth date",
@@ -107,6 +96,17 @@
       "weight": "Weight",
       "weightMustBePositive": "Weight must be positive",
       "weightUnit": "Weight unit"
+    },
+    "wormables": {
+      "noWormableAddNewForStartTracking": "No wormable. Add new for start tracking",
+      "tableHeaders": {
+        "actions": "Actions",
+        "date": "Date",
+        "description": "Description",
+        "reminderDate": "Reminder",
+        "title": "Title"
+      },
+      "title": "Wormables"
     }
   }
 }

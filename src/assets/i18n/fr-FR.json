@@ -21,17 +21,6 @@
   },
   "languages": "Langues",
   "pages": {
-    "wormables": {
-      "noWormableAddNewForStartTracking": "Aucun vermifuge. Ajouter un vaccin pour commencer le suivi",
-      "tableHeaders": {
-        "actions": "Actions",
-        "date": "Date",
-        "description": "Description",
-        "reminderDate": "Rappel",
-        "title": "Titre"
-      },
-      "title": "Vermifuges"
-    },
     "informations": {
       "adoptedDate": "Date d'adoption",
       "birthDate": "Date de naissance",
@@ -107,6 +96,17 @@
       "weight": "Poids",
       "weightMustBePositive": "Le poids doit être positif",
       "weightUnit": "Unité de poids"
+    },
+    "wormables": {
+      "noWormableAddNewForStartTracking": "Aucun vermifuge. Ajouter un vaccin pour commencer le suivi",
+      "tableHeaders": {
+        "actions": "Actions",
+        "date": "Date",
+        "description": "Description",
+        "reminderDate": "Rappel",
+        "title": "Titre"
+      },
+      "title": "Vermifuges"
     }
   }
 }
