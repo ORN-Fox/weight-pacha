@@ -6,15 +6,20 @@
           <label class="label">{{ "pages.weight.date" | translate }}</label>
           <div class="control has-icons-left">
             <input type="text" id="measureDateInput_{{ measure.id }}" class="input" formControlName="date" placeholder="{{ 'commons.dateFormats.date' | translate }}"
-              [ngClass]="{'is-danger': isInvalidDate()}">
+              [ngClass]="{'is-danger': measureForm.get('date')?.touched && measureForm.get('date')?.invalid}">
             <span class="icon is-small is-left">
               <i class="far fa-calendar"></i>
             </span>
-            @if (measureForm.get('date')?.errors?.['required'] && measureForm.get('date')?.touched) {
-              <p class="help is-danger">{{ "pages.informations.errors.dateRequired" | translate }}</p>
-            }
-            @if (isInvalidDate()) {
-              <p class="help is-danger">{{ "pages.weight.invalidDate" | translate }}</p>
+            @if (measureForm.get('date')?.touched) {
+              @if (measureForm.get('date')?.errors?.['required']) {
+                <p class="help is-danger">{{ "pages.weight.errors.dateRequired" | translate }}</p>
+              }
+              @if (measureForm.get('date')?.errors?.['invalidDate']) {
+                <p class="help is-danger">{{ "pages.weight.errors.invalidDate" | translate }}</p>
+              }
+              @if (measureForm.get('date')?.errors?.['existingMeasureAtDate']) {
+                <p class="help is-danger">{{ "pages.weight.errors.measureExistsOnThisDate" | translate }}</p>
+              }
             }
           </div>
         </div>
@@ -22,28 +27,28 @@
         <div class="field">
           <label class="label">{{ "pages.weight.weight" | translate }}</label>
           <div class="control has-icons-left has-icons-right">
-            <input type="number" class="input" formControlName="weight" [ngClass]="{'is-danger': isInvalidWeight(measure.weight)}" step="any" min="0" placeholder="2">
+            <input type="number" class="input" formControlName="weight" [ngClass]="{'is-danger': measureForm.get('weight')?.touched && measureForm.get('weight')?.invalid}" 
+              step="any" min="0" placeholder="2">
             <span class="icon is-small is-left">
               <i class="far fa-weight-hanging"></i>
             </span>
-            <span class="icon is-small is-right">
-              {{ measureUnitLabel }}
-            </span>
-            @if (measureForm.get('weight')?.errors?.['required'] && measureForm.get('weight')?.touched) {
-              <p class="help is-danger">{{ "pages.informations.errors.weightRequired" | translate }}</p>
-            }
-            @if (measureForm.get('weight')?.errors?.['min'] && measureForm.get('weight')?.touched) {
-              <p class="help is-danger">{{ "pages.informations.errors.weightMustBePositive" | translate }}</p>
+            <span class="icon is-small is-right">{{ measureUnitLabel }}</span>
+            @if (measureForm.get('weight')?.touched) {
+              @if (measureForm.get('weight')?.errors?.['required']) {
+                <p class="help is-danger">{{ "pages.weight.errors.weightRequired" | translate }}</p>
+              }
+              @if (measureForm.get('weight')?.errors?.['min']) {
+                <p class="help is-danger">{{ "pages.weight.errors.weightMustBePositive" | translate }}</p>
+              }
             }
           </div>
         </div>
     
         <div class="field has-text-centered">
           <div class="control">
-            <button type="buttom" class="button is-primary add-measure-button" [disabled]="shouldDisableAddMeasureButton()">{{ "commons.actions.save" | translate }}</button>
-            @if (isExistingMeasureOnSelectedDate()) {
-              <p class="help is-danger">{{ "pages.weight.measureExistsOnThisDate" | translate }}</p>
-            }
+            <button type="submit" class="button is-primary">
+              <i class="far fa-bookmark mr-2"></i> {{ "commons.actions.save" | translate }}
+            </button>
           </div>
         </div>
       </div>
@@ -64,12 +69,12 @@
     </div>
   }
 
-  <div class="actions">
-    <button type="button" class="button btn-edit is-small" (click)="updateMeasure()">
-      <i class="far fa-pencil-alt"></i>
-    </button>
-    <button type="button" class="button btn-delete is-small ml-2" (click)="deleteMeasure()">
-      <i class="far fa-trash"></i>
-    </button>
-  </div>
+    <div class="actions">
+      <button type="button" class="button btn-edit is-small" (click)="updateMeasure()">
+        <i class="far fa-pencil-alt"></i>
+      </button>
+      <button type="button" class="button btn-delete is-small ml-2" (click)="deleteMeasure()">
+        <i class="far fa-trash"></i>
+      </button>
+    </div>
 </div>

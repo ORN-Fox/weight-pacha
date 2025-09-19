@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import Chart from 'chart.js/auto';
 import annotationPlugin from 'chartjs-plugin-annotation';
@@ -38,12 +39,12 @@ export class WeightMonitoringComponent {
   measureUnit: UnitType;
   healthWeight: number;
 
+  measureForm: FormGroup;
+
   rangeDateInputInstance: Instance;
 
-  date: moment.Moment;
-  weight: number;
-
   constructor(
+    private formBuilder: FormBuilder,
     private localStorageService: LocalStorageService,
     private translateService: TranslateService
   ) {
@@ -56,12 +57,10 @@ export class WeightMonitoringComponent {
 
     this.rangeDateInputInstance = new Object() as Instance;
 
-    this.date = moment();
-    this.weight = 4;
-
     Chart.register(annotationPlugin);
 
     this.loadMeasures();
+    this.initForm();
   }
 
   ngAfterViewInit() {
@@ -74,12 +73,9 @@ export class WeightMonitoringComponent {
       }
     }) as Instance;
 
+    // No date update in onChange here because petForm change event interfer with date format rendering
     flatpickr('#measureDateInput', {
       dateFormat: this.translateService.instant('commons.dateFormats.flatpickr.date'),
-      defaultDate: this.date.toDate(),
-      onChange: (selectedDates: Date[]) => {
-        this.date = moment(selectedDates[0]);
-      }
     });
 
     this.chart = new Chart(
@@ -140,47 +136,61 @@ export class WeightMonitoringComponent {
     this.onChangeRangeDates(rangeDates);
   }
 
-  isInvalidDate(): boolean {
-    return DateService.isInvalidDate(this.date);
+  invalidDateValidator(): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: boolean } | null => {
+      let targetDate = moment(control.value);
+      if (!targetDate || DateService.isInvalidDate(moment(control.value))) {
+        return { 'invalidDate': true };
+      }
+      return null;
+    };
+  }
+
+  existingMeasureAtDateValidator(): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: boolean } | null => {
+      let existingMeasureAtDate = this.isExistingMeasureOnSelectedDate(moment(control.value));
+      if (existingMeasureAtDate) {
+        return { 'existingMeasureAtDate': true };
+      }
+      return null;
+    };
   }
 
   isInvalidWeight(weight: number): boolean {
     return weight <= 0;
   }
 
-  isExistingMeasureOnSelectedDate(): boolean {
-    return this.measures.filter(measure => measure.date.isSame(this.date, 'day')).length > 0;
-  }
-
-  shouldDisableAddMeasureButton(): boolean {
-    return this.isInvalidWeight(this.weight) || this.isExistingMeasureOnSelectedDate();
+  isExistingMeasureOnSelectedDate(targetDate: moment.Moment): boolean {
+    return this.measures.filter(measure => measure.date.isSame(targetDate, 'day')).length > 0;
   }
 
   addMeasure() {
-    let measure = new Measure(this.date, this.weight);
-    this.sourceMeasures.push(measure);
-    this.measures.push(measure);
-    this.saveMeasures();
+    if (this.measureForm.valid) {
+      let measure = new Measure();
+      Object.assign(measure, this.measureForm.value);
+      measure.date = moment(measure.date);
 
-    let dataPoint: IChatDataSetPoint = {
-      x: measure.date,
-      y: measure.weight
-    };
+      this.sourceMeasures.push(measure);
+      this.measures = this.filterMeasuresInRangeDates();
+      this.saveMeasures();
 
-    this.chart.data.datasets[0].data.push(dataPoint);
-    this.updateRangeDates();
-    
+      let dataPoint: IChatDataSetPoint = {
+        x: measure.date,
+        y: measure.weight
+      };
+
+      this.chart.data.datasets[0].data.push(dataPoint);
+      this.updateRangeDates();
+    }
   }
 
   onUpdateMeasure(event: { measure: Measure }) {
-    let rangeDates = this.getRangeDates();
-
     const index = this.sourceMeasures.findIndex(measure => measure.id === event.measure.id);
     if (index !== -1) {
       this.sourceMeasures[index] = event.measure;
     }
 
-    this.measures = this.sourceMeasures.filter((measure) => measure.date.isBetween(rangeDates[0], rangeDates[1], 'day', '[]'))
+    this.measures = this.filterMeasuresInRangeDates();
     this.saveMeasures();
 
     this.chart.data.datasets[0].data = this.chart.data.datasets[0].data.filter((dataPoint: IChatDataSetPoint) => !moment(dataPoint.x).isSame(event.measure.date, 'day'));
@@ -188,10 +198,8 @@ export class WeightMonitoringComponent {
   }
 
   onDeleteMeasure(event: { measure: Measure }) {
-    let rangeDates = this.getRangeDates();
-
     this.sourceMeasures = this.sourceMeasures.filter(measure => !measure.date.isSame(event.measure.date, 'day'));
-    this.measures = this.sourceMeasures.filter((measure) => measure.date.isBetween(rangeDates[0], rangeDates[1], 'day', '[]'))
+    this.measures = this.filterMeasuresInRangeDates();
     this.saveMeasures();
 
     this.chart.data.datasets[0].data = this.chart.data.datasets[0].data.filter((dataPoint: IChatDataSetPoint) => !moment(dataPoint.x).isSame(event.measure.date, 'day'));
@@ -222,6 +230,13 @@ export class WeightMonitoringComponent {
     this.updateChart();
   }
 
+  private initForm() {
+    this.measureForm = this.formBuilder.group({
+      date: [null, [Validators.required, this.invalidDateValidator(), this.existingMeasureAtDateValidator()]],
+      weight: [null, [Validators.required, Validators.min(0)]]
+    });
+  }
+
   private computeWeightHealthLabel(): string {
     return `${this.translateService.instant('pages.weight.healthyWeight')} : ${this.healthWeight} ${this.getMeasureUnitLabel()}`;
   }
@@ -246,6 +261,11 @@ export class WeightMonitoringComponent {
     this.initChartData();
   }
 
+  private filterMeasuresInRangeDates(): Measure[] {
+    let rangeDates = this.getRangeDates();
+    return this.sourceMeasures.filter((measure) => measure.date.isBetween(rangeDates[0], rangeDates[1], 'day', '[]'));
+  }
+
   private saveMeasures() {
     let serializedMeasures: ISerializedMeasure[] = [];
     this.sourceMeasures.forEach(measure => {
@@ -254,6 +274,8 @@ export class WeightMonitoringComponent {
 
     this.localStorageService.setItem(this.APP_STORAGE_KEY, { healthWeight: this.healthWeight, measureUnit: this.measureUnit, measures: serializedMeasures });
   }
+
+  //#region Chart related
 
   private initChartData() {
     const down = (ctx: { p0: { parsed: { y: number; }; }; p1: { parsed: { y: number; }; }; }, value: string): string | undefined => {
@@ -382,6 +404,8 @@ export class WeightMonitoringComponent {
   private updateChart() {
     this.chart.update();
   }
+
+  //#endregion
 
 }
 

@@ -1,10 +1,11 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import flatpickr from 'flatpickr';
 import moment from 'moment';
 
 import { Measure } from '../../models/measure/measure.model';
+import { DateService } from '../../services/date/date.service';
 
 export interface IMeasureDiff {
   value: string;
@@ -46,23 +47,36 @@ export class MeasureComponent implements OnInit {
     this.measureDiff = this.getDiffWithPreviousMeasure(this.measure.date);
   }
 
-  isInvalidDate(): boolean {
-    if (this.measure.date) {
-      return !moment(this.measure.date).isValid();
-    }
-    return false;
+  invalidDateValidator(): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: boolean } | null => {
+      let targetDate = moment(control.value);
+      if (!targetDate || this.isInvalidDate(control.value)) {
+        return { 'invalidDate': true };
+      }
+      return null;
+    };
+  }
+
+  existingMeasureAtDateValidator(): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: boolean } | null => {
+      let existingMeasureAtDate = this.isExistingMeasureOnSelectedDate(moment(control.value));
+      if (existingMeasureAtDate) {
+        return { 'existingMeasureAtDate': true };
+      }
+      return null;
+    };
+  }
+
+  isInvalidDate(date: moment.Moment | Date | string): boolean {
+    return DateService.isInvalidDate(moment(date));
   }
 
   isInvalidWeight(weight: number): boolean {
     return weight <= 0;
   }
 
-  isExistingMeasureOnSelectedDate(): boolean {
-    return this.measures.filter(measure => measure.date.isSame(this.measure.date, 'day') && measure.id != this.measure.id).length > 0;
-  }
-
-  shouldDisableAddMeasureButton(): boolean {
-    return this.isInvalidWeight(this.measure.weight) || this.isExistingMeasureOnSelectedDate();
+  isExistingMeasureOnSelectedDate(targetDate: moment.Moment): boolean {
+    return this.measures.filter(measure => measure.date.isSame(targetDate, 'day') && measure.id != this.measure.id).length > 0;
   }
 
   getDiffIcon(diff: number): string {
@@ -148,7 +162,7 @@ export class MeasureComponent implements OnInit {
 
   private initForm() {
     this.measureForm = this.formBuilder.group({
-      date: [this.measure.date, [Validators.required]],
+      date: [this.measure.date, [Validators.required, this.invalidDateValidator(), this.existingMeasureAtDateValidator()]],
       weight: [this.measure.weight, [Validators.required, Validators.min(0)]]
     });
   }

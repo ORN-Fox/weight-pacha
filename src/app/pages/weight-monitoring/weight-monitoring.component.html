@@ -37,43 +37,57 @@
   <div class="column is-two-fifths add-measure">
     <h2 class="title">{{ "pages.weight.addMeasure" | translate }}</h2>
 
-    <div class="field">
-      <label class="label">{{ "pages.weight.date" | translate }}</label>
-      <div class="control has-icons-left">
-        <input type="text" name="measureDate" id="measureDateInput" class="input" [ngClass]="{'is-danger': isInvalidDate()}">
-        <span class="icon is-small is-left">
-          <i class="far fa-calendar"></i>
-        </span>
-        @if (isInvalidDate()) {
-          <p class="help is-danger">{{ "pages.weight.invalidDate" | translate }}</p>
-        }
+    <form [formGroup]="measureForm" (ngSubmit)="addMeasure()">
+      <div class="field">
+        <label class="label">{{ "pages.weight.date" | translate }}</label>
+        <div class="control has-icons-left">
+          <input type="text" formControlName="date" id="measureDateInput" class="input" formControlName="date" placeholder="{{ 'commons.dateFormats.date' | translate }}"
+              [ngClass]="{'is-danger': measureForm.get('date')?.touched && measureForm.get('date')?.invalid}">
+          <span class="icon is-small is-left">
+            <i class="far fa-calendar"></i>
+          </span>
+          @if (measureForm.get('date')?.touched) {
+            @if (measureForm.get('date')?.errors?.['required']) {
+              <p class="help is-danger">{{ "pages.weight.errors.dateRequired" | translate }}</p>
+            }
+            @if (measureForm.get('date')?.errors?.['invalidDate']) {
+              <p class="help is-danger">{{ "pages.weight.errors.invalidDate" | translate }}</p>
+            }
+            @if (measureForm.get('date')?.errors?.['existingMeasureAtDate']) {
+              <p class="help is-danger">{{ "pages.weight.errors.measureExistsOnThisDate" | translate }}</p>
+            }
+          }
+        </div>
       </div>
-    </div>
 
-    <div class="field">
-      <label class="label">{{"pages.weight.weight" | translate}}</label>
-      <div class="control has-icons-left has-icons-right">
-        <input type="number" name="weight" class="input" [ngClass]="{'is-danger': isInvalidWeight(weight)}" [(ngModel)]="weight" step="any" min="0" placeholder="2">
-        <span class="icon is-small is-left">
-          <i class="far fa-weight-hanging"></i>
-        </span>
-        <span class="icon is-small is-right">
-          {{ getMeasureUnitLabel() }}
-        </span>
-        @if (isInvalidWeight(weight)) {
-          <p class="help is-danger">{{ "pages.weight.weightMustBePositive" | translate }}</p>
-        }
+      <div class="field">
+        <label class="label">{{"pages.weight.weight" | translate}}</label>
+        <div class="control has-icons-left has-icons-right">
+          <input type="number" formControlName="weight" class="input" [ngClass]="{'is-danger': measureForm.get('weight')?.touched && measureForm.get('weight')?.invalid}" 
+              step="any" min="0" placeholder="2">
+          <span class="icon is-small is-left">
+            <i class="far fa-weight-hanging"></i>
+          </span>
+          <span class="icon is-small is-right">{{ getMeasureUnitLabel() }}</span>
+          @if (measureForm.get('weight')?.touched) {
+            @if (measureForm.get('weight')?.errors?.['required']) {
+              <p class="help is-danger">{{ "pages.weight.errors.weightRequired" | translate }}</p>
+            }
+            @if (measureForm.get('weight')?.errors?.['min']) {
+              <p class="help is-danger">{{ "pages.weight.errors.weightMustBePositive" | translate }}</p>
+            }
+          }
+        </div>
       </div>
-    </div>
 
-    <div class="field has-text-centered">
-      <div class="control">
-        <button type="button" class="button is-primary add-measure-button" (click)="addMeasure()" [disabled]="shouldDisableAddMeasureButton()"><i class="far fa-bookmark mr-2"></i> {{ "pages.weight.add" | translate }}</button>
-        @if (isExistingMeasureOnSelectedDate()) {
-          <p class="help is-danger">{{ "pages.weight.measureExistsOnThisDate" | translate }}</p>
-        }
+      <div class="field has-text-centered">
+        <div class="control">
+          <button type="submit" class="button is-primary btn-add-measure">
+            <i class="far fa-bookmark mr-2"></i> {{ "pages.weight.add" | translate }}
+          </button>
+        </div>
       </div>
-    </div>
+    </form>
   </div>
 
   <div class="column"></div>
