@@ -12,6 +12,7 @@ import { cloneDeep } from 'lodash';
 import { DateService } from 'src/app/core/services/date/date.service';
 import { LocalStorageService } from 'src/app/core/services/local-storage/local-storage.service';
 import { ToastService } from 'src/app/core/services/toast/toast.service';
+import { SerializerService } from 'src/app/core/services/serializer/serializer.service';
 
 import { UnitType } from 'src/app/core/enums/unit-type/unit-type.enum';
 
@@ -48,7 +49,8 @@ export class WeightMonitoringComponent {
     private formBuilder: FormBuilder,
     private localStorageService: LocalStorageService,
     private toastService: ToastService,
-    private translateService: TranslateService
+    private translateService: TranslateService,
+    private serializerService: SerializerService
   ) {
     this.APP_STORAGE_KEY = 'weight-pacha-data-measures';
 
@@ -272,11 +274,7 @@ export class WeightMonitoringComponent {
   }
 
   private saveMeasures() {
-    let serializedMeasures: ISerializedMeasure[] = [];
-    this.sourceMeasures.forEach(measure => {
-      serializedMeasures.push(measure.serializeForSave());
-    });
-
+    const serializedMeasures = this.serializerService.serializeList(this.sourceMeasures);
     this.localStorageService.setItem(this.APP_STORAGE_KEY, { healthWeight: this.healthWeight, measureUnit: this.measureUnit, measures: serializedMeasures });
   }
 

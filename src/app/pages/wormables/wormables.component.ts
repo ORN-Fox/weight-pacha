@@ -5,6 +5,7 @@ import moment from 'moment';
 
 import { LocalStorageService } from 'src/app/core/services/local-storage/local-storage.service';
 import { ToastService } from 'src/app/core/services/toast/toast.service';
+import { SerializerService } from 'src/app/core/services/serializer/serializer.service';
 
 import { ISerializedWormable, Wormable } from 'src/app/core/models/wormable/wormable';
 
@@ -31,7 +32,8 @@ export class WormablesComponent {
   constructor(
     private localStorageService: LocalStorageService,
     private toastService: ToastService,
-    private translateService: TranslateService
+    private translateService: TranslateService,
+    private serializerService: SerializerService
   ) {
     this.APP_STORAGE_KEY = 'weight-pacha-wormables';
 
@@ -116,12 +118,8 @@ export class WormablesComponent {
   }
   
   private saveWormables() {
-    let serializedWormables: ISerializedWormable[] = [];
-    this.wormables.forEach(wormable => {
-      serializedWormables.push(wormable.serializeForSave());
-    });
-
-    this.localStorageService.setItem(this.APP_STORAGE_KEY, { wormables: this.wormables });
+    const serializedWormables = this.serializerService.serializeList(this.wormables);
+    this.localStorageService.setItem(this.APP_STORAGE_KEY, { wormables: serializedWormables });
   }
 
 }

@@ -5,6 +5,7 @@ import moment from 'moment';
 
 import { LocalStorageService } from 'src/app/core/services/local-storage/local-storage.service';
 import { ToastService } from 'src/app/core/services/toast/toast.service';
+import { SerializerService } from 'src/app/core/services/serializer/serializer.service';
 
 import { ISerializedNote, Note } from 'src/app/core/models/note/note.model';
 
@@ -28,7 +29,8 @@ export class NotesComponent {
   constructor(
     private formBuilder: FormBuilder,
     private localStorageService: LocalStorageService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private serializerService: SerializerService
   ) {
     this.APP_STORAGE_KEY = 'weight-pacha-notes';
 
@@ -117,12 +119,8 @@ export class NotesComponent {
   }
   
   private saveNotes() {
-    let serializedNotes: ISerializedNote[] = [];
-    this.notes.forEach(note => {
-      serializedNotes.push(note.serializeForSave());
-    });
-
-    this.localStorageService.setItem(this.APP_STORAGE_KEY, { notes: this.notes });
+    const serializedNotes = this.serializerService.serializeList(this.notes);
+    this.localStorageService.setItem(this.APP_STORAGE_KEY, { notes: serializedNotes });
   }
 
 }
