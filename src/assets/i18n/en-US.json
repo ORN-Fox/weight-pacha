@@ -17,6 +17,10 @@
         "dateTime": "Y-m-d H:i"
       }
     },
+    "languages": {
+      "en-US": "English",
+      "fr-FR": "Français"
+    },
     "youWontBeAbleToRevertThis": "You won't be able to revert this!"
   },
   "languages": "Languages",
