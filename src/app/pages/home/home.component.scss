@@ -86,7 +86,7 @@
             0 24px 46px var(--box-shadow-color);
             
         .overlay {
-            transform: scale(4) translateZ(0);
+            transform: scale(8) translateZ(0);
         }
     
         .circle {
@@ -149,13 +149,16 @@
     }
 
     .overlay {
-        width: 118px;
         position: absolute;
+        margin: auto;
         height: 118px;
+        width: 118px;
         border-radius: 50%;
         background: var(--bg-color);
-        top: 75px;
-        left: 90px;
+        top: 0;
+        left: 0;
+        bottom: 3.5rem;
+        right: 0;
         z-index: 0;
         transition: transform .3s ease-out;
     }
