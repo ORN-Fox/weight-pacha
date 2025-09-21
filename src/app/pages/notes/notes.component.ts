@@ -65,6 +65,12 @@ export class NotesComponent {
     if (this.noteForm.valid && this.selectedNote) {
       Object.assign(this.selectedNote, this.noteForm.value);
       this.selectedNote.updatedAt = moment();
+      
+      const index = this.notes.findIndex(note => note.id === this.selectedNote?.id);
+      if (index !== -1) {
+        this.notes[index] = this.selectedNote;
+      }
+
       this.saveNotes();
     }
   }
