@@ -195,7 +195,6 @@ export class WeightMonitoringComponent {
     this.measures = this.filterMeasuresInRangeDates();
     this.saveMeasures();
 
-    this.chart.data.datasets[0].data = this.chart.data.datasets[0].data.filter((dataPoint: IChatDataSetPoint) => !moment(dataPoint.x).isSame(event.measure.date, 'day'));
     this.updateRangeDates();
   }
 
