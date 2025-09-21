@@ -1,4 +1,4 @@
 export enum PetSex {
-    Female = 0,
+    Female = 1,
     Male
 }
