@@ -84,6 +84,7 @@ export class WormablesComponent {
   private initDatePickers(wormable: Wormable) {
     setTimeout(() => {
       flatpickr(`#wormableInjectionDateInput_${wormable.id}`, {
+        altInput: true,
         altFormat: this.translateService.instant('commons.dateFormats.flatpickr.date'),
         defaultDate: wormable.injectionDate.toDate(),
         onChange: (selectedDates: Date[]) => {
@@ -92,6 +93,7 @@ export class WormablesComponent {
       });
 
       flatpickr(`#wormableReminderDateInput_${wormable.id}`, {
+        altInput: true,
         altFormat: this.translateService.instant('commons.dateFormats.flatpickr.date'),
         defaultDate: wormable.reminderDate?.toDate(),
         onChange: (_selectedDates: Object, date: string) => {

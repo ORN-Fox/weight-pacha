@@ -70,6 +70,7 @@ export class WeightMonitoringComponent {
   ngAfterViewInit() {
     this.rangeDateInputInstance = flatpickr('#rangeDatesInput', {
       mode: "range",
+      altInput: true,
       altFormat: this.translateService.instant('commons.dateFormats.flatpickr.date'),
       defaultDate: this.getRangeDates(),
       onChange: (selectedDates: Date[]) => {
@@ -79,6 +80,7 @@ export class WeightMonitoringComponent {
 
     // No date update in onChange here because petForm change event interfer with date format rendering
     flatpickr('#measureDateInput', {
+      altInput: true,
       altFormat: this.translateService.instant('commons.dateFormats.flatpickr.date'),
     });
 

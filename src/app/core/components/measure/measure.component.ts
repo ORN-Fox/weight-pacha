@@ -134,6 +134,7 @@ export class MeasureComponent implements OnInit {
         // No date update in onChange here because petForm change event interfer with date format rendering
         flatpickr(`#measureDateInput_${this.measure.id}`, {
           enableTime: true,
+          altInput: true,
           altFormat: this.translateService.instant('commons.dateFormats.flatpickr.dateTime'),
           defaultDate: this.measureForm.get('date')?.value?.toDate(),
           onChange: (selectedDates: Date[]) => {

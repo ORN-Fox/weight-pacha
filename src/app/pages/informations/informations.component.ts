@@ -58,12 +58,14 @@ export class InformationsComponent {
 
       flatpickr('#birthDateInput', {
         enableTime: true,
+        altInput: true,
         altFormat: this.translateService.instant('commons.dateFormats.flatpickr.dateTime'),
         defaultDate: this.petForm.get('birthDate')?.value?.toDate()
       });
 
       flatpickr('#adoptedDateInput', {
         enableTime: true,
+        altInput: true,
         altFormat: this.translateService.instant('commons.dateFormats.flatpickr.dateTime'),
         defaultDate: this.petForm.get('adoptedDate')?.value?.toDate()
       });

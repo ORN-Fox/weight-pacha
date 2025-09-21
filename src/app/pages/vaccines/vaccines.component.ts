@@ -99,6 +99,7 @@ export class VaccinesComponent {
   private initDatePickers(vaccine: Vaccine) {
     setTimeout(() => {
       flatpickr(`#vaccineInjectionDateInput_${vaccine.id}`, {
+        altInput: true,
         altFormat: this.translateService.instant('commons.dateFormats.flatpickr.date'),
         defaultDate: vaccine.injectionDate.toDate(),
         onChange: (selectedDates: Date[]) => {
@@ -108,6 +109,7 @@ export class VaccinesComponent {
       });
 
       flatpickr(`#vaccineReminderDateInput_${vaccine.id}`, {
+        altInput: true,
         altFormat: this.translateService.instant('commons.dateFormats.flatpickr.date'),
         defaultDate: vaccine.reminderDate?.toDate(),
         onChange: (_selectedDates: Object, date: string) => {
