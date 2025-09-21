@@ -58,13 +58,13 @@ export class InformationsComponent {
 
       flatpickr('#birthDateInput', {
         enableTime: true,
-        dateFormat: this.translateService.instant('commons.dateFormats.flatpickr.dateTime'),
+        altFormat: this.translateService.instant('commons.dateFormats.flatpickr.dateTime'),
         defaultDate: this.petForm.get('birthDate')?.value?.toDate()
       });
 
       flatpickr('#adoptedDateInput', {
         enableTime: true,
-        dateFormat: this.translateService.instant('commons.dateFormats.flatpickr.dateTime'),
+        altFormat: this.translateService.instant('commons.dateFormats.flatpickr.dateTime'),
         defaultDate: this.petForm.get('adoptedDate')?.value?.toDate()
       });
     }, 100);
