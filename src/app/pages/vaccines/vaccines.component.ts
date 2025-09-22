@@ -8,6 +8,7 @@ import { ToastService } from 'src/app/core/services/toast/toast.service';
 import { SerializerService } from 'src/app/core/services/serializer/serializer.service';
 
 import { ISerializedVaccine, Vaccine } from 'src/app/core/models/vaccine/vaccine.model';
+import { PetRecord } from 'src/app/core/models/pet-record/pet-record.model';
 
 export interface ITableHeader {
   title: string;
@@ -27,6 +28,8 @@ export class VaccinesComponent {
   tableHeaders: ITableHeader[];
   vaccines: Vaccine[];
 
+  petRecord: PetRecord;
+
   dateFormat: string;
 
   constructor(
@@ -40,6 +43,7 @@ export class VaccinesComponent {
     this.dateFormat = this.translateService.instant('commons.dateFormats.date');
 
     this.setupTableHeaders();
+    this.loadPetRecord();
     this.loadVaccines();
   }
 
@@ -86,12 +90,10 @@ export class VaccinesComponent {
   }
 
   getAgeFromVaccineDate(vaccine: Vaccine) {
-    // TODO: use real birthdate
-    const birthdate = moment('2023-06-01');
     // TODO: compute days, weeks, months value for handle babies
-    if (vaccine.injectionDate) {
+    if (vaccine.injectionDate && this.petRecord.birthDate) {
       vaccine.injectionDate = moment(vaccine.injectionDate);
-      return vaccine.injectionDate?.diff(birthdate, 'years', false);
+      return vaccine.injectionDate?.diff(this.petRecord.birthDate, 'years', false);
     }
     return -1;
   }
@@ -133,6 +135,17 @@ export class VaccinesComponent {
       });
     } else {
       this.localStorageService.setItem(this.APP_STORAGE_KEY, { vaccines: this.vaccines });
+    }
+  }
+
+  private loadPetRecord() {
+    const APP_PET_RECORD_STORAGE_KEY = 'weight-pacha-data-pet-record';
+
+    this.petRecord = new PetRecord();
+
+    if (this.localStorageService.isItemExist(APP_PET_RECORD_STORAGE_KEY)) {
+      let petRecordJSON = this.localStorageService.getItem(APP_PET_RECORD_STORAGE_KEY);
+      this.petRecord.deserilizeFromSave(petRecordJSON);
     }
   }
   

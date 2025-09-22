@@ -62,7 +62,7 @@
                             }
                         </td>
                         <td class="has-text-centered">
-                            {{ vaccine.age }}
+                            {{ vaccine.age != -1 ? vaccine.age : '' }}
                         </td>
                         <td class="has-text-centered">
                             @if (vaccine.editMode) {
