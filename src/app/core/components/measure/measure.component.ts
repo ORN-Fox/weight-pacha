@@ -164,7 +164,7 @@ export class MeasureComponent implements OnInit {
   private initForm() {
     this.measureForm = this.formBuilder.group({
       date: [this.measure.date, [Validators.required, this.invalidDateValidator(), this.existingMeasureAtDateValidator()]],
-      weight: [this.measure.weight, [Validators.required, Validators.min(0)]]
+      weight: [this.measure.weight, [Validators.required, Validators.min(0.001)]]
     });
   }
 

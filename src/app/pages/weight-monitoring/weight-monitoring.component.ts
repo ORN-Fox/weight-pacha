@@ -242,7 +242,7 @@ export class WeightMonitoringComponent {
   private initForm() {
     this.measureForm = this.formBuilder.group({
       date: [null, [Validators.required, this.invalidDateValidator(), this.existingMeasureAtDateValidator()]],
-      weight: [null, [Validators.required, Validators.min(0)]]
+      weight: [null, [Validators.required, Validators.min(0.001)]]
     });
   }
 
