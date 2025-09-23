@@ -49,8 +49,8 @@ export class MeasureComponent implements OnInit {
 
   invalidDateValidator(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: boolean } | null => {
-      let targetDate = moment(control.value);
-      if (!targetDate || this.isInvalidDate(control.value)) {
+      const targetDate = moment(control.value);
+      if (DateService.isInvalidDate(targetDate)) {
         return { 'invalidDate': true };
       }
       return null;
@@ -59,16 +59,12 @@ export class MeasureComponent implements OnInit {
 
   existingMeasureAtDateValidator(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: boolean } | null => {
-      let existingMeasureAtDate = this.isExistingMeasureOnSelectedDate(moment(control.value));
-      if (existingMeasureAtDate) {
+      const targetDate = moment(control.value);
+      if (this.isExistingMeasureOnSelectedDate(targetDate)) {
         return { 'existingMeasureAtDate': true };
       }
       return null;
     };
-  }
-
-  isInvalidDate(date: moment.Moment | Date | string): boolean {
-    return DateService.isInvalidDate(moment(date));
   }
 
   isInvalidWeight(weight: number): boolean {
