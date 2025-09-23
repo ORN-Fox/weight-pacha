@@ -90,15 +90,19 @@
       "addMeasure": "Add measure",
       "addMeasureToStartWeightTracking": "Add a measure to start weight tracking",
       "date": "Date",
+      "errors": {
+        "dateRequired": "Date is required",
+        "invalidDate": "Invalid date",
+        "measureExistsOnThisDate": "A measure exists on this date",
+        "weightMustBePositive": "Weight must be positive",
+        "weightRequired": "Weight is required"
+      },
       "healthyWeight": "Healthy weight",
-      "invalidDate": "Invalid date",
-      "measureExistsOnThisDate": "A measure exists on this date",
       "measures": "Measures",
       "noWeight": "No weight",
       "settings": "Settings",
       "title": "Weight tracking",
       "weight": "Weight",
-      "weightMustBePositive": "Weight must be positive",
       "weightUnit": "Weight unit"
     },
     "wormables": {
