@@ -177,6 +177,7 @@ export class WeightMonitoringComponent {
       measure.date = moment(measure.date);
 
       this.sourceMeasures.push(measure);
+      this.sourceMeasures = this.sortMeasuresByDate(this.sourceMeasures);
       this.measures = this.filterMeasuresInRangeDates();
       this.saveMeasures();
 
@@ -194,6 +195,7 @@ export class WeightMonitoringComponent {
     const index = this.sourceMeasures.findIndex(measure => measure.id === event.measure.id);
     if (index !== -1) {
       this.sourceMeasures[index] = event.measure;
+      this.sourceMeasures = this.sortMeasuresByDate(this.sourceMeasures);
     }
 
     this.measures = this.filterMeasuresInRangeDates();
@@ -273,6 +275,10 @@ export class WeightMonitoringComponent {
   private filterMeasuresInRangeDates(): Measure[] {
     let rangeDates = this.getRangeDates();
     return this.sourceMeasures.filter((measure) => measure.date.isBetween(rangeDates[0], rangeDates[1], 'day', '[]'));
+  }
+  
+  private sortMeasuresByDate(measures: Measure[]) {
+    return measures.sort((firstMeasure, secondMeasure) => firstMeasure.date.isBefore(secondMeasure.date) ? 1 : -1);
   }
 
   private saveMeasures() {
