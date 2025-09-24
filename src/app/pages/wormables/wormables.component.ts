@@ -53,7 +53,7 @@ export class WormablesComponent {
     ];
   }
 
-  addWormables() {
+  addWormable() {
     let wormable = new Wormable();
     wormable.editMode = true;
     this.wormables.push(wormable);
@@ -61,7 +61,7 @@ export class WormablesComponent {
     this.initDatePickers(wormable);
   }
 
-  updateWormables(wormable: Wormable) {
+  updateWormable(wormable: Wormable) {
     wormable.editMode = !wormable.editMode;
     this.initDatePickers(wormable);
   }
@@ -72,7 +72,7 @@ export class WormablesComponent {
     this.saveWormables();
   }
 
-  deleteWormables(id: string) {
+  deleteWormable(id: string) {
     this.toastService.showConfirm().then((result: { isConfirmed: boolean; }) => {
       if (result.isConfirmed) {
         this.wormables = this.wormables.filter(wormable => wormable.id != id);
