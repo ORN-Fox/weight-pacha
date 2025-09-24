@@ -43,7 +43,7 @@
       <div class="field">
         <label class="label">{{ "pages.weight.date" | translate }}</label>
         <div class="control has-icons-left">
-          <input type="text" formControlName="date" id="measureDateInput" class="input" formControlName="date" placeholder="{{ 'commons.dateFormats.date' | translate }}"
+          <input type="text" formControlName="date" id="measureDateInput" class="input" placeholder="{{ 'commons.dateFormats.date' | translate }}"
               [ngClass]="{'is-danger': measureForm.get('date')?.touched && measureForm.get('date')?.invalid}">
           <span class="icon is-small is-left">
             <i class="far fa-calendar"></i>
