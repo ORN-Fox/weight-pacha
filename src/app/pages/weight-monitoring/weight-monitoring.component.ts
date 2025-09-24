@@ -278,7 +278,7 @@ export class WeightMonitoringComponent {
   }
   
   private sortMeasuresByDate(measures: Measure[]) {
-    return measures.sort((firstMeasure, secondMeasure) => firstMeasure.date.isBefore(secondMeasure.date) ? 1 : -1);
+    return measures.sort((firstMeasure, secondMeasure) => firstMeasure.date.isAfter(secondMeasure.date) ? 1 : -1);
   }
 
   private saveMeasures() {
