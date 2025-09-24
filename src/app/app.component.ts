@@ -16,7 +16,7 @@ export class AppComponent {
   selectedLocale!: string;
 
   constructor(private translateService: TranslateService) {
-    this.locales = ['en-US', 'fr-FR'];
+    this.locales = ['en-US', 'fr-CA', 'fr-FR'];
     this.updateLocale(this.locales[1]);
     flatpickr.localize(French);
   }
