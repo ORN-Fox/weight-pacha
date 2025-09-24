@@ -21,6 +21,8 @@
       "en-US": "English",
       "fr-FR": "Français"
     },
+    "moneySymbol": "€",
+    "moneySymbolFaIcon": "euro-sign",
     "youWontBeAbleToRevertThis": "Tu ne pourras pas revenir en arrière !"
   },
   "languages": "Langues",
@@ -56,7 +58,15 @@
       "title": "Informations"
     },
     "invoices": {
-      "title": "Factures"
+      "noInvoiceaddNewForStartTracking": "Aucune facture. Ajouter une facture pour commencer le suivi",
+      "tableHeaders": {
+        "actions": "Actions",
+        "date": "Date",
+        "description": "Description",
+        "amount": "Montant"
+      },
+      "title": "Factures",
+      "totalAmount": "Montant total"
     },
     "notes": {
       "errors": {

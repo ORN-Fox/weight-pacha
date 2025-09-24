@@ -1,4 +1,28 @@
-import { Component } from '@angular/core';
+import { AfterViewInit, Component } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
+import Chart from 'chart.js/auto';
+import flatpickr from 'flatpickr';
+import moment from 'moment';
+
+import { LocalStorageService } from 'src/app/core/services/local-storage/local-storage.service';
+import { ToastService } from 'src/app/core/services/toast/toast.service';
+import { SerializerService } from 'src/app/core/services/serializer/serializer.service';
+
+import { ISerializedInvoice, Invoice } from 'src/app/core/models/invoice/invoice';
+
+export interface IChatDataSetPoint {
+  x: number;
+  y: number;
+}
+export interface ITableHeader {
+  title: string;
+  width: string;
+}
+
+export interface ITotalInvoicedPerYear {
+  year: number,
+  totalAmount: number
+}
 
 @Component({
   selector: 'app-invoices',
@@ -6,6 +30,223 @@ import { Component } from '@angular/core';
   styleUrl: './invoices.component.scss',
   standalone: false
 })
-export class InvoicesComponent {
+export class InvoicesComponent implements AfterViewInit {
+
+  APP_STORAGE_KEY: string;
+
+  chart: any;
+  data: any;
+
+  tableHeaders: ITableHeader[];
+  invoices: Invoice[];
+
+  dateFormat: string;
+  displaySignPosition: string;
+
+  constructor(
+    private localStorageService: LocalStorageService,
+    private toastService: ToastService,
+    private translateService: TranslateService,
+    private serializerService: SerializerService
+  ) {
+    this.APP_STORAGE_KEY = 'weight-pacha-invoices';
+
+    this.dateFormat = this.translateService.instant('commons.dateFormats.date');
+    this.displaySignPosition = this.translateService.currentLang == 'es-US' ? 'left' : 'right';
+
+    this.setupTableHeaders();
+    this.loadInvoices();
+  }
+
+  ngAfterViewInit() {
+    this.chart = new Chart(
+      document.getElementById('totalInvoicedPerYearsChart') as HTMLCanvasElement,
+      this.getChartConfig()
+    );
+  }
+
+  private setupTableHeaders() {
+    this.tableHeaders = [
+      { title: 'date', width: '12%' },
+      { title: 'amount', width: '12%' },
+      { title: 'description', width: '' },
+      { title: 'actions', width: '' }
+    ];
+  }
+
+  addInvoice() {
+    let invoice = new Invoice();
+    invoice.editMode = true;
+    this.invoices.push(invoice);
+
+    this.initDatePickers(invoice);
+  }
+
+  updateInvoice(invoice: Invoice) {
+    invoice.editMode = !invoice.editMode;
+    this.initDatePickers(invoice);
+  }
+
+  saveChanges(invoice: Invoice) {
+    invoice.editMode = false;
+    invoice.updatedAt = moment();
+    this.saveInvoices();
+
+    this.updateChart();
+  }
+
+  deleteInvoice(id: string) {
+    this.toastService.showConfirm().then((result: { isConfirmed: boolean; }) => {
+      if (result.isConfirmed) {
+        this.invoices = this.invoices.filter(invoice => invoice.id != id);
+        this.saveInvoices();
+
+        this.updateChart();
+      }
+    });
+  }
+
+  private initDatePickers(invoice: Invoice) {
+    setTimeout(() => {
+      flatpickr(`#invoiceBillingDateInput_${invoice.id}`, {
+        altInput: true,
+        altFormat: this.translateService.instant('commons.dateFormats.flatpickr.date'),
+        defaultDate: invoice.billingDate?.toDate(),
+        onChange: (selectedDates: Date[]) => {
+          invoice.billingDate = moment(selectedDates[0]);
+
+          this.updateChart();
+        }
+      });
+    }, 100);
+  }
+
+  private loadInvoices() {
+    this.invoices = [];
+
+    if (this.localStorageService.isItemExist(this.APP_STORAGE_KEY)) {
+      let invoicesJSON = this.localStorageService.getItem(this.APP_STORAGE_KEY);
+
+      invoicesJSON.invoices.forEach((invoiceJSON: ISerializedInvoice) => {
+        let invoice = new Invoice();
+        invoice.deserilizeFromSave(invoiceJSON);
+        this.invoices.push(invoice);
+      });
+    } else {
+      this.localStorageService.setItem(this.APP_STORAGE_KEY, { invoices: this.invoices });
+    }
+
+    this.initChartData();
+  }
+
+  private saveInvoices() {
+    const serializedInvoices = this.serializerService.serializeList(this.invoices);
+    this.localStorageService.setItem(this.APP_STORAGE_KEY, { invoices: serializedInvoices });
+  }
+
+  //#region Chart related
+  
+    private initChartData() {
+      let data = [];
+      let years: number[] = [];
+      
+      if (this.invoices.length > 0) {
+        data = this.computeDataPoints();
+        years = data.map(dataPoint => dataPoint.x);
+      }
+
+      this.data = {
+        labels: years,
+        datasets: [
+          {
+            label: this.translateService.instant('pages.invoices.title'),
+            data: data,
+            backgroundColor: [
+              'rgba(255, 99, 132, 0.2)',
+              'rgba(255, 159, 64, 0.2)',
+              'rgba(255, 205, 86, 0.2)',
+              'rgba(75, 192, 192, 0.2)',
+              'rgba(54, 162, 235, 0.2)',
+              'rgba(153, 102, 255, 0.2)',
+              'rgba(201, 203, 207, 0.2)'
+            ],
+            borderColor: [
+              'rgb(255, 99, 132)',
+              'rgb(255, 159, 64)',
+              'rgb(255, 205, 86)',
+              'rgb(75, 192, 192)',
+              'rgb(54, 162, 235)',
+              'rgb(153, 102, 255)',
+              'rgb(201, 203, 207)'
+            ],
+            borderWidth: 1
+          }
+        ]
+      };
+    }
+  
+    private computeDataPoints(): any[] {
+      let dataPoints: IChatDataSetPoint[] = [];
+
+      let invoiceYears: ITotalInvoicedPerYear[] = [];
+      let indexYear = -1;
+      this.invoices.forEach(invoice => {
+        let targetYear = invoice.billingDate.year();
+        
+        if (invoiceYears.filter(invoiceYear => invoiceYear.year == targetYear).length == 0) {
+          const newInvoiceYear = { year: targetYear, totalAmount: invoice.amount };
+          invoiceYears.push(newInvoiceYear);
+          indexYear++;
+        } else {
+          invoiceYears[indexYear].totalAmount += invoice.amount;
+        }
+      });
+
+      invoiceYears.forEach(invoiceYear => {
+        let dataPoint = {
+          x: invoiceYear.year,
+          y: invoiceYear.totalAmount
+        }
+        dataPoints.push(dataPoint); 
+      });
+  
+      return dataPoints;
+    };
+  
+    private getChartConfig(): any {
+      const config = {
+        type: 'bar',
+        data: this.data,
+        locale: this.translateService.currentLang,
+        options: {
+          scales: {
+            y: {
+              title: {
+                display: true,
+                text: this.translateService.instant('pages.invoices.totalAmount'),
+                beginAtZero: true
+              }
+            }
+          },
+          plugins: {
+            tooltip: {
+              callbacks: {
+                label: (context: { dataset: { label: string; }; parsed: { y: number | bigint | null; }; }) => {
+                  return `${ this.translateService.instant('pages.invoices.totalAmount') } : ${ context.parsed.y } ${ this.translateService.instant('commons.moneySymbol') }`;
+                }
+              }
+            }
+          }
+        }
+      };
+      return config;
+    }
+  
+    private updateChart() {
+      this.chart.data.datasets[0].data = this.computeDataPoints();
+      this.chart.update();
+    }
+  
+    //#endregion
 
 }

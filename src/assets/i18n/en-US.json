@@ -21,6 +21,8 @@
       "en-US": "English",
       "fr-FR": "Français"
     },
+    "moneySymbol": "$",
+    "moneySymbolFaIcon": "dollar-sign",
     "youWontBeAbleToRevertThis": "You won't be able to revert this!"
   },
   "languages": "Languages",
@@ -56,7 +58,15 @@
       "title": "Informations"
     },
     "invoices": {
-      "title": "Invoices"
+      "noInvoiceAddNewForStartTracking": "No invoice. Add new for start tracking",
+      "tableHeaders": {
+        "actions": "Actions",
+        "date": "Date",
+        "description": "Description",
+        "amount": "Amount"
+      },
+      "title": "Invoices",
+      "totalAmount": "Montant total"
     },
     "notes": {
       "errors": {
