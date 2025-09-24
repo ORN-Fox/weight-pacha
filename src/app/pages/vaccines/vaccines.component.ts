@@ -114,8 +114,8 @@ export class VaccinesComponent {
         altInput: true,
         altFormat: this.translateService.instant('commons.dateFormats.flatpickr.date'),
         defaultDate: vaccine.reminderDate?.toDate(),
-        onChange: (_selectedDates: Object, date: string) => {
-          vaccine.reminderDate = date ? moment(date) : null;
+        onChange: (selectedDates: Date[]) => {
+          vaccine.reminderDate = selectedDates[0] ? moment(selectedDates[0]) : null;
         }
       });
     }, 100);
