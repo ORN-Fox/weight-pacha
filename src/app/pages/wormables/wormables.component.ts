@@ -49,7 +49,7 @@ export class WormablesComponent {
       { title: 'title', width: '' },
       { title: 'reminderDate', width: '12%' },
       { title: 'description', width: '' },
-      { title: 'actions', width: '' }
+      { title: 'actions', width: '15%' }
     ];
   }
 

@@ -54,7 +54,7 @@ export class VaccinesComponent {
       { title: 'reminderDate', width: '12%' },
       { title: 'description', width: '' },
       { title: 'age', width: '' },
-      { title: 'actions', width: '' }
+      { title: 'actions', width: '15%' }
     ];
   }
 

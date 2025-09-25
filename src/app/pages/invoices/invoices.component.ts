@@ -68,9 +68,9 @@ export class InvoicesComponent implements AfterViewInit {
   private setupTableHeaders() {
     this.tableHeaders = [
       { title: 'date', width: '12%' },
-      { title: 'amount', width: '12%' },
+      { title: 'amount', width: '15%' },
       { title: 'description', width: '' },
-      { title: 'actions', width: '' }
+      { title: 'actions', width: '15%' }
     ];
   }
 
