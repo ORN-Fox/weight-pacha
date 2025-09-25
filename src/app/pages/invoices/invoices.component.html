@@ -77,7 +77,7 @@
         </table>
     </div>
 
-    <div class="has-background-white">
+    <div class="has-background-white" [ngClass]="{'is-invisible': invoices.length == 0}">
         <canvas id="totalInvoicedPerYearsChart"></canvas>
     </div>
 </div>
