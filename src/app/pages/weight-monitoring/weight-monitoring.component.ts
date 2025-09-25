@@ -16,9 +16,11 @@ import { SerializerService } from 'src/app/core/services/serializer/serializer.s
 
 import { UnitType } from 'src/app/core/enums/unit-type/unit-type.enum';
 
+import { IChartDataSetPoint } from 'src/app/core/interfaces/IChartDataSetPoint';
+
 import { ISerializedMeasure, Measure } from 'src/app/core/models/measure/measure.model';
 
-export interface IChatDataSetPoint {
+interface IWeightChartDataSetPoint extends IChartDataSetPoint {
   x: moment.Moment,
   y: number
 }
@@ -181,7 +183,7 @@ export class WeightMonitoringComponent {
       this.measures = this.filterMeasuresInRangeDates();
       this.saveMeasures();
 
-      let dataPoint: IChatDataSetPoint = {
+      let dataPoint: IWeightChartDataSetPoint = {
         x: measure.date,
         y: measure.weight
       };
@@ -211,7 +213,7 @@ export class WeightMonitoringComponent {
         this.measures = this.filterMeasuresInRangeDates();
         this.saveMeasures();
 
-        this.chart.data.datasets[0].data = this.chart.data.datasets[0].data.filter((dataPoint: IChatDataSetPoint) => !moment(dataPoint.x).isSame(event.measure.date, 'day'));
+        this.chart.data.datasets[0].data = this.chart.data.datasets[0].data.filter((dataPoint: IWeightChartDataSetPoint) => !moment(dataPoint.x).isSame(event.measure.date, 'day'));
         this.updateRangeDates();
       }
     });
@@ -316,7 +318,7 @@ export class WeightMonitoringComponent {
   }
 
   private computeDataPoints(): any[] {
-    let dataPoints: IChatDataSetPoint[] = [];
+    let dataPoints: IWeightChartDataSetPoint[] = [];
     this.measures.forEach(measure => {
       let dataPoint = {
         x: measure.date,
@@ -332,7 +334,7 @@ export class WeightMonitoringComponent {
     let min = 999999;
     if (this.data) {
       let suggestedMinGap = .25;
-      this.data.datasets[0].data.forEach((dataPoint: IChatDataSetPoint) => {
+      this.data.datasets[0].data.forEach((dataPoint: IWeightChartDataSetPoint) => {
         if (dataPoint.y < min) {
           min = dataPoint.y;
         }
@@ -346,7 +348,7 @@ export class WeightMonitoringComponent {
     let max = 0;
     if (this.data) {
       let suggestedMaxGap = .25;
-      this.data.datasets[0].data.forEach((dataPoint: IChatDataSetPoint) => {
+      this.data.datasets[0].data.forEach((dataPoint: IWeightChartDataSetPoint) => {
         if (dataPoint.y > max) {
           max = dataPoint.y;
         }

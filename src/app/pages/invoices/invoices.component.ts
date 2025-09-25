@@ -8,12 +8,15 @@ import { LocalStorageService } from 'src/app/core/services/local-storage/local-s
 import { ToastService } from 'src/app/core/services/toast/toast.service';
 import { SerializerService } from 'src/app/core/services/serializer/serializer.service';
 
+import { IChartDataSetPoint } from 'src/app/core/interfaces/IChartDataSetPoint';
+
 import { ISerializedInvoice, Invoice } from 'src/app/core/models/invoice/invoice';
 
-export interface IChatDataSetPoint {
+interface IInvoiceChartDataSetPoint extends IChartDataSetPoint {
   x: number;
   y: number;
 }
+
 export interface ITableHeader {
   title: string;
   width: string;
@@ -186,7 +189,7 @@ export class InvoicesComponent implements AfterViewInit {
     }
   
     private computeDataPoints(): any[] {
-      let dataPoints: IChatDataSetPoint[] = [];
+      let dataPoints: IInvoiceChartDataSetPoint[] = [];
 
       let invoiceYears: ITotalInvoicedPerYear[] = [];
       let indexYear = -1;
