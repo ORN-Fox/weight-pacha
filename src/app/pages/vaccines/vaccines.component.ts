@@ -7,13 +7,10 @@ import { LocalStorageService } from 'src/app/core/services/local-storage/local-s
 import { ToastService } from 'src/app/core/services/toast/toast.service';
 import { SerializerService } from 'src/app/core/services/serializer/serializer.service';
 
+import { ITableHeader } from 'src/app/core/interfaces/ITableHeader';
+
 import { ISerializedVaccine, Vaccine } from 'src/app/core/models/vaccine/vaccine.model';
 import { PetRecord } from 'src/app/core/models/pet-record/pet-record.model';
-
-export interface ITableHeader {
-  title: string;
-  width: string;
-}
 
 @Component({
   selector: 'app-vaccines',

@@ -7,12 +7,9 @@ import { LocalStorageService } from 'src/app/core/services/local-storage/local-s
 import { ToastService } from 'src/app/core/services/toast/toast.service';
 import { SerializerService } from 'src/app/core/services/serializer/serializer.service';
 
-import { ISerializedWormable, Wormable } from 'src/app/core/models/wormable/wormable';
+import { ITableHeader } from 'src/app/core/interfaces/ITableHeader';
 
-export interface ITableHeader {
-  title: string;
-  width: string;
-}
+import { ISerializedWormable, Wormable } from 'src/app/core/models/wormable/wormable';
 
 @Component({
   selector: 'app-wormables',
