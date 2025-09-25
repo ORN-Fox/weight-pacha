@@ -51,7 +51,7 @@ export class InvoicesComponent implements AfterViewInit {
     this.APP_STORAGE_KEY = 'weight-pacha-invoices';
 
     this.dateFormat = this.translateService.instant('commons.dateFormats.date');
-    this.displaySignPosition = this.translateService.currentLang == 'es-US' ? 'left' : 'right';
+    this.displaySignPosition = this.translateService.currentLang == 'en-US' ? 'left' : 'right';
 
     this.setupTableHeaders();
     this.loadInvoices();
