@@ -37,7 +37,7 @@ export class WormablesComponent {
   ) {
     this.APP_STORAGE_KEY = 'weight-pacha-wormables';
 
-    this.translateService.instant('commons.dateFormats.date');
+    this.dateFormat = this.translateService.instant('commons.dateFormats.date');
 
     this.setupTableHeaders();
     this.loadWormables();
