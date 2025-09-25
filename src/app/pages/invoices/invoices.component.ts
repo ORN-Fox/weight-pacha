@@ -145,107 +145,107 @@ export class InvoicesComponent implements AfterViewInit {
 
   //#region Chart related
   
-    private initChartData() {
-      let data = [];
-      let years: number[] = [];
-      
-      if (this.invoices.length > 0) {
-        data = this.computeDataPoints();
-        years = data.map(dataPoint => dataPoint.x);
-      }
-
-      this.data = {
-        labels: years,
-        datasets: [
-          {
-            label: this.translateService.instant('pages.invoices.title'),
-            data: data,
-            backgroundColor: [
-              'rgba(255, 99, 132, 0.2)',
-              'rgba(255, 159, 64, 0.2)',
-              'rgba(255, 205, 86, 0.2)',
-              'rgba(75, 192, 192, 0.2)',
-              'rgba(54, 162, 235, 0.2)',
-              'rgba(153, 102, 255, 0.2)',
-              'rgba(201, 203, 207, 0.2)'
-            ],
-            borderColor: [
-              'rgb(255, 99, 132)',
-              'rgb(255, 159, 64)',
-              'rgb(255, 205, 86)',
-              'rgb(75, 192, 192)',
-              'rgb(54, 162, 235)',
-              'rgb(153, 102, 255)',
-              'rgb(201, 203, 207)'
-            ],
-            borderWidth: 1
-          }
-        ]
-      };
+  private initChartData() {
+    let data = [];
+    let years: number[] = [];
+    
+    if (this.invoices.length > 0) {
+      data = this.computeDataPoints();
+      years = data.map(dataPoint => dataPoint.x);
     }
-  
-    private computeDataPoints(): any[] {
-      let dataPoints: IInvoiceChartDataSetPoint[] = [];
 
-      let invoiceYears: ITotalInvoicedPerYear[] = [];
-      let indexYear = -1;
-      this.invoices.forEach(invoice => {
-        let targetYear = invoice.billingDate.year();
-        
-        if (invoiceYears.filter(invoiceYear => invoiceYear.year == targetYear).length == 0) {
-          const newInvoiceYear = { year: targetYear, totalAmount: invoice.amount };
-          invoiceYears.push(newInvoiceYear);
-          indexYear++;
-        } else {
-          invoiceYears[indexYear].totalAmount += invoice.amount;
+    this.data = {
+      labels: years,
+      datasets: [
+        {
+          label: this.translateService.instant('pages.invoices.title'),
+          data: data,
+          backgroundColor: [
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(255, 159, 64, 0.2)',
+            'rgba(255, 205, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(153, 102, 255, 0.2)',
+            'rgba(201, 203, 207, 0.2)'
+          ],
+          borderColor: [
+            'rgb(255, 99, 132)',
+            'rgb(255, 159, 64)',
+            'rgb(255, 205, 86)',
+            'rgb(75, 192, 192)',
+            'rgb(54, 162, 235)',
+            'rgb(153, 102, 255)',
+            'rgb(201, 203, 207)'
+          ],
+          borderWidth: 1
         }
-      });
-
-      invoiceYears.forEach(invoiceYear => {
-        let dataPoint = {
-          x: invoiceYear.year,
-          y: invoiceYear.totalAmount
-        }
-        dataPoints.push(dataPoint); 
-      });
-  
-      return dataPoints;
+      ]
     };
-  
-    private getChartConfig(): any {
-      const config = {
-        type: 'bar',
-        data: this.data,
-        locale: this.translateService.currentLang,
-        options: {
-          scales: {
-            y: {
-              title: {
-                display: true,
-                text: this.translateService.instant('pages.invoices.totalAmount'),
-                beginAtZero: true
-              }
+  }
+
+  private computeDataPoints(): any[] {
+    let dataPoints: IInvoiceChartDataSetPoint[] = [];
+
+    let invoiceYears: ITotalInvoicedPerYear[] = [];
+    let indexYear = -1;
+    this.invoices.forEach(invoice => {
+      let targetYear = invoice.billingDate.year();
+      
+      if (invoiceYears.filter(invoiceYear => invoiceYear.year == targetYear).length == 0) {
+        const newInvoiceYear = { year: targetYear, totalAmount: invoice.amount };
+        invoiceYears.push(newInvoiceYear);
+        indexYear++;
+      } else {
+        invoiceYears[indexYear].totalAmount += invoice.amount;
+      }
+    });
+
+    invoiceYears.forEach(invoiceYear => {
+      let dataPoint = {
+        x: invoiceYear.year,
+        y: invoiceYear.totalAmount
+      }
+      dataPoints.push(dataPoint); 
+    });
+
+    return dataPoints;
+  };
+
+  private getChartConfig(): any {
+    const config = {
+      type: 'bar',
+      data: this.data,
+      locale: this.translateService.currentLang,
+      options: {
+        scales: {
+          y: {
+            title: {
+              display: true,
+              text: this.translateService.instant('pages.invoices.totalAmount'),
+              beginAtZero: true
             }
-          },
-          plugins: {
-            tooltip: {
-              callbacks: {
-                label: (context: { dataset: { label: string; }; parsed: { y: number | bigint | null; }; }) => {
-                  return `${ this.translateService.instant('pages.invoices.totalAmount') } : ${ context.parsed.y } ${ this.translateService.instant('commons.moneySymbol') }`;
-                }
+          }
+        },
+        plugins: {
+          tooltip: {
+            callbacks: {
+              label: (context: { dataset: { label: string; }; parsed: { y: number | bigint | null; }; }) => {
+                return `${ this.translateService.instant('pages.invoices.totalAmount') } : ${ context.parsed.y } ${ this.translateService.instant('commons.moneySymbol') }`;
               }
             }
           }
         }
-      };
-      return config;
-    }
-  
-    private updateChart() {
-      this.chart.data.datasets[0].data = this.computeDataPoints();
-      this.chart.update();
-    }
-  
-    //#endregion
+      }
+    };
+    return config;
+  }
+
+  private updateChart() {
+    this.chart.data.datasets[0].data = this.computeDataPoints();
+    this.chart.update();
+  }
+
+  //#endregion
 
 }
