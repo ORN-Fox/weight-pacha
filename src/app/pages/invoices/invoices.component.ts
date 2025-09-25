@@ -39,6 +39,8 @@ export class InvoicesComponent implements AfterViewInit {
   tableHeaders: ITableHeader[];
   invoices: Invoice[];
 
+  totalInvoicedPerYears: ITotalInvoicedPerYear[];
+
   dateFormat: string;
   displaySignPosition: string;
 
@@ -91,6 +93,7 @@ export class InvoicesComponent implements AfterViewInit {
     invoice.updatedAt = moment();
     this.saveInvoices();
 
+    this.computeTotalInvoicedPerYears();
     this.updateChart();
   }
 
@@ -100,6 +103,7 @@ export class InvoicesComponent implements AfterViewInit {
         this.invoices = this.invoices.filter(invoice => invoice.id != id);
         this.saveInvoices();
 
+        this.computeTotalInvoicedPerYears();
         this.updateChart();
       }
     });
@@ -120,6 +124,28 @@ export class InvoicesComponent implements AfterViewInit {
     }, 100);
   }
 
+  private computeTotalInvoicedPerYears() {
+    let invoiceYears: ITotalInvoicedPerYear[] = [];
+    let indexYear = -1;
+    this.invoices.forEach(invoice => {
+      let targetYear = invoice.billingDate.year();
+
+      if (invoiceYears.filter(invoiceYear => invoiceYear.year == targetYear).length == 0) {
+        const newInvoiceYear = { year: targetYear, totalAmount: invoice.amount };
+        invoiceYears.push(newInvoiceYear);
+        indexYear++;
+      } else {
+        invoiceYears[indexYear].totalAmount += invoice.amount;
+      }
+    });
+
+    this.totalInvoicedPerYears = invoiceYears;
+  }
+
+  private computeYearsLabelFromTotalInvoicedPerYears() {
+    return this.totalInvoicedPerYears.map(totalInvoicedPerYear => totalInvoicedPerYear.year);
+  }
+
   private loadInvoices() {
     this.invoices = [];
 
@@ -135,6 +161,7 @@ export class InvoicesComponent implements AfterViewInit {
       this.localStorageService.setItem(this.APP_STORAGE_KEY, { invoices: this.invoices });
     }
 
+    this.computeTotalInvoicedPerYears();
     this.initChartData();
   }
 
@@ -151,7 +178,7 @@ export class InvoicesComponent implements AfterViewInit {
     
     if (this.invoices.length > 0) {
       data = this.computeDataPoints();
-      years = data.map(dataPoint => dataPoint.x);
+      years = this.computeYearsLabelFromTotalInvoicedPerYears();
     }
 
     this.data = {
@@ -187,24 +214,10 @@ export class InvoicesComponent implements AfterViewInit {
   private computeDataPoints(): any[] {
     let dataPoints: IInvoiceChartDataSetPoint[] = [];
 
-    let invoiceYears: ITotalInvoicedPerYear[] = [];
-    let indexYear = -1;
-    this.invoices.forEach(invoice => {
-      let targetYear = invoice.billingDate.year();
-      
-      if (invoiceYears.filter(invoiceYear => invoiceYear.year == targetYear).length == 0) {
-        const newInvoiceYear = { year: targetYear, totalAmount: invoice.amount };
-        invoiceYears.push(newInvoiceYear);
-        indexYear++;
-      } else {
-        invoiceYears[indexYear].totalAmount += invoice.amount;
-      }
-    });
-
-    invoiceYears.forEach(invoiceYear => {
-      let dataPoint = {
-        x: invoiceYear.year,
-        y: invoiceYear.totalAmount
+    this.totalInvoicedPerYears.forEach(totalInvoicedPerYear => {
+      const dataPoint = {
+        x: totalInvoicedPerYear.year,
+        y: totalInvoicedPerYear.totalAmount
       }
       dataPoints.push(dataPoint); 
     });
@@ -242,6 +255,7 @@ export class InvoicesComponent implements AfterViewInit {
   }
 
   private updateChart() {
+    this.chart.data.labels = this.computeYearsLabelFromTotalInvoicedPerYears();
     this.chart.data.datasets[0].data = this.computeDataPoints();
     this.chart.update();
   }
