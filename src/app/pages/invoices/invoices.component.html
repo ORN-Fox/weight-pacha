@@ -36,11 +36,11 @@
                             <div class="control has-icons-{{ displaySignPosition }}">
                                 <input type="number" class="input" name="amount" [(ngModel)]="invoice.amount" step="any" min="0">
                                 <span class="icon is-small is-{{ displaySignPosition }}">
-                                    <i class="fal fa-{{ 'commons.moneySymbolFaIcon' | translate }}"></i>
+                                    {{ 'commons.moneySymbol' | translate }}
                                 </span>
                             </div>
                         } @else {
-                            {{ invoice.amount }} <i class="fal fa-{{ 'commons.moneySymbolFaIcon' | translate }}"></i>
+                            {{ invoice.amount }} {{ 'commons.moneySymbol' | translate }}
                         }
                     </td>
                     <td>
