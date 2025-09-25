@@ -6,8 +6,8 @@
 <button class="button is-primary mb-3" (click)="addInvoice()"><i class="far fa-pencil-alt"></i></button>
 
 <div>
-    <div class="table-container mb-3">
-        <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+    <div class="table-container box p-0">
+        <table class="table is-striped is-hoverable is-fullwidth">
             <thead>
                 <tr>
                     @for (tableHeader of tableHeaders; track tableHeader) {
@@ -81,7 +81,7 @@
         <div class="column"></div>
     
         <div class="column is-three-fifths">
-            <div class="has-background-white" [ngClass]="{'is-invisible': invoices.length == 0}">
+            <div class="box" [ngClass]="{'is-invisible': invoices.length == 0}">
                 <canvas id="totalInvoicedPerYearsChart"></canvas>
             </div>
         </div>
