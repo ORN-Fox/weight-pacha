@@ -96,8 +96,8 @@ export class WormablesComponent {
         altInput: true,
         altFormat: this.translateService.instant('commons.dateFormats.flatpickr.date'),
         defaultDate: wormable.reminderDate?.toDate(),
-        onChange: (_selectedDates: Object, date: string) => {
-          wormable.reminderDate = date ? moment(date) : null;
+        onChange: (selectedDates: Date[]) => {
+          wormable.reminderDate = selectedDates[0] ? moment(selectedDates[0]) : null;
         }
       });
     }, 100);
