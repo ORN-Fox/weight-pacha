@@ -10,6 +10,7 @@ import { AppComponent } from './app.component';
 
 // Components
 import { MeasureComponent } from './core/components/measure/measure.component';
+import { PaginationComponent } from './core/components/pagination/pagination.component';
 
 // Pages
 import { HomeComponent } from './pages/home/home.component';
@@ -37,6 +38,7 @@ export function appInitializerFactory(translate: TranslateService) {
         AppComponent,
         // Components
         MeasureComponent,
+        PaginationComponent,
         // Pages
         HomeComponent,
         InformationsComponent,
