@@ -17,64 +17,68 @@
                 </tr>
             </thead>
             <tbody>
-                @for (invoice of invoices; track invoice) {
-                <tr class="invoice">
-                    <td class="has-text-centered">
-                        @if (invoice.editMode) {
-                            <div class="control has-icons-left">
-                                <input type="text" id="invoiceBillingDateInput_{{ invoice.id }}" class="input" name="billingDate">
-                                <span class="icon is-small is-left">
-                                    <i class="far fa-calendar"></i>
-                                </span>
-                            </div>
-                        } @else {
-                            {{ invoice.billingDate ? invoice.billingDate.format(dateFormat) : '' }}
-                        }
-                    </td>
-                    <td class="has-text-centered">
-                        @if (invoice.editMode) {
-                            <div class="control has-icons-{{ displaySignPosition }}">
-                                <input type="number" class="input" name="amount" [(ngModel)]="invoice.amount" step="any" min="0">
-                                <span class="icon is-small is-{{ displaySignPosition }}">
-                                    {{ 'commons.moneySymbol' | translate }}
-                                </span>
-                            </div>
-                        } @else {
-                            {{ invoice.amount }} {{ 'commons.moneySymbol' | translate }}
-                        }
-                    </td>
-                    <td>
-                        @if (invoice.editMode) {
-                            <textarea class="textarea" name="description" [(ngModel)]="invoice.description" rows="1"></textarea>
-                        } @else {
-                            <div class="description">{{ invoice.description }}</div>
-                        }
-                    </td>
-                    <td class="has-text-centered">
-                        @if (invoice.editMode) {
-                            <button type="button" class="button" (click)="saveChanges(invoice)">
-                                <i class="far fa-bookmark"></i>
-                            </button>
-                        } @else {
-                            <button type="button" class="button" (click)="updateInvoice(invoice)">
-                                <i class="far fa-pencil-alt"></i>
-                            </button>
-                        }
+                @for (invoice of invoices | paginate: { itemsPerPage: 2, currentPage: page }; track invoice) {
+                    <tr class="invoice">
+                        <td class="has-text-centered">
+                            @if (invoice.editMode) {
+                                <div class="control has-icons-left">
+                                    <input type="text" id="invoiceBillingDateInput_{{ invoice.id }}" class="input" name="billingDate">
+                                    <span class="icon is-small is-left">
+                                        <i class="far fa-calendar"></i>
+                                    </span>
+                                </div>
+                            } @else {
+                                {{ invoice.billingDate ? invoice.billingDate.format(dateFormat) : '' }}
+                            }
+                        </td>
+                        <td class="has-text-centered">
+                            @if (invoice.editMode) {
+                                <div class="control has-icons-{{ displaySignPosition }}">
+                                    <input type="number" class="input" name="amount" [(ngModel)]="invoice.amount" step="any" min="0">
+                                    <span class="icon is-small is-{{ displaySignPosition }}">
+                                        {{ 'commons.moneySymbol' | translate }}
+                                    </span>
+                                </div>
+                            } @else {
+                                {{ invoice.amount }} {{ 'commons.moneySymbol' | translate }}
+                            }
+                        </td>
+                        <td>
+                            @if (invoice.editMode) {
+                                <textarea class="textarea" name="description" [(ngModel)]="invoice.description" rows="1"></textarea>
+                            } @else {
+                                <div class="description">{{ invoice.description }}</div>
+                            }
+                        </td>
+                        <td class="has-text-centered">
+                            @if (invoice.editMode) {
+                                <button type="button" class="button" (click)="saveChanges(invoice)">
+                                    <i class="far fa-bookmark"></i>
+                                </button>
+                            } @else {
+                                <button type="button" class="button" (click)="updateInvoice(invoice)">
+                                    <i class="far fa-pencil-alt"></i>
+                                </button>
+                            }
 
-                        <button type="button" class="button btn-delete ml-2" (click)="deleteInvoice(invoice.id)">
-                            <i class="far fa-trash"></i>
-                        </button>
-                    </td>
-                </tr>
+                            <button type="button" class="button btn-delete ml-2" (click)="deleteInvoice(invoice.id)">
+                                <i class="far fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
                 }
 
                 @if (invoices.length == 0) {
-                <tr>
-                    <td colspan="7" class="has-text-centered">{{ "pages.invoices.noInvoiceAddNewForStartTracking" | translate }}</td>
-                </tr>
+                    <tr>
+                        <td colspan="7" class="has-text-centered">{{ "pages.invoices.noInvoiceAddNewForStartTracking" | translate }}</td>
+                    </tr>
                 }
             </tbody>
         </table>
+    </div>
+
+    <div class="mb-3">
+        <pagination-controls (pageChange)="page = $event"></pagination-controls>
     </div>
 
     <div class="columns">

@@ -39,6 +39,8 @@ export class InvoicesComponent implements AfterViewInit {
   tableHeaders: ITableHeader[];
   invoices: Invoice[];
 
+  page: number;
+
   totalInvoicedPerYears: ITotalInvoicedPerYear[];
 
   dateFormat: string;
@@ -54,6 +56,8 @@ export class InvoicesComponent implements AfterViewInit {
 
     this.dateFormat = this.translateService.instant('commons.dateFormats.date');
     this.displaySignPosition = this.translateService.currentLang == 'en-US' ? 'left' : 'right';
+
+    this.page = 1;
 
     this.setupTableHeaders();
     this.loadInvoices();
