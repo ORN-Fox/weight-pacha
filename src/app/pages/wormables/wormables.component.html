@@ -16,7 +16,7 @@
                 </tr>
             </thead>
             <tbody>
-                @for (wormable of wormables; track wormable) {
+                @for (wormable of wormables | paginate: { itemsPerPage: itemsPerPage, currentPage: page }; track wormable) {
                 <tr class="wormable">
                     <td class="has-text-centered">
                         @if (wormable.editMode) {
@@ -87,4 +87,10 @@
             </tbody>
         </table>
     </div>
+
+    <app-pagination
+        [page]="page"
+        (pageChange)="page = $event"
+        (itemsPerPageChange)="itemsPerPage = $event"
+    ></app-pagination>
 </div>

@@ -24,6 +24,10 @@
     },
     "moneySymbol": "$",
     "moneySymbolFaIcon": "dollar-sign",
+    "pagination": {
+      "next": "Suivant",
+      "previous": "Précédent"
+    },
     "youWontBeAbleToRevertThis": "Tu ne pourras pas revenir en arrière !"
   },
   "languages": "Langues",
@@ -62,9 +66,9 @@
       "noInvoiceaddNewForStartTracking": "Aucune facture. Ajouter une facture pour commencer le suivi",
       "tableHeaders": {
         "actions": "Actions",
+        "amount": "Montant",
         "date": "Date",
-        "description": "Description",
-        "amount": "Montant"
+        "description": "Description"
       },
       "title": "Factures",
       "totalAmount": "Montant total"

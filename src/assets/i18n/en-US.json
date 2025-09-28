@@ -24,6 +24,10 @@
     },
     "moneySymbol": "$",
     "moneySymbolFaIcon": "dollar-sign",
+    "pagination": {
+      "next": "Next",
+      "previous": "Previous"
+    },
     "youWontBeAbleToRevertThis": "You won't be able to revert this!"
   },
   "languages": "Languages",
@@ -62,9 +66,9 @@
       "noInvoiceAddNewForStartTracking": "No invoice. Add new for start tracking",
       "tableHeaders": {
         "actions": "Actions",
+        "amount": "Amount",
         "date": "Date",
-        "description": "Description",
-        "amount": "Amount"
+        "description": "Description"
       },
       "title": "Invoices",
       "totalAmount": "Montant total"

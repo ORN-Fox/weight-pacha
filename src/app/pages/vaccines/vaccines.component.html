@@ -16,7 +16,7 @@
                 </tr>
             </thead>
             <tbody>
-                @for (vaccine of vaccines; track vaccine) {
+                @for (vaccine of vaccines | paginate: { itemsPerPage: itemsPerPage, currentPage: page }; track vaccine) {
                     <tr class="vaccine">
                         <td class="has-text-centered">
                             @if (vaccine.editMode) {
@@ -90,4 +90,10 @@
             </tbody>
         </table>
     </div>
+
+    <app-pagination
+        [page]="page"
+        (pageChange)="page = $event"
+        (itemsPerPageChange)="itemsPerPage = $event"
+    ></app-pagination>
 </div>

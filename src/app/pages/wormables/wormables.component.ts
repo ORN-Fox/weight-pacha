@@ -26,6 +26,9 @@ export class WormablesComponent {
 
   dateFormat: string;
 
+  page: number;
+  itemsPerPage: number;
+
   constructor(
     private localStorageService: LocalStorageService,
     private toastService: ToastService,

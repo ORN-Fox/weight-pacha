@@ -1,15 +1,17 @@
-<nav class="pagination is-centered is-small" role="navigation" aria-label="pagination">
-    <a href="#" class="pagination-previous">Previous</a>
-    <ul class="pagination-list">
-        <li><a href="#" class="pagination-link" aria-label="Goto page 1">1</a></li>
-        <li><span class="pagination-ellipsis">&hellip;</span></li>
-        <li><a href="#" class="pagination-link" aria-label="Goto page 45">45</a></li>
-        <li>
-            <a class="pagination-link is-current" aria-label="Page 46" aria-current="page">46</a>
-        </li>
-        <li><a href="#" class="pagination-link" aria-label="Goto page 47">47</a></li>
-        <li><span class="pagination-ellipsis">&hellip;</span></li>
-        <li><a href="#" class="pagination-link" aria-label="Goto page 86">86</a></li>
-    </ul>
-    <a href="#" class="pagination-next">Next page</a>
-</nav>
+<div class="pagination mb-3">
+    <pagination-controls 
+        [autoHide]="true"
+        [responsive]="true" 
+        previousLabel="{{ 'commons.pagination.previous' | translate }}"
+        nextLabel="{{ 'commons.pagination.next' | translate }}" 
+        (pageChange)="onPageChange($event)"
+    ></pagination-controls>
+
+    <div class="select">
+        <select [ngModel]="itemsPerPage" (ngModelChange)="onItemsPerPageChange($event)">
+            @for (itemsPerPage of itemsPerPages; track itemsPerPage) {
+                <option [ngValue]="itemsPerPage">{{ itemsPerPage }}</option>
+            }
+        </select>
+    </div>
+</div>

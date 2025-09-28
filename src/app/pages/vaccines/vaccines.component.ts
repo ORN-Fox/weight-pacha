@@ -29,6 +29,9 @@ export class VaccinesComponent {
 
   dateFormat: string;
 
+  page: number;
+  itemsPerPage: number;
+
   constructor(
     private localStorageService: LocalStorageService,
     private toastService: ToastService,
