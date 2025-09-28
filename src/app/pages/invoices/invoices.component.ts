@@ -149,17 +149,24 @@ export class InvoicesComponent implements AfterViewInit {
     return this.totalInvoicedPerYears.map(totalInvoicedPerYear => totalInvoicedPerYear.year);
   }
 
+  private sortInvoicesByBillingDate(invoices: Invoice[]) {
+    return invoices.sort((firstInvoice, secondInvoice) => firstInvoice.billingDate.isAfter(secondInvoice.billingDate, 'day') ? 1 : -1);
+  }
+
   private loadInvoices() {
     this.invoices = [];
 
     if (this.localStorageService.isItemExist(this.APP_STORAGE_KEY)) {
+      let invoices: Invoice[] = [];
       let invoicesJSON = this.localStorageService.getItem(this.APP_STORAGE_KEY);
 
       invoicesJSON.invoices.forEach((invoiceJSON: ISerializedInvoice) => {
         let invoice = new Invoice();
         invoice.deserilizeFromSave(invoiceJSON);
-        this.invoices.push(invoice);
+        invoices.push(invoice);
       });
+
+      this.invoices = this.sortInvoicesByBillingDate(invoices);
     } else {
       this.localStorageService.setItem(this.APP_STORAGE_KEY, { invoices: this.invoices });
     }
@@ -169,6 +176,7 @@ export class InvoicesComponent implements AfterViewInit {
   }
 
   private saveInvoices() {
+    this.invoices = this.sortInvoicesByBillingDate(this.invoices);
     const serializedInvoices = this.serializerService.serializeList(this.invoices);
     this.localStorageService.setItem(this.APP_STORAGE_KEY, { invoices: serializedInvoices });
   }
