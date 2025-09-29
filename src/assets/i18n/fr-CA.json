@@ -63,7 +63,7 @@
       "title": "Informations"
     },
     "invoices": {
-      "noInvoiceaddNewForStartTracking": "Aucune facture. Ajouter une facture pour commencer le suivi",
+      "noInvoiceAddNewForStartTracking": "Aucune facture. Ajouter une facture pour commencer",
       "tableHeaders": {
         "actions": "Actions",
         "amount": "Montant",
