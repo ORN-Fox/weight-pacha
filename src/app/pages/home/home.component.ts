@@ -24,7 +24,7 @@ export class HomeComponent {
       { path: 'invoices', title: 'invoices', enabled: true },
       { path: 'vaccines', title: 'vaccines', enabled: true },
       { path: 'wormables', title: 'wormables', enabled: true },
-      { path: 'settings', title: 'settings', enabled: false }
+      { path: 'settings', title: 'settings', enabled: true }
     ];
   }
 
