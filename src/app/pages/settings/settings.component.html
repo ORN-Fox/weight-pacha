@@ -2,3 +2,25 @@
     <img src="/assets/images/pages/settings.png" alt="">
     <h1 class="title">Parametres</h1>
 </div>
+
+<div>
+    <section class="section">
+        <h1 class="title">Langue</h1>
+        <h2 class="subtitle">
+            @for (locale of locales; track locale) {
+                <button class="button mx-2" [ngClass]="{'is-active': selectedLocale == locale}" (click)="updateLocale(locale)">
+                    <img src="/assets/images/locales/{{ locale }}.png" /> {{ 'commons.languages.' + locale | translate}}
+                </button>
+            }
+        </h2>
+    </section>
+
+    <section class="section">
+        <h1 class="title">A propos</h1>
+        <h2 class="subtitle">
+            <p>Poids pacha v1.0</p>
+            <p>Logiciel open source - Licence MIT</p>
+            <p>Autheur : ORN_Fox</p>
+        </h2>
+    </section>
+</div>
