@@ -1,4 +1,4 @@
-import { Wormable } from './wormable';
+import { Wormable } from './wormable.model';
 
 describe('Wormable', () => {
     it('should create an instance', () => {

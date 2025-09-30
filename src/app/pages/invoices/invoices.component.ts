@@ -11,7 +11,7 @@ import { SerializerService } from 'src/app/core/services/serializer/serializer.s
 import { IChartDataSetPoint } from 'src/app/core/interfaces/IChartDataSetPoint';
 import { ITableHeader } from 'src/app/core/interfaces/ITableHeader';
 
-import { ISerializedInvoice, Invoice } from 'src/app/core/models/invoice/invoice';
+import { ISerializedInvoice, Invoice } from 'src/app/core/models/invoice/invoice.model';
 
 interface IInvoiceChartDataSetPoint extends IChartDataSetPoint {
   x: number;

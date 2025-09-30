@@ -9,7 +9,7 @@ import { SerializerService } from 'src/app/core/services/serializer/serializer.s
 
 import { ITableHeader } from 'src/app/core/interfaces/ITableHeader';
 
-import { ISerializedWormable, Wormable } from 'src/app/core/models/wormable/wormable';
+import { ISerializedWormable, Wormable } from 'src/app/core/models/wormable/wormable.model';
 
 @Component({
   selector: 'app-wormables',
