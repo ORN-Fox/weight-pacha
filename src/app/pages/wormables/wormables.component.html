@@ -8,7 +8,7 @@
             <thead>
                 <tr>
                     @for (tableHeader of tableHeaders; track tableHeader) {
-                        <th class="is-primary" align="center" [ngStyle]="{'width': tableHeader.width}">{{ ('pages.wormables.tableHeaders.' + tableHeader.title) | translate }}</th>
+                        <th class="is-primary" [align]="tableHeader.align" [ngStyle]="{'width': tableHeader.width}">{{ ('pages.wormables.tableHeaders.' + tableHeader.title) | translate }}</th>
                     }
                 </tr>
             </thead>

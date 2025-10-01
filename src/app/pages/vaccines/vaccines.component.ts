@@ -47,12 +47,12 @@ export class VaccinesComponent {
 
   private setupTableHeaders() {
     this.tableHeaders = [
-      { title: 'date', width: '12%' },
-      { title: 'title', width: '' },
-      { title: 'reminderDate', width: '12%' },
-      { title: 'description', width: '' },
-      { title: 'age', width: '' },
-      { title: 'actions', width: '15%' }
+      { title: 'date', align: 'center', width: '12%' },
+      { title: 'title', align: 'left', width: '' },
+      { title: 'reminderDate', align: 'center', width: '12%' },
+      { title: 'description', align: 'left', width: '' },
+      { title: 'age', align: 'center', width: '' },
+      { title: 'actions', align: 'center', width: '15%' }
     ];
   }
 
