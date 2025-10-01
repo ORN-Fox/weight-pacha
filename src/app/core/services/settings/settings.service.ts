@@ -36,7 +36,7 @@ export class SettingsService {
         this.settingsSubject.next(this.settings);
     }
 
-    private loadSettings(): void {
+    private loadSettings() {
         if (this.localStorageService.isItemExist(this.STORAGE_KEY)) {
             const savedSettings = this.localStorageService.getItem(this.STORAGE_KEY);
             this.settings = new Settings();
@@ -47,7 +47,7 @@ export class SettingsService {
         }
     }
 
-    private saveSettings(): void {
+    private saveSettings() {
         this.localStorageService.setItem(this.STORAGE_KEY, this.settings);
     }
     
