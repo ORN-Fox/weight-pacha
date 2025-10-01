@@ -11,6 +11,7 @@ import { AppComponent } from './app.component';
 
 // Components
 import { MeasureComponent } from './core/components/measure/measure.component';
+import { PageTitleComponent } from './core/components/page-title/page-title.component';
 import { PaginationComponent } from './core/components/pagination/pagination.component';
 
 // Pages
@@ -39,6 +40,7 @@ export function appInitializerFactory(translate: TranslateService) {
         AppComponent,
         // Components
         MeasureComponent,
+        PageTitleComponent,
         PaginationComponent,
         // Pages
         HomeComponent,
