@@ -31,7 +31,7 @@ export interface ITotalInvoicedPerYear {
 })
 export class InvoicesComponent implements AfterViewInit {
 
-  APP_STORAGE_KEY: string;
+  APP_STORAGE_KEY: string = 'weight-pacha-invoices';
 
   chart: any;
   data: any;
@@ -53,8 +53,6 @@ export class InvoicesComponent implements AfterViewInit {
     private translateService: TranslateService,
     private serializerService: SerializerService
   ) {
-    this.APP_STORAGE_KEY = 'weight-pacha-invoices';
-
     this.dateFormat = this.translateService.instant('commons.dateFormats.date');
     this.displaySignPosition = this.translateService.currentLang == 'en-US' ? 'left' : 'right';
 

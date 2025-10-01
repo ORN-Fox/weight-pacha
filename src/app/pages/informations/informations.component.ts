@@ -23,7 +23,7 @@ interface ISpecie {
 })
 export class InformationsComponent {
 
-  APP_STORAGE_KEY: string;
+  APP_STORAGE_KEY: string = 'weight-pacha-data-pet-record';
 
   petForm: FormGroup;
   petRecord: PetRecord;
@@ -34,9 +34,7 @@ export class InformationsComponent {
     private formBuilder: FormBuilder,
     private translateService: TranslateService,
     private localStorageService: LocalStorageService,
-  ) {
-    this.APP_STORAGE_KEY = 'weight-pacha-data-pet-record';
-    
+  ) {    
     this.loadSpecies();
     this.loadPetRecord();
   }

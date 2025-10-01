@@ -20,7 +20,7 @@ import { PetRecord } from 'src/app/core/models/pet-record/pet-record.model';
 })
 export class VaccinesComponent {
 
-  APP_STORAGE_KEY: string;
+  APP_STORAGE_KEY: string = 'weight-pacha-vaccines';
 
   tableHeaders: ITableHeader[];
   vaccines: Vaccine[];
@@ -38,8 +38,6 @@ export class VaccinesComponent {
     private translateService: TranslateService,
     private serializerService: SerializerService
   ) {
-    this.APP_STORAGE_KEY = 'weight-pacha-vaccines';
-
     this.dateFormat = this.translateService.instant('commons.dateFormats.date');
 
     this.setupTableHeaders();

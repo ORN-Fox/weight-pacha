@@ -17,7 +17,7 @@ import { ISerializedNote, Note } from 'src/app/core/models/note/note.model';
 })
 export class NotesComponent {
 
-  APP_STORAGE_KEY: string;
+  APP_STORAGE_KEY: string = 'weight-pacha-notes';
 
   sourceNotes: Note[];
   notes: Note[];
@@ -32,8 +32,6 @@ export class NotesComponent {
     private toastService: ToastService,
     private serializerService: SerializerService
   ) {
-    this.APP_STORAGE_KEY = 'weight-pacha-notes';
-
     this.loadNotes();
   }
 

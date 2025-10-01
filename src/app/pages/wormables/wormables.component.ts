@@ -19,7 +19,7 @@ import { ISerializedWormable, Wormable } from 'src/app/core/models/wormable/worm
 })
 export class WormablesComponent {
 
-  APP_STORAGE_KEY: string;
+  APP_STORAGE_KEY: string = 'weight-pacha-wormables';
   
   tableHeaders: ITableHeader[];
   wormables: Wormable[];
@@ -35,8 +35,6 @@ export class WormablesComponent {
     private translateService: TranslateService,
     private serializerService: SerializerService
   ) {
-    this.APP_STORAGE_KEY = 'weight-pacha-wormables';
-
     this.dateFormat = this.translateService.instant('commons.dateFormats.date');
 
     this.setupTableHeaders();

@@ -19,7 +19,7 @@ export class PaginationComponent implements OnInit {
 
   settings!: Settings;
 
-  itemsPerPages: number[];
+  itemsPerPages: number[] = [10, 25, 50];
   itemsPerPage: number;
 
   constructor(
@@ -27,7 +27,6 @@ export class PaginationComponent implements OnInit {
   ) {
     this.settings = this.settingsService.currentSettings;
     
-    this.itemsPerPages = [10, 25, 50];
     this.itemsPerPage = this.settings.itemsPerPage || this.itemsPerPages[0];
   }
 

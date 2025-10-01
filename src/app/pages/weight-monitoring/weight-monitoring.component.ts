@@ -35,21 +35,21 @@ interface IWeightChartDataSetPoint extends IChartDataSetPoint {
 })
 export class WeightMonitoringComponent {
 
-  APP_STORAGE_KEY: string;
+  APP_STORAGE_KEY: string = 'weight-pacha-data-measures';
 
   settings!: Settings;
 
   chart: any;
   data: any;
 
-  sourceMeasures: Measure[];
-  measures: Measure[];
+  sourceMeasures: Measure[] = [];
+  measures: Measure[] = [];
   measureUnit: UnitType;
-  healthWeight: number;
+  healthWeight: number = 4;
 
   measureForm: FormGroup;
 
-  rangeDateInputInstance: Instance;
+  rangeDateInputInstance: Instance = new Object() as Instance;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -59,16 +59,9 @@ export class WeightMonitoringComponent {
     private serializerService: SerializerService,
     private settingsService: SettingsService
   ) {
-    this.APP_STORAGE_KEY = 'weight-pacha-data-measures';
-
     this.settings = this.settingsService.currentSettings;
-
-    this.sourceMeasures = [];
-    this.measures = [];
+    
     this.measureUnit = this.settings.weightUnit || UnitType.Kg;
-    this.healthWeight = 4;
-
-    this.rangeDateInputInstance = new Object() as Instance;
 
     Chart.register(annotationPlugin);
 

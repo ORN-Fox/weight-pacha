@@ -29,7 +29,7 @@ export class MeasureComponent implements OnInit {
   @Output() updateMeasureEvent: EventEmitter<{ measure: Measure }> = new EventEmitter();
   @Output() deleteMeasureEvent: EventEmitter<{ measure: Measure }> = new EventEmitter();
 
-  editMode: boolean;
+  editMode: boolean = false;
 
   measureForm: FormGroup;
   measureDiff: IMeasureDiff;
@@ -39,7 +39,6 @@ export class MeasureComponent implements OnInit {
     private formBuilder: FormBuilder,
     private translateService: TranslateService
   ) {
-    this.editMode = false;
     this.dateTimeFormat = this.translateService.instant('commons.dateFormats.dateTime');
   }
 
