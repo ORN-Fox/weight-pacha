@@ -46,6 +46,7 @@ export class WeightMonitoringComponent {
   measures: Measure[] = [];
   measureUnit: UnitType;
   healthWeight: number = 4;
+  healthWeightOffset: number = .5;
 
   measureForm: FormGroup;
 
@@ -240,6 +241,10 @@ export class WeightMonitoringComponent {
     healthWeightLine.yMin = this.healthWeight;
     healthWeightLine.yMax = this.healthWeight;
 
+    const healthWeightZone = this.chart.options.plugins.annotation.annotations.healthWeightZone;
+    healthWeightZone.yMin = this.healthWeight - this.healthWeightOffset;
+    healthWeightZone.yMax = this.healthWeight + this.healthWeightOffset;
+
     const healthWeightLabel = this.chart.options.plugins.annotation.annotations.label;
     healthWeightLabel.content = this.computeWeightHealthLabel();
 
@@ -396,6 +401,13 @@ export class WeightMonitoringComponent {
                 yMax: this.healthWeight,
                 borderColor: 'rgb(107, 201, 255)',
                 borderWidth: 2
+              },
+              healthWeightZone: {
+                type: 'box',
+                yMin: this.healthWeight - this.healthWeightOffset,
+                yMax: this.healthWeight + this.healthWeightOffset,
+                backgroundColor: 'rgba(107, 201, 255, 0.1)',
+                borderColor: 'transparent'
               },
               label: {
                 backgroundColor: 'grey',
