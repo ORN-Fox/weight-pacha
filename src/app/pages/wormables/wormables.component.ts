@@ -100,24 +100,31 @@ export class WormablesComponent {
       });
     }, 100);
   }
+    
+  private sortWormablesByInjectionDate(wormables: Wormable[]) {
+    return wormables.sort((firstWormable, secondWormable) => firstWormable.injectionDate.isAfter(secondWormable.injectionDate, 'day') ? 1 : -1);
+  }
 
   private loadWormables() {
     this.wormables = [];
     
     if (this.localStorageService.isItemExist(this.APP_STORAGE_KEY)) {
-      let wormablesJSON = this.localStorageService.getItem(this.APP_STORAGE_KEY);
+      let wormables: Wormable[] = [];
+      const wormablesJSON = this.localStorageService.getItem(this.APP_STORAGE_KEY);
 
       wormablesJSON.wormables.forEach((wormableJSON: ISerializedWormable) => {
         let wormable = new Wormable();
         wormable.deserilizeFromSave(wormableJSON);
-        this.wormables.push(wormable);
+        wormables.push(wormable);
       });
+      this.wormables = this.sortWormablesByInjectionDate(wormables);
     } else {
       this.localStorageService.setItem(this.APP_STORAGE_KEY, { wormables: this.wormables });
     }
   }
   
   private saveWormables() {
+    this.wormables = this.sortWormablesByInjectionDate(this.wormables);
     const serializedWormables = this.serializerService.serializeList(this.wormables);
     this.localStorageService.setItem(this.APP_STORAGE_KEY, { wormables: serializedWormables });
   }

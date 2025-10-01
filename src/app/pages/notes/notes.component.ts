@@ -108,14 +108,16 @@ export class NotesComponent {
     this.notes = [];
     
     if (this.localStorageService.isItemExist(this.APP_STORAGE_KEY)) {
-      let notesJSON = this.localStorageService.getItem(this.APP_STORAGE_KEY);
+      let notes: Note[] = [];
+      const notesJSON = this.localStorageService.getItem(this.APP_STORAGE_KEY);
 
       notesJSON.notes.forEach((noteJSON: ISerializedNote) => {
         let note = new Note();
         note.deserilizeFromSave(noteJSON);
-        this.sourceNotes.push(note);
+        notes.push(note);
       });
 
+      this.sourceNotes = notes;
       this.notes = cloneDeep(this.sourceNotes);
     } else {
       this.localStorageService.setItem(this.APP_STORAGE_KEY, { notes: this.sourceNotes });

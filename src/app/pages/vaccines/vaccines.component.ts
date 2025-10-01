@@ -118,19 +118,25 @@ export class VaccinesComponent {
       });
     }, 100);
   }
+  
+  private sortVaccinesByInjectionDate(vaccines: Vaccine[]) {
+    return vaccines.sort((firstVaccine, secondVaccine) => firstVaccine.injectionDate.isAfter(secondVaccine.injectionDate, 'day') ? 1 : -1);
+  }
 
   private loadVaccines() {
     this.vaccines = [];
     
     if (this.localStorageService.isItemExist(this.APP_STORAGE_KEY)) {
-      let vaccinesJSON = this.localStorageService.getItem(this.APP_STORAGE_KEY);
+      let vaccines: Vaccine[] = [];
+      const vaccinesJSON = this.localStorageService.getItem(this.APP_STORAGE_KEY);
 
       vaccinesJSON.vaccines.forEach((vaccineJSON: ISerializedVaccine) => {
         let vaccine = new Vaccine();
         vaccine.deserilizeFromSave(vaccineJSON);
         vaccine.age = this.getAgeFromVaccineDate(vaccine);
-        this.vaccines.push(vaccine);
+        vaccines.push(vaccine);
       });
+      this.vaccines = this.sortVaccinesByInjectionDate(vaccines);
     } else {
       this.localStorageService.setItem(this.APP_STORAGE_KEY, { vaccines: this.vaccines });
     }
@@ -148,6 +154,7 @@ export class VaccinesComponent {
   }
   
   private saveVaccines() {
+    this.vaccines = this.sortVaccinesByInjectionDate(this.vaccines);
     const serializedVaccines = this.serializerService.serializeList(this.vaccines);
     this.localStorageService.setItem(this.APP_STORAGE_KEY, { vaccines: serializedVaccines });
   }

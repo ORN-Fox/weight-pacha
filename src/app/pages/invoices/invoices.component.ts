@@ -156,7 +156,7 @@ export class InvoicesComponent implements AfterViewInit {
 
     if (this.localStorageService.isItemExist(this.APP_STORAGE_KEY)) {
       let invoices: Invoice[] = [];
-      let invoicesJSON = this.localStorageService.getItem(this.APP_STORAGE_KEY);
+      const invoicesJSON = this.localStorageService.getItem(this.APP_STORAGE_KEY);
 
       invoicesJSON.invoices.forEach((invoiceJSON: ISerializedInvoice) => {
         let invoice = new Invoice();

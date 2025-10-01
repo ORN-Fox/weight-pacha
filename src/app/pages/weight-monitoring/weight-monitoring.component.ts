@@ -265,15 +265,17 @@ export class WeightMonitoringComponent {
 
   private loadMeasures() {
     if (this.localStorageService.isItemExist(this.APP_STORAGE_KEY)) {
-      let measuresJSON = this.localStorageService.getItem(this.APP_STORAGE_KEY);
+      let measures: Measure[] = [];
+      const measuresJSON = this.localStorageService.getItem(this.APP_STORAGE_KEY);
 
       this.healthWeight = measuresJSON.healthWeight;
 
       measuresJSON.measures.forEach((measureJSON: ISerializedMeasure) => {
         let measure = new Measure();
         measure.deserilizeFromSave(measureJSON);
-        this.sourceMeasures.push(measure);
+        measures.push(measure);
       });
+      this.sourceMeasures = measures;
       this.measures = cloneDeep(this.sourceMeasures);
     } else {
       this.localStorageService.setItem(this.APP_STORAGE_KEY, { healthWeight: this.healthWeight, measureUnit: this.measureUnit, measures: this.sourceMeasures });
