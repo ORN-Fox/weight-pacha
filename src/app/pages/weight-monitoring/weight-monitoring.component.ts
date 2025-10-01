@@ -299,11 +299,28 @@ export class WeightMonitoringComponent {
   //#region Chart related
 
   private initChartData() {
-    const down = (ctx: { p0: { parsed: { y: number; }; }; p1: { parsed: { y: number; }; }; }, value: string): string | undefined => {
-      if (ctx.p0.parsed.y > ctx.p1.parsed.y) {
-        return value;
+    const minHealthWeight = this.healthWeight - this.healthWeightOffset;
+    const maxHealthWeight = this.healthWeight + this.healthWeightOffset;
+    
+    const exceededValue = (ctx: { p0: { parsed: { y: number } }, p1: { parsed: { y: number } } }, value: string): string | undefined => {
+      let p0 = ctx.p0.parsed.y;
+      let p1 = ctx.p1.parsed.y;
+      let diff = (p1 - p0);
+
+      if (diff > 0) {
+        if (p1 > maxHealthWeight) {
+          return value;
+        }
+      } else if (diff < 0) {
+        if (p1 < minHealthWeight || p1 > maxHealthWeight) {
+          return value;
+        }
+      } else {
+        if (p1 > maxHealthWeight) {
+          return value;
+        }
       }
-      return undefined;
+      return;
     }
 
     this.data = {
@@ -317,7 +334,7 @@ export class WeightMonitoringComponent {
           pointHoverRadius: 10,
           borderColor: 'rgb(75, 192, 192)',
           segment: {
-            borderColor: (ctx: any) => down(ctx, 'rgb(192,75,75)')
+            borderColor: (ctx: any) => exceededValue(ctx, 'rgb(192,75,75)')
           },
           spanGaps: true
         }
