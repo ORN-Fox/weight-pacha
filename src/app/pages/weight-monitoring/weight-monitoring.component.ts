@@ -302,26 +302,20 @@ export class WeightMonitoringComponent {
     const minHealthWeight = this.healthWeight - this.healthWeightOffset;
     const maxHealthWeight = this.healthWeight + this.healthWeightOffset;
     
-    const exceededValue = (ctx: { p0: { parsed: { y: number } }, p1: { parsed: { y: number } } }, value: string): string | undefined => {
-      let p0 = ctx.p0.parsed.y;
-      let p1 = ctx.p1.parsed.y;
-      let diff = (p1 - p0);
+    const exceededValue = (
+      ctx: { p0: { parsed: { y: number } }, p1: { parsed: { y: number } } },
+      value: string
+    ): string | undefined => {
+      const p0 = ctx.p0.parsed.y;
+      const p1 = ctx.p1.parsed.y;
+      const diff = p1 - p0;
 
-      if (diff > 0) {
-        if (p1 > maxHealthWeight) {
-          return value;
-        }
-      } else if (diff < 0) {
-        if (p1 < minHealthWeight || p1 > maxHealthWeight) {
-          return value;
-        }
-      } else {
-        if (p1 > maxHealthWeight) {
-          return value;
-        }
-      }
+      if (diff > 0 && p1 > maxHealthWeight) return value;
+      if (diff < 0 && (p1 < minHealthWeight || p1 > maxHealthWeight)) return value;
+      if (diff === 0 && p1 > maxHealthWeight) return value;
+
       return;
-    }
+    };
 
     this.data = {
       datasets: [
