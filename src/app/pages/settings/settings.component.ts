@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
-import { Settings } from 'src/app/core/models/settings/settings.model';
+import { TranslateService } from '@ngx-translate/core';
 
-import { LocalStorageService } from 'src/app/core/services/local-storage/local-storage.service';
+import { SettingsService } from 'src/app/core/services/settings/settings.service';
+
+import { Settings } from 'src/app/core/models/settings/settings.model';
 
 @Component({
   selector: 'app-settings',
@@ -11,34 +13,41 @@ import { LocalStorageService } from 'src/app/core/services/local-storage/local-s
 })
 export class SettingsComponent {
 
-  APP_STORAGE_KEY: string;
+  settings!: Settings;
 
-  settings: Settings;
-  locales: string[];
-  selectedLocale: string;
+  locales: string[] = ['en-US', 'fr-CA', 'fr-FR'];
+  themes: string[] = ['light', 'dark'];
+  itemsPerPages: number[] = [10, 25, 50];
+  weightUnits: number[] = [0, 1];
+  weightUnitsLabels: string[] = ['Kg', 'Lbs'];
 
   constructor(
-    private localStorageService: LocalStorageService
+    private settingsService: SettingsService,
+    private translateService: TranslateService
   ) {
-    this.APP_STORAGE_KEY = 'weight-pacha-settings';
-
-    this.locales = ['en-US', 'fr-CA', 'fr-FR'];
-    this.selectedLocale = this.locales[1];
-
-    this.loadSettings();
+    this.settings = this.settingsService.currentSettings;
   }
 
   updateLocale(locale: string) {
-    this.selectedLocale = locale;
-    this.localStorageService.setItem(this.APP_STORAGE_KEY, { locale: this.selectedLocale });
+    this.settingsService.updateSettings({ locale });
+    this.settings = this.settingsService.currentSettings;
+    this.translateService.use(locale);
   }
 
-  private loadSettings() {
-    if (this.localStorageService.isItemExist(this.APP_STORAGE_KEY)) {
-      this.settings = this.localStorageService.getItem(this.APP_STORAGE_KEY) as Settings;
-    } else {
-      this.localStorageService.setItem(this.APP_STORAGE_KEY, { locale: this.selectedLocale });
-    }
+  updateTheme(theme: string) {
+    this.settingsService.updateSettings({ theme });
+    this.settings = this.settingsService.currentSettings;
+    document.documentElement.setAttribute('data-theme', theme);
+  }
+
+  updateItemsPerPage(itemsPerPage: number) {
+    this.settingsService.updateSettings({ itemsPerPage });
+    this.settings = this.settingsService.currentSettings;
+  }
+
+  updateWeightUnit(weightUnit: number) {
+    this.settingsService.updateSettings({ weightUnit });
+    this.settings = this.settingsService.currentSettings;
   }
 
 }

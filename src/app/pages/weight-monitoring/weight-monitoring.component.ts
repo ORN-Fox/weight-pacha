@@ -13,12 +13,14 @@ import { DateService } from 'src/app/core/services/date/date.service';
 import { LocalStorageService } from 'src/app/core/services/local-storage/local-storage.service';
 import { ToastService } from 'src/app/core/services/toast/toast.service';
 import { SerializerService } from 'src/app/core/services/serializer/serializer.service';
+import { SettingsService } from 'src/app/core/services/settings/settings.service';
 
 import { UnitType } from 'src/app/core/enums/unit-type/unit-type.enum';
 
 import { IChartDataSetPoint } from 'src/app/core/interfaces/IChartDataSetPoint';
 
 import { ISerializedMeasure, Measure } from 'src/app/core/models/measure/measure.model';
+import { Settings } from 'src/app/core/models/settings/settings.model';
 
 interface IWeightChartDataSetPoint extends IChartDataSetPoint {
   x: moment.Moment,
@@ -34,6 +36,8 @@ interface IWeightChartDataSetPoint extends IChartDataSetPoint {
 export class WeightMonitoringComponent {
 
   APP_STORAGE_KEY: string;
+
+  settings!: Settings;
 
   chart: any;
   data: any;
@@ -52,13 +56,16 @@ export class WeightMonitoringComponent {
     private localStorageService: LocalStorageService,
     private toastService: ToastService,
     private translateService: TranslateService,
-    private serializerService: SerializerService
+    private serializerService: SerializerService,
+    private settingsService: SettingsService
   ) {
     this.APP_STORAGE_KEY = 'weight-pacha-data-measures';
 
+    this.settings = this.settingsService.currentSettings;
+
     this.sourceMeasures = [];
     this.measures = [];
-    this.measureUnit = UnitType.Kg;
+    this.measureUnit = this.settings.weightUnit || UnitType.Kg;
     this.healthWeight = 4;
 
     this.rangeDateInputInstance = new Object() as Instance;
@@ -222,6 +229,10 @@ export class WeightMonitoringComponent {
   updateMeasureUnit() {
     const healthWeightLabel = this.chart.options.plugins.annotation.annotations.label;
     healthWeightLabel.content = this.computeWeightHealthLabel();
+    
+    let weightUnit = this.measureUnit;
+    this.settingsService.updateSettings({ weightUnit });
+    this.settings = this.settingsService.currentSettings;
 
     this.saveMeasures();
     this.updateChart();
@@ -259,7 +270,6 @@ export class WeightMonitoringComponent {
       let measuresJSON = this.localStorageService.getItem(this.APP_STORAGE_KEY);
 
       this.healthWeight = measuresJSON.healthWeight;
-      this.measureUnit = measuresJSON.measureUnit;
 
       measuresJSON.measures.forEach((measureJSON: ISerializedMeasure) => {
         let measure = new Measure();

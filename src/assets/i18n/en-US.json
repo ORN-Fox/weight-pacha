@@ -9,6 +9,7 @@
       "yes": "Yes"
     },
     "areYouSure": "Are you sure?",
+    "commingSoon": "Comming Soon",
     "dateFormats": {
       "date": "YYYY-MM-DD",
       "dateTime": "YYYY-MM-DD hh:mm A",
@@ -17,6 +18,7 @@
         "dateTime": "Y-m-d H:i"
       }
     },
+    "language": "Language",
     "languages": {
       "en-US": "English",
       "fr-CA": "Français Canadien",
@@ -30,7 +32,6 @@
     },
     "youWontBeAbleToRevertThis": "You won't be able to revert this!"
   },
-  "languages": "Languages",
   "pages": {
     "informations": {
       "adoptedDate": "Adopted date",
@@ -86,7 +87,11 @@
       "title": "Notes"
     },
     "settings": {
-      "title": "Settings"
+      "about": "About",
+      "pagination": "Pagination",
+      "theme": "Theme",
+      "title": "Settings",
+      "weightUnit": "Weight unit"
     },
     "vaccines": {
       "noVaccineAddNewForStartTracking": "No vaccine. Add new for start tracking",

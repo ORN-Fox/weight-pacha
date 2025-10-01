@@ -1,5 +1,9 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
+import { SettingsService } from '../../services/settings/settings.service';
+
+import { Settings } from '../../models/settings/settings.model';
+
 @Component({
   selector: 'app-pagination',
   templateUrl: './pagination.component.html',
@@ -9,15 +13,22 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 export class PaginationComponent implements OnInit {
 
   @Input() page: number;
-  @Input() itemsPerPage: number;
 
   @Output() pageChange: EventEmitter<number> = new EventEmitter<number>();
   @Output() itemsPerPageChange: EventEmitter<number> = new EventEmitter<number>();
 
-  itemsPerPages: number[];
+  settings!: Settings;
 
-  constructor() {
+  itemsPerPages: number[];
+  itemsPerPage: number;
+
+  constructor(
+    private settingsService: SettingsService
+  ) {
+    this.settings = this.settingsService.currentSettings;
+    
     this.itemsPerPages = [10, 25, 50];
+    this.itemsPerPage = this.settings.itemsPerPage || this.itemsPerPages[0];
   }
 
   ngOnInit() {

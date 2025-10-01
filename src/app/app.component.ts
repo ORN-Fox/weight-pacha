@@ -1,8 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import flatpickr from 'flatpickr';
 import { english } from "flatpickr/dist/l10n/default.js"
 import { French } from "flatpickr/dist/l10n/fr.js";
+
+import { SettingsService } from './core/services/settings/settings.service';
+
+import { Settings } from './core/models/settings/settings.model';
 
 @Component({
     selector: 'app-root',
@@ -10,21 +14,29 @@ import { French } from "flatpickr/dist/l10n/fr.js";
     styleUrls: ['./app.component.scss'],
     standalone: false
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
 
-  locales: string[];
-  selectedLocale!: string;
+  settings!: Settings;
 
-  constructor(private translateService: TranslateService) {
-    this.locales = ['en-US', 'fr-CA', 'fr-FR'];
-    this.updateLocale(this.locales[1]);
-    flatpickr.localize(French);
+  locales: string[] = ['en-US', 'fr-CA', 'fr-FR'];
+
+  constructor(
+    private translateService: TranslateService,
+    private appSettingsService: SettingsService
+  ) {}
+
+  ngOnInit() {
+    this.appSettingsService.settings$.subscribe(settings => {
+      this.settings = this.appSettingsService.currentSettings;
+      this.translateService.use(settings.locale);
+      flatpickr.localize(settings.locale === 'en-US' ? english : French);
+      document.documentElement.setAttribute('data-theme', settings.theme || 'light');
+    });
   }
 
   updateLocale(locale: string) {
-    this.selectedLocale = locale;
-    this.translateService.use(this.selectedLocale);
-    flatpickr.localize(this.selectedLocale == 'en-US' ? english : French);
+    this.appSettingsService.updateSettings({ locale });
+    this.translateService.use(locale);
   }
 
 }

@@ -1,26 +1,61 @@
 <div class="card-page-title highlight-card card-small">
     <img src="/assets/images/pages/settings.png" alt="">
-    <h1 class="title">Parametres</h1>
+    <h1 class="title">{{ 'pages.settings.title' | translate }}</h1>
 </div>
 
-<div>
+<div class="box">
     <section class="section">
-        <h1 class="title">Langue</h1>
-        <h2 class="subtitle">
+        <h1 class="title mb-3">{{ 'commons.language' | translate }}</h1>
+        <div class="subtitle">
             @for (locale of locales; track locale) {
-                <button class="button mx-2" [ngClass]="{'is-active': selectedLocale == locale}" (click)="updateLocale(locale)">
-                    <img src="/assets/images/locales/{{ locale }}.png" /> {{ 'commons.languages.' + locale | translate}}
+                <button class="button mx-2" [ngClass]="{'is-primary is-selected': settings.locale == locale}" (click)="updateLocale(locale)">
+                    <img src="/assets/images/locales/{{ locale }}.png" class="mr-3" /> {{ 'commons.languages.' + locale | translate}}
                 </button>
             }
-        </h2>
+        </div>
     </section>
 
     <section class="section">
-        <h1 class="title">A propos</h1>
-        <h2 class="subtitle">
+        <h1 class="title mb-3">{{ 'pages.settings.theme' | translate }}</h1>
+        <div class="subtitle">
+            {{ 'commons.commingSoon' | translate }}
+        </div>
+    </section>
+
+    <section class="section">
+        <h1 class="title mb-3">{{ 'pages.settings.pagination' | translate }}</h1>
+        <div class="subtitle">
+            <div class="buttons has-addons">
+                @for (itemsPerPage of itemsPerPages; track itemsPerPage) {
+                    <button class="button" [ngClass]="{'is-primary is-selected': settings.itemsPerPage == itemsPerPage}" (click)="updateItemsPerPage(itemsPerPage)">
+                        {{ itemsPerPage }}
+                    </button>
+                }
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <h1 class="title mb-3">{{ 'pages.settings.weightUnit' | translate }}</h1>
+        <div class="subtitle">
+            <div class="radios">
+                @for (weightUnit of weightUnits; track weightUnit) {
+                    <label class="b-radio radio">
+                        <input type="radio" name="weightUnit" [(ngModel)]="settings.weightUnit" (ngModelChange)="updateWeightUnit(weightUnit)" [value]="weightUnit">
+                        <span class="check"></span>
+                        <span class="control-label">{{ weightUnitsLabels[weightUnit] }}</span>
+                    </label>
+                }
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <h1 class="title mb-3">{{ 'pages.settings.about' | translate }}</h1>
+        <div class="subtitle">
             <p>Poids pacha v1.0</p>
             <p>Logiciel open source - Licence MIT</p>
             <p>Autheur : ORN_Fox</p>
-        </h2>
+        </div>
     </section>
 </div>

@@ -18,10 +18,10 @@
 
     <div class="navbar-end">
       <div class="navbar-item has-dropdown is-hoverable">
-        <a class="navbar-link">{{"languages" | translate}}</a>
+        <a class="navbar-link">{{ "commons.language" | translate }}</a>
         <div class="navbar-dropdown is-right">
           @for (locale of locales; track locale) {
-            <a class="navbar-item" [ngClass]="{'is-active': selectedLocale == locale}" (click)="updateLocale(locale)">
+            <a class="navbar-item" [ngClass]="{'is-active': settings.locale == locale}" (click)="updateLocale(locale)">
               <img src="/assets/images/locales/{{ locale }}.png" /> {{ 'commons.languages.' + locale | translate}}
             </a>
           }
