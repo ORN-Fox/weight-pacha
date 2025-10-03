@@ -16,7 +16,8 @@ export interface ISerializedPetRecord extends ISerializeModel {
     color: string;
     birthDate: string | null;
     adoptedDate: string | null;
-    sterilise: boolean;
+    sterilize: boolean;
+    sterilizeDate: string | null;
     tagNumber: string;
     tagRageNumber: string;
     description: string;
@@ -32,7 +33,8 @@ export class PetRecord extends SerializeModel {
     color: string;
     birthDate: moment.Moment | null;
     adoptedDate: moment.Moment | null;
-    sterilise: boolean;
+    sterilizeDate: moment.Moment | null;
+    sterilize: boolean;
     tagNumber: string;
     tagRageNumber: string;
     description: string;
@@ -40,7 +42,7 @@ export class PetRecord extends SerializeModel {
     constructor() {
         super();
 
-        this.sterilise = false;
+        this.sterilize = false;
     }
     
     override serializeForSave(): ISerializedPetRecord {
@@ -53,7 +55,8 @@ export class PetRecord extends SerializeModel {
             color: this.color,
             birthDate: DateService.getStringDateFromMoment(this.birthDate),
             adoptedDate: DateService.getStringDateFromMoment(this.adoptedDate),
-            sterilise: this.sterilise,
+            sterilize: this.sterilize,
+            sterilizeDate: DateService.getStringDateFromMoment(this.sterilizeDate),
             tagNumber: this.tagNumber,
             tagRageNumber: this.tagRageNumber,
             description: this.description
@@ -76,7 +79,8 @@ export class PetRecord extends SerializeModel {
             this.color = serializePetRecord.color;
             this.birthDate = DateService.getMomentFromStringDate(serializePetRecord.birthDate);
             this.adoptedDate = DateService.getMomentFromStringDate(serializePetRecord.adoptedDate);
-            this.sterilise = serializePetRecord.sterilise;
+            this.sterilize = serializePetRecord.sterilize;
+            this.sterilizeDate = DateService.getMomentFromStringDate(serializePetRecord.sterilizeDate);
             this.tagNumber = serializePetRecord.tagNumber;
             this.tagRageNumber = serializePetRecord.tagRageNumber;
             this.description = serializePetRecord.description;

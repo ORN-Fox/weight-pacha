@@ -44,6 +44,7 @@ export class InformationsComponent {
       Object.assign(this.petRecord, this.petForm.value);
       this.petRecord.birthDate = moment(this.petRecord.birthDate);
       this.petRecord.adoptedDate = this.petRecord.adoptedDate ? moment(this.petRecord.adoptedDate) : null,
+      this.petRecord.sterilizeDate = this.petRecord.sterilizeDate ? moment(this.petRecord.sterilizeDate) : null,
       this.petRecord.updatedAt = moment();
       const serializedPetRecord = this.petRecord.serializeForSave();
       this.localStorageService.setItem(this.APP_STORAGE_KEY, serializedPetRecord);
@@ -62,10 +63,15 @@ export class InformationsComponent {
       });
 
       flatpickr('#adoptedDateInput', {
-        enableTime: true,
         altInput: true,
-        altFormat: this.translateService.instant('commons.dateFormats.flatpickr.dateTime'),
+        altFormat: this.translateService.instant('commons.dateFormats.flatpickr.date'),
         defaultDate: this.petForm.get('adoptedDate')?.value?.toDate()
+      });
+
+      flatpickr('#sterilizeDateInput', {
+        altInput: true,
+        altFormat: this.translateService.instant('commons.dateFormats.flatpickr.date'),
+        defaultDate: this.petForm.get('sterilizeDate')?.value?.toDate()
       });
     }, 100);
   }
@@ -79,7 +85,8 @@ export class InformationsComponent {
       sex: [this.petRecord.sex, [Validators.required]],
       birthDate: [this.petRecord.birthDate],
       adoptedDate: [this.petRecord.adoptedDate],
-      sterilise: [this.petRecord.sterilise],
+      sterilize: [this.petRecord.sterilize],
+      sterilizeDate: [this.petRecord.sterilizeDate],
       tagNumber: [this.petRecord.tagNumber],
       tagRageNumber: [this.petRecord.tagRageNumber],
       description: [this.petRecord.description]

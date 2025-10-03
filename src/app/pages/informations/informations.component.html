@@ -128,15 +128,24 @@
     
     <div class="field is-horizontal">
         <div class="field-label">
-            <label class="label">{{ "pages.informations.sterialize" | translate }} ?</label>
+            <label class="label">{{ "pages.informations.sterilize" | translate }} ?</label>
         </div>
         <div class="field-body">
             <div class="field">
                 <label class="switch is-outlined">
-                    <input type="checkbox" formControlName="sterilise">
+                    <input type="checkbox" formControlName="sterilize">
                     <span class="check"></span>
-                    <span class="control-label">{{ (petForm.get('sterilise')?.value == true ? 'commons.actions.yes' : 'commons.actions.no') | translate }}</span>
+                    <span class="control-label">{{ (petForm.get('sterilize')?.value ? 'commons.actions.yes' : 'commons.actions.no') | translate }}</span>
                 </label>
+            </div>
+
+            <div class="field" [ngClass]="{'is-hidden': !petForm.get('sterilize')?.value}">
+                <div class="control is-expanded has-icons-left">
+                    <input id="sterilizeDateInput" class="input" type="text" formControlName="sterilizeDate" placeholder="{{ 'commons.dateFormats.dateTime' | translate }}">
+                    <span class="icon is-small is-left">
+                        <i class="far fa-calendar"></i>
+                    </span>
+                </div>
             </div>
         </div>
     </div>
