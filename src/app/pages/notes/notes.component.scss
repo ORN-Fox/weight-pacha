@@ -6,6 +6,10 @@
 
 .panel-block {
     position: relative;
+
+    .subtitle {
+        font-size: .85rem;
+    }
     
     .btn-delete {
         display: none;

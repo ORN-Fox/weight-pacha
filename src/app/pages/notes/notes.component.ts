@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { TranslateService } from '@ngx-translate/core';
 import { cloneDeep } from 'lodash';
 import moment from 'moment';
 
 import { LocalStorageService } from 'src/app/core/services/local-storage/local-storage.service';
-import { ToastService } from 'src/app/core/services/toast/toast.service';
 import { SerializerService } from 'src/app/core/services/serializer/serializer.service';
+import { ToastService } from 'src/app/core/services/toast/toast.service';
 
 import { ISerializedNote, Note } from 'src/app/core/models/note/note.model';
 
@@ -24,14 +25,18 @@ export class NotesComponent {
   selectedNote: Note | null;
   noteForm: FormGroup;
 
+  dateTimeFormat: string;
   searchText: string;
 
   constructor(
     private formBuilder: FormBuilder,
     private localStorageService: LocalStorageService,
+    private serializerService: SerializerService,
     private toastService: ToastService,
-    private serializerService: SerializerService
+    private translateService: TranslateService
   ) {
+    this.dateTimeFormat = this.translateService.instant('commons.dateFormats.dateTime');
+
     this.loadNotes();
   }
 

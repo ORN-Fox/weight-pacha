@@ -20,11 +20,14 @@
                         <span class="panel-icon">
                             <i class="far fa-book" aria-hidden="true"></i>
                         </span>
-                        @if (note.title) {
-                            {{ note.title }}
-                        } @else {
-                            <span class="has-text-grey-light">{{ "pages.notes.placeholders.title" | translate }}</span>
-                        }
+                        <div>
+                            @if (note.title) {
+                                <p>{{ note.title }}</p>
+                                <p class="subtitle has-text-grey-light">{{ note.updatedAt ? note.updatedAt.format(dateTimeFormat) : note.createdAt.format(dateTimeFormat) }}</p>
+                            } @else {
+                                <p class="has-text-grey-light">{{ "pages.notes.placeholders.title" | translate }}</p>
+                            }
+                        </div>
 
                         <button type="button" class="button btn-delete" (click)="deleteNote($event, note.id)">
                             <i class="far fa-trash"></i>
