@@ -10,7 +10,7 @@
             <span class="icon is-small is-left">
               <i class="far fa-calendar"></i>
             </span>
-            @if (measureForm.get('date')?.touched) {
+            @if (measureForm.get('date')?.value) {
               @if (measureForm.get('date')?.errors?.['required']) {
                 <p class="help is-danger">{{ "pages.weight.errors.dateRequired" | translate }}</p>
               }
