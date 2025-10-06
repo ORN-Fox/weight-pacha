@@ -88,10 +88,7 @@ export class WeightMonitoringComponent {
       altFormat: this.translateService.instant('commons.dateFormats.flatpickr.date'),
     });
 
-    this.chart = new Chart(
-      document.getElementById('weightChart') as HTMLCanvasElement,
-      this.getChartConfig()
-    );
+    this.initChart();
   }
 
   onChangeRangeDates(selectedDates: Date[]) {
@@ -299,6 +296,13 @@ export class WeightMonitoringComponent {
   }
 
   //#region Chart related
+
+  private initChart() {
+    this.chart = new Chart(
+      document.getElementById('weightChart') as HTMLCanvasElement,
+      this.getChartConfig()
+    );
+  }
 
   private initChartData() {
     this.data = {
