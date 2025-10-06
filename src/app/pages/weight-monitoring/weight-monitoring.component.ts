@@ -345,7 +345,7 @@ export class WeightMonitoringComponent {
     const diff = p1 - p0;
 
     if (diff > 0 && p1 > maxHealthWeight) return value;
-    if (diff < 0 && (p1 < minHealthWeight || p1 > maxHealthWeight)) return value;
+    if (diff < 0 && (p1 < minHealthWeight)) return value;
     if (diff === 0 && p1 > maxHealthWeight) return value;
 
     return;
