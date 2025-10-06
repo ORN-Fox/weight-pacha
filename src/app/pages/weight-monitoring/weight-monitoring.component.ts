@@ -301,24 +301,6 @@ export class WeightMonitoringComponent {
   //#region Chart related
 
   private initChartData() {
-    const minHealthWeight = this.healthWeight - this.healthWeightOffset;
-    const maxHealthWeight = this.healthWeight + this.healthWeightOffset;
-    
-    const exceededValue = (
-      ctx: { p0: { parsed: { y: number } }, p1: { parsed: { y: number } } },
-      value: string
-    ): string | undefined => {
-      const p0 = ctx.p0.parsed.y;
-      const p1 = ctx.p1.parsed.y;
-      const diff = p1 - p0;
-
-      if (diff > 0 && p1 > maxHealthWeight) return value;
-      if (diff < 0 && (p1 < minHealthWeight || p1 > maxHealthWeight)) return value;
-      if (diff === 0 && p1 > maxHealthWeight) return value;
-
-      return;
-    };
-
     this.data = {
       datasets: [
         {
@@ -330,7 +312,7 @@ export class WeightMonitoringComponent {
           pointHoverRadius: 10,
           borderColor: 'rgb(75, 192, 192)',
           segment: {
-            borderColor: (ctx: any) => exceededValue(ctx, 'rgb(192,75,75)')
+            borderColor: (ctx: any) => this.exceededValue(ctx, 'rgb(192,75,75)')
           },
           spanGaps: true
         }
@@ -349,6 +331,24 @@ export class WeightMonitoringComponent {
     });
 
     return dataPoints;
+  };
+
+  private exceededValue = (
+    ctx: { p0: { parsed: { y: number } }, p1: { parsed: { y: number } } },
+    value: string
+  ): string | undefined => {
+    const minHealthWeight = this.healthWeight - this.healthWeightOffset;
+    const maxHealthWeight = this.healthWeight + this.healthWeightOffset;
+
+    const p0 = ctx.p0.parsed.y;
+    const p1 = ctx.p1.parsed.y;
+    const diff = p1 - p0;
+
+    if (diff > 0 && p1 > maxHealthWeight) return value;
+    if (diff < 0 && (p1 < minHealthWeight || p1 > maxHealthWeight)) return value;
+    if (diff === 0 && p1 > maxHealthWeight) return value;
+
+    return;
   };
 
   private getSuggestedMin(): number {
@@ -444,6 +444,8 @@ export class WeightMonitoringComponent {
 
   private updateChart() {
     this.chart.data.datasets[0].data = this.computeDataPoints();
+    this.chart.data.datasets[0].segment.borderColor = (ctx: any) => this.exceededValue(ctx, 'rgb(192,75,75)');
+
     this.chart.options.scales.y.suggestedMin = this.getSuggestedMin();
     this.chart.options.scales.y.suggestedMax = this.getSuggestedMax();
     
