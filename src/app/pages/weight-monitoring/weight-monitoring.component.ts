@@ -83,6 +83,7 @@ export class WeightMonitoringComponent {
 
     // No date update in onChange here because petForm change event interfer with date format rendering
     flatpickr('#measureDateInput', {
+      enableTime: true,
       altInput: true,
       altFormat: this.translateService.instant('commons.dateFormats.flatpickr.date'),
     });
