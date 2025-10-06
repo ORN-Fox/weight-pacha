@@ -20,7 +20,6 @@ import { UnitType } from 'src/app/core/enums/unit-type/unit-type.enum';
 import { IChartDataSetPoint } from 'src/app/core/interfaces/IChartDataSetPoint';
 
 import { ISerializedMeasure, Measure } from 'src/app/core/models/measure/measure.model';
-import { Settings } from 'src/app/core/models/settings/settings.model';
 
 interface IWeightChartDataSetPoint extends IChartDataSetPoint {
   x: moment.Moment,
@@ -36,8 +35,6 @@ interface IWeightChartDataSetPoint extends IChartDataSetPoint {
 export class WeightMonitoringComponent {
 
   APP_STORAGE_KEY: string = 'weight-pacha-data-measures';
-
-  settings!: Settings;
 
   chart: any;
   data: any;
@@ -60,9 +57,8 @@ export class WeightMonitoringComponent {
     private serializerService: SerializerService,
     private settingsService: SettingsService
   ) {
-    this.settings = this.settingsService.currentSettings;
     
-    this.measureUnit = this.settings.weightUnit || UnitType.Kg;
+    this.measureUnit = this.settingsService.currentSettings.weightUnit || UnitType.Kg;
 
     Chart.register(annotationPlugin);
 
@@ -223,7 +219,6 @@ export class WeightMonitoringComponent {
     
     let weightUnit = this.measureUnit;
     this.settingsService.updateSettings({ weightUnit });
-    this.settings = this.settingsService.currentSettings;
 
     this.saveMeasures();
     this.updateChart();
