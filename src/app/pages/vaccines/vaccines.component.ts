@@ -6,7 +6,9 @@ import moment from 'moment';
 import { LocalStorageService } from 'src/app/core/services/local-storage/local-storage.service';
 import { ToastService } from 'src/app/core/services/toast/toast.service';
 import { SerializerService } from 'src/app/core/services/serializer/serializer.service';
+import { SettingsService } from 'src/app/core/services/settings/settings.service';
 
+import { IInputElementWithFlatpickr } from 'src/app/core/interfaces/IInputElementWithFlatpickr';
 import { ITableHeader } from 'src/app/core/interfaces/ITableHeader';
 
 import { ISerializedVaccine, Vaccine } from 'src/app/core/models/vaccine/vaccine.model';
@@ -36,13 +38,18 @@ export class VaccinesComponent {
     private localStorageService: LocalStorageService,
     private toastService: ToastService,
     private translateService: TranslateService,
-    private serializerService: SerializerService
+    private serializerService: SerializerService,
+    private settingsService: SettingsService
   ) {
     this.dateFormat = this.translateService.instant('commons.dateFormats.date');
 
     this.setupTableHeaders();
     this.loadPetRecord();
     this.loadVaccines();
+
+    this.settingsService.settings$.subscribe(() => {
+      this.updateFlatpickrLocales();
+    });
   }
 
   private setupTableHeaders() {
@@ -157,6 +164,22 @@ export class VaccinesComponent {
     this.vaccines = this.sortVaccinesByInjectionDate(this.vaccines);
     const serializedVaccines = this.serializerService.serializeList(this.vaccines);
     this.localStorageService.setItem(this.APP_STORAGE_KEY, { vaccines: serializedVaccines });
+  }
+    
+  private updateFlatpickrLocales() {
+    const datePickersId = this.vaccines.flatMap((vaccine) => [
+      `#vaccineInjectionDateInput_${vaccine.id}`,
+      `#vaccineReminderDateInput_${vaccine.id}`
+    ]);
+
+    datePickersId.forEach(inputId => {
+      const input = document.querySelector(`#${inputId}`) as IInputElementWithFlatpickr;
+      if (input?._flatpickr) {
+        input._flatpickr.set('altFormat', this.translateService.instant('commons.dateFormats.flatpickr.date'));
+        input._flatpickr.set('locale', this.settingsService.currentSettings.locale);
+        input._flatpickr.redraw();
+      }
+    });
   }
 
 }

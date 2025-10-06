@@ -6,7 +6,9 @@ import moment from 'moment';
 import { LocalStorageService } from 'src/app/core/services/local-storage/local-storage.service';
 import { ToastService } from 'src/app/core/services/toast/toast.service';
 import { SerializerService } from 'src/app/core/services/serializer/serializer.service';
+import { SettingsService } from 'src/app/core/services/settings/settings.service';
 
+import { IInputElementWithFlatpickr } from 'src/app/core/interfaces/IInputElementWithFlatpickr';
 import { ITableHeader } from 'src/app/core/interfaces/ITableHeader';
 
 import { ISerializedWormable, Wormable } from 'src/app/core/models/wormable/wormable.model';
@@ -33,12 +35,17 @@ export class WormablesComponent {
     private localStorageService: LocalStorageService,
     private toastService: ToastService,
     private translateService: TranslateService,
-    private serializerService: SerializerService
+    private serializerService: SerializerService,
+    private settingsService: SettingsService
   ) {
     this.dateFormat = this.translateService.instant('commons.dateFormats.date');
 
     this.setupTableHeaders();
     this.loadWormables();
+
+    this.settingsService.settings$.subscribe(() => {
+      this.updateFlatpickrLocales();
+    });
   }
 
   private setupTableHeaders() {
@@ -127,6 +134,22 @@ export class WormablesComponent {
     this.wormables = this.sortWormablesByInjectionDate(this.wormables);
     const serializedWormables = this.serializerService.serializeList(this.wormables);
     this.localStorageService.setItem(this.APP_STORAGE_KEY, { wormables: serializedWormables });
+  }
+      
+  private updateFlatpickrLocales() {
+    const datePickersId = this.wormables.flatMap((wormable) => [
+      `#wormableInjectionDateInput_${wormable.id}`,
+      `#wormableReminderDateInput_${wormable.id}`
+    ]);
+
+    datePickersId.forEach(inputId => {
+      const input = document.querySelector(`#${inputId}`) as IInputElementWithFlatpickr;
+      if (input?._flatpickr) {
+        input._flatpickr.set('altFormat', this.translateService.instant('commons.dateFormats.flatpickr.date'));
+        input._flatpickr.set('locale', this.settingsService.currentSettings.locale);
+        input._flatpickr.redraw();
+      }
+    });
   }
 
 }

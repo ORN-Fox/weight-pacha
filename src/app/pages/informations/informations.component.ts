@@ -5,8 +5,11 @@ import flatpickr from 'flatpickr';
 import moment from 'moment';
 
 import { LocalStorageService } from 'src/app/core/services/local-storage/local-storage.service';
+import { SettingsService } from 'src/app/core/services/settings/settings.service';
 
 import { PetType } from 'src/app/core/enums/pet-type/pet-type.enum';
+
+import { IInputElementWithFlatpickr } from 'src/app/core/interfaces/IInputElementWithFlatpickr';
 
 import { PetRecord } from 'src/app/core/models/pet-record/pet-record.model';
 
@@ -34,9 +37,14 @@ export class InformationsComponent {
     private formBuilder: FormBuilder,
     private translateService: TranslateService,
     private localStorageService: LocalStorageService,
+    private settingsService: SettingsService
   ) {    
     this.loadSpecies();
     this.loadPetRecord();
+    
+    this.settingsService.settings$.subscribe(() => {
+      this.updateFlatpickrLocales();
+    });
   }
 
   saveChanges() {
@@ -115,6 +123,18 @@ export class InformationsComponent {
       { key: 'rabbit', value: PetType.Rabbit },
       { key: 'others', value: PetType.Others },
     ];
+  }
+
+  private updateFlatpickrLocales() {
+    ['birthDateInput', 'adoptedDateInput', 'sterilizeDateInput'].forEach(inputId => {
+      const input = document.querySelector(`#${inputId}`) as IInputElementWithFlatpickr;
+      if (input?._flatpickr) {
+        const format = inputId === 'birthDateInput' ? 'commons.dateFormats.flatpickr.dateTime' : 'commons.dateFormats.flatpickr.date';
+        input._flatpickr.set('altFormat', this.translateService.instant(format));
+        input._flatpickr.set('locale', this.settingsService.currentSettings.locale);
+        input._flatpickr.redraw();
+      }
+    });
   }
 
 }

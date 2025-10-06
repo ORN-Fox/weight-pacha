@@ -7,8 +7,10 @@ import moment from 'moment';
 import { LocalStorageService } from 'src/app/core/services/local-storage/local-storage.service';
 import { ToastService } from 'src/app/core/services/toast/toast.service';
 import { SerializerService } from 'src/app/core/services/serializer/serializer.service';
+import { SettingsService } from 'src/app/core/services/settings/settings.service';
 
 import { IChartDataSetPoint } from 'src/app/core/interfaces/IChartDataSetPoint';
+import { IInputElementWithFlatpickr } from 'src/app/core/interfaces/IInputElementWithFlatpickr';
 import { ITableHeader } from 'src/app/core/interfaces/ITableHeader';
 
 import { ISerializedInvoice, Invoice } from 'src/app/core/models/invoice/invoice.model';
@@ -51,13 +53,18 @@ export class InvoicesComponent implements AfterViewInit {
     private localStorageService: LocalStorageService,
     private toastService: ToastService,
     private translateService: TranslateService,
-    private serializerService: SerializerService
+    private serializerService: SerializerService,
+    private settingsService: SettingsService
   ) {
     this.dateFormat = this.translateService.instant('commons.dateFormats.date');
     this.displaySignPosition = this.translateService.currentLang == 'en-US' ? 'left' : 'right';
 
     this.setupTableHeaders();
     this.loadInvoices();
+
+    this.settingsService.settings$.subscribe(() => {
+      this.updateFlatpickrLocales();
+    });
   }
 
   ngAfterViewInit() {
@@ -177,6 +184,19 @@ export class InvoicesComponent implements AfterViewInit {
     this.invoices = this.sortInvoicesByBillingDate(this.invoices);
     const serializedInvoices = this.serializerService.serializeList(this.invoices);
     this.localStorageService.setItem(this.APP_STORAGE_KEY, { invoices: serializedInvoices });
+  }
+  
+  private updateFlatpickrLocales() {
+    const datePickersId = this.invoices.map((invoice) => `#invoiceBillingDateInput_${invoice.id}`);
+
+    datePickersId.forEach(inputId => {
+      const input = document.querySelector(`#${inputId}`) as IInputElementWithFlatpickr;
+      if (input?._flatpickr) {
+        input._flatpickr.set('altFormat', this.translateService.instant('commons.dateFormats.flatpickr.date'));
+        input._flatpickr.set('locale', this.settingsService.currentSettings.locale);
+        input._flatpickr.redraw();
+      }
+    });
   }
 
   //#region Chart related

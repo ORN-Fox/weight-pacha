@@ -18,6 +18,7 @@ import { SettingsService } from 'src/app/core/services/settings/settings.service
 import { UnitType } from 'src/app/core/enums/unit-type/unit-type.enum';
 
 import { IChartDataSetPoint } from 'src/app/core/interfaces/IChartDataSetPoint';
+import { IInputElementWithFlatpickr } from 'src/app/core/interfaces/IInputElementWithFlatpickr';
 
 import { ISerializedMeasure, Measure } from 'src/app/core/models/measure/measure.model';
 
@@ -57,6 +58,9 @@ export class WeightMonitoringComponent {
     private serializerService: SerializerService,
     private settingsService: SettingsService
   ) {
+    this.settingsService.settings$.subscribe(() => {
+      this.updateFlatpickrLocales();
+    });
     
     this.measureUnit = this.settingsService.currentSettings.weightUnit || UnitType.Kg;
 
@@ -288,6 +292,21 @@ export class WeightMonitoringComponent {
   private saveMeasures() {
     const serializedMeasures = this.serializerService.serializeList(this.sourceMeasures);
     this.localStorageService.setItem(this.APP_STORAGE_KEY, { healthWeight: this.healthWeight, measureUnit: this.measureUnit, measures: serializedMeasures });
+  }
+
+  private updateFlatpickrLocales() {
+    if (this.rangeDateInputInstance) {
+      this.rangeDateInputInstance.set('altFormat', this.translateService.instant('commons.dateFormats.flatpickr.date'));
+      this.rangeDateInputInstance.set('locale', this.settingsService.currentSettings.locale);
+      this.rangeDateInputInstance.redraw();
+    }
+
+    const dateInput = document.querySelector('#measureDateInput') as IInputElementWithFlatpickr;
+    if (dateInput?._flatpickr) {
+      dateInput._flatpickr.set('altFormat', this.translateService.instant('commons.dateFormats.flatpickr.dateTime'));
+      dateInput._flatpickr.set('locale', this.settingsService.currentSettings.locale);
+      dateInput._flatpickr.redraw();
+    }
   }
 
   //#region Chart related
