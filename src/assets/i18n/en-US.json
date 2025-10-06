@@ -15,7 +15,7 @@
       "dateTime": "YYYY-MM-DD hh:mm A",
       "flatpickr": {
         "date": "Y-m-d",
-        "dateTime": "Y-m-d H:i"
+        "dateTime": "Y-m-d h:i K"
       }
     },
     "language": "Language",
