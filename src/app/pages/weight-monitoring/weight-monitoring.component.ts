@@ -60,6 +60,7 @@ export class WeightMonitoringComponent {
   ) {
     this.settingsService.settings$.subscribe(() => {
       this.updateFlatpickrLocales();
+      this.updateChartLocale();
     });
     
     this.measureUnit = this.settingsService.currentSettings.weightUnit || UnitType.Kg;
@@ -468,6 +469,25 @@ export class WeightMonitoringComponent {
     this.chart.options.scales.y.suggestedMax = this.getSuggestedMax();
     
     this.chart.update();
+  }
+
+  private updateChartLocale() {
+    if (this.chart) {
+      this.chart.options.locale = this.translateService.currentLang;
+      
+      this.chart.options.scales.x.title.text = this.translateService.instant('pages.weight.date');
+      this.chart.options.scales.y.title.text = this.translateService.instant('pages.weight.weight');
+      
+      this.chart.options.scales.x.time = {
+        tooltipFormat: this.translateService.instant('commons.dateFormats.dateTime')
+      };
+
+      this.chart.data.datasets[0].label = this.translateService.instant('pages.weight.weight');
+      
+      this.chart.options.plugins.annotation.annotations.label.content = this.computeWeightHealthLabel();
+      
+      this.chart.update();
+    }
   }
 
   //#endregion
