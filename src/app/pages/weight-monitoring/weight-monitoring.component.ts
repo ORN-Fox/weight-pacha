@@ -96,7 +96,6 @@ export class WeightMonitoringComponent {
   onChangeRangeDates(selectedDates: Date[]) {
     if (selectedDates.length > 1) {
       this.measures = this.sourceMeasures.filter((measure) => measure.date.isBetween(selectedDates[0], selectedDates[1], 'day', '[]'));
-      this.chart.data.datasets[0].data = this.computeDataPoints();
       this.updateChart();
     }
   }
@@ -443,6 +442,10 @@ export class WeightMonitoringComponent {
   }
 
   private updateChart() {
+    this.chart.data.datasets[0].data = this.computeDataPoints();
+    this.chart.options.scales.y.suggestedMin = this.getSuggestedMin();
+    this.chart.options.scales.y.suggestedMax = this.getSuggestedMax();
+    
     this.chart.update();
   }
 
