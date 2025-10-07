@@ -4,8 +4,9 @@ import { TranslateService } from '@ngx-translate/core';
 import flatpickr from 'flatpickr';
 import moment from 'moment';
 
-import { Measure } from '../../models/measure/measure.model';
 import { DateService } from '../../services/date/date.service';
+
+import { Measure } from '../../models/measure/measure.model';
 
 export interface IMeasureDiff {
   value: string;
@@ -15,10 +16,10 @@ export interface IMeasureDiff {
 }
 
 @Component({
-    selector: 'app-measure',
-    templateUrl: './measure.component.html',
-    styleUrls: ['./measure.component.scss'],
-    standalone: false
+  selector: 'app-measure',
+  templateUrl: './measure.component.html',
+  styleUrls: ['./measure.component.scss'],
+  standalone: false
 })
 export class MeasureComponent implements OnChanges {
 
