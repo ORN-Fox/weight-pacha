@@ -408,6 +408,10 @@ export class WeightMonitoringComponent {
           x: {
             type: 'time',
             time: {
+              unit: 'day',
+              displayFormats: {
+                'day': this.translateService.instant('commons.dateFormats.date'),
+              },
               tooltipFormat: 'L LT'
             },
             title: {
@@ -478,9 +482,8 @@ export class WeightMonitoringComponent {
       this.chart.options.scales.x.title.text = this.translateService.instant('pages.weight.date');
       this.chart.options.scales.y.title.text = this.translateService.instant('pages.weight.weight');
       
-      this.chart.options.scales.x.time = {
-        tooltipFormat: this.translateService.instant('commons.dateFormats.dateTime')
-      };
+      this.chart.options.scales.x.time.tooltipFormat = this.translateService.instant('commons.dateFormats.dateTime');
+      this.chart.options.scales.x.time.displayFormats.day = this.translateService.instant('commons.dateFormats.date');
 
       this.chart.data.datasets[0].label = this.translateService.instant('pages.weight.weight');
       
