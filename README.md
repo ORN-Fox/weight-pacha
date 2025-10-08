@@ -4,11 +4,24 @@
 ![Preview Informations Page](./preview_informations.png)
 ![Preview Weight Tracking Page](./preview_weight_tracking.png)
 
+## Informations
+
+This application allows you to better manage the monitoring of your favorite pet and make your life easier.
+
+### Features
+
+- Informations
+- Weight tracking
+- Notes
+- Invoices
+- Vaccines
+- Wormables
+
+## Development server
+
 Current project version is **20.1.6**
 
 Created project version is **16.1.4** with [Angular CLI](https://github.com/angular/angular-cli)
-
-## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
 
