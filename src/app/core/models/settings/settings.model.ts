@@ -17,7 +17,7 @@ export class Settings extends SerializeModel {
     constructor() {
         super();
         
-        this.locale = 'fr-CA';
+        this.locale = 'en-US';
         this.theme = 'light';
         this.itemsPerPage = 10;
         this.weightUnit = 0;

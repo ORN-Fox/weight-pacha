@@ -9,14 +9,14 @@ import { SettingsService } from './core/services/settings/settings.service';
 import { Settings } from './core/models/settings/settings.model';
 
 @Component({
-    selector: 'app-root',
-    templateUrl: './app.component.html',
-    styleUrls: ['./app.component.scss'],
-    standalone: false
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss'],
+  standalone: false
 })
 export class AppComponent implements OnInit {
 
-  settings!: Settings;
+  settings: Settings;
 
   locales: string[] = ['en-US', 'fr-CA', 'fr-FR'];
 
@@ -28,8 +28,12 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.appSettingsService.settings$.subscribe(settings => {
       this.settings = this.appSettingsService.currentSettings;
-      this.translateService.use(settings.locale);
-      flatpickr.localize(settings.locale === 'en-US' ? english : French);
+      
+      const locale = settings.locale || 'en-US';
+      this.translateService.use(locale);
+      
+      flatpickr.localize(locale === 'en-US' ? english : French);
+      
       document.documentElement.setAttribute('data-theme', settings.theme || 'light');
     });
   }

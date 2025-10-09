@@ -13,7 +13,7 @@ import { Settings } from 'src/app/core/models/settings/settings.model';
 })
 export class SettingsComponent {
 
-  settings!: Settings;
+  settings: Settings;
 
   locales: string[] = ['en-US', 'fr-CA', 'fr-FR'];
   themes: string[] = ['light', 'dark'];
