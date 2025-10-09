@@ -64,6 +64,7 @@ export class InvoicesComponent implements AfterViewInit {
 
     this.settingsService.settings$.subscribe(() => {
       this.updateFlatpickrLocales();
+      this.updateChartLocale();
     });
   }
 
@@ -254,6 +255,10 @@ export class InvoicesComponent implements AfterViewInit {
     return dataPoints;
   };
 
+  private computeTotalInvoicesAmountTooltipLabel(totalAmount: number | bigint | null = 0) {
+    return `${this.translateService.instant('pages.invoices.totalAmount')} : ${totalAmount} ${this.translateService.instant('commons.moneySymbol')}`;
+  }
+
   private getChartConfig(): any {
     const config = {
       type: 'bar',
@@ -272,9 +277,7 @@ export class InvoicesComponent implements AfterViewInit {
         plugins: {
           tooltip: {
             callbacks: {
-              label: (context: { dataset: { label: string; }; parsed: { y: number | bigint | null; }; }) => {
-                return `${ this.translateService.instant('pages.invoices.totalAmount') } : ${ context.parsed.y } ${ this.translateService.instant('commons.moneySymbol') }`;
-              }
+              label: (context: { dataset: { label: string; }; parsed: { y: number | bigint | null; }; }) => this.computeTotalInvoicesAmountTooltipLabel(context.parsed.y)
             }
           }
         }
@@ -287,6 +290,23 @@ export class InvoicesComponent implements AfterViewInit {
     this.chart.data.labels = this.computeYearsLabelFromTotalInvoicedPerYears();
     this.chart.data.datasets[0].data = this.computeDataPoints();
     this.chart.update();
+  }
+
+  private updateChartLocale() {
+    if (this.chart) {
+      this.chart.options.locale = this.translateService.currentLang;
+
+      this.chart.data.datasets[0].label = this.translateService.instant('pages.invoices.title');
+      this.chart.options.scales.y.title.text = this.translateService.instant('pages.invoices.totalAmount');
+
+      this.chart.options.plugins.tooltip = {
+        callbacks: {
+          label: (context: { dataset: { label: string; }; parsed: { y: number | bigint | null; }; }) => this.computeTotalInvoicesAmountTooltipLabel(context.parsed.y)
+        }
+      };
+
+      this.chart.update();
+    }
   }
 
   //#endregion
