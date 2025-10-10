@@ -173,7 +173,7 @@ export class VaccinesComponent {
     ]);
 
     datePickersId.forEach(inputId => {
-      const input = document.querySelector(`#${inputId}`) as IInputElementWithFlatpickr;
+      const input = document.querySelector(inputId) as IInputElementWithFlatpickr;
       if (input?._flatpickr) {
         input._flatpickr.set('altFormat', this.translateService.instant('commons.dateFormats.flatpickr.date'));
         input._flatpickr.set('locale', this.settingsService.currentSettings.locale);
