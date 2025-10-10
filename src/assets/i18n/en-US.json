@@ -72,7 +72,7 @@
         "description": "Description"
       },
       "title": "Invoices",
-      "totalAmount": "Montant total"
+      "totalAmount": "Total amount"
     },
     "notes": {
       "errors": {
