@@ -69,10 +69,7 @@ export class InvoicesComponent implements AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.chart = new Chart(
-      document.getElementById('totalInvoicedPerYearsChart') as HTMLCanvasElement,
-      this.getChartConfig()
-    );
+    this.initChart();
   }
 
   private setupTableHeaders() {
@@ -201,6 +198,13 @@ export class InvoicesComponent implements AfterViewInit {
   }
 
   //#region Chart related
+
+  private initChart() {
+    this.chart = new Chart(
+      document.getElementById('totalInvoicedPerYearsChart') as HTMLCanvasElement,
+      this.getChartConfig()
+    );
+  }
   
   private initChartData() {
     let data = [];
