@@ -5,6 +5,9 @@ import flatpickr from 'flatpickr';
 import moment from 'moment';
 
 import { DateService } from '../../services/date/date.service';
+import { SettingsService } from '../../services/settings/settings.service';
+
+import { IInputElementWithFlatpickr } from '../../interfaces/IInputElementWithFlatpickr';
 
 import { Measure } from '../../models/measure/measure.model';
 
@@ -38,9 +41,15 @@ export class MeasureComponent implements OnChanges {
 
   constructor(
     private formBuilder: FormBuilder,
-    private translateService: TranslateService
+    private translateService: TranslateService,
+    private settingsService: SettingsService
   ) {
     this.dateTimeFormat = this.translateService.instant('commons.dateFormats.dateTime');
+
+    this.settingsService.settings$.subscribe(() => {
+      this.updateFlatpickrLocale();
+      this.dateTimeFormat = this.translateService.instant('commons.dateFormats.dateTime');
+    });
   }
 
   ngOnChanges() {
@@ -162,6 +171,15 @@ export class MeasureComponent implements OnChanges {
       date: [this.measure.date, [Validators.required, this.invalidDateValidator(), this.existingMeasureAtDateValidator()]],
       weight: [this.measure.weight, [Validators.required, Validators.min(0.001)]]
     });
+  }
+
+  private updateFlatpickrLocale() {
+    const dateInput = document.querySelector(`#measureDateInput_${this.measure.id}`) as IInputElementWithFlatpickr;
+    if (dateInput?._flatpickr) {
+      dateInput._flatpickr.set('altFormat', this.translateService.instant('commons.dateFormats.flatpickr.dateTime'));
+      dateInput._flatpickr.set('locale', this.settingsService.currentSettings.locale);
+      dateInput._flatpickr.redraw();
+    }
   }
 
 }
