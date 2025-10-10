@@ -1,13 +1,16 @@
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { TranslateModule, TranslateLoader, TranslateService } from '@ngx-translate/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+
+// Services
+import { SettingsService } from './core/services/settings/settings.service';
 
 // Components
 import { MeasureComponent } from './core/components/measure/measure.component';
@@ -26,6 +29,14 @@ import { SettingsComponent } from './pages/settings/settings.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
+}
+
+export function appInitializerFactory(translate: TranslateService, settings: SettingsService) {
+    return () => {
+        const locale = settings.currentSettings.locale || 'en-US';
+        translate.setDefaultLang(locale);
+        return translate.use(locale).toPromise();
+    };
 }
 
 @NgModule({ 
@@ -61,7 +72,13 @@ export function HttpLoaderFactory(http: HttpClient) {
         AppRoutingModule
     ],
     providers: [
-        provideHttpClient(withInterceptorsFromDi())
+        provideHttpClient(withInterceptorsFromDi()),
+        {
+            provide: APP_INITIALIZER,
+            useFactory: appInitializerFactory,
+            deps: [TranslateService, SettingsService],
+            multi: true
+        }
     ]
 })
 export class AppModule { }
