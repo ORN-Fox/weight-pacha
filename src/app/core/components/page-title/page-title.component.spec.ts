@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { PageTitleComponent } from './page-title.component';
 
@@ -8,7 +9,10 @@ describe('PageTitleComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PageTitleComponent]
+      declarations: [PageTitleComponent],
+      imports: [
+        TranslateModule.forRoot({})
+      ]
     })
     .compileComponents();
 

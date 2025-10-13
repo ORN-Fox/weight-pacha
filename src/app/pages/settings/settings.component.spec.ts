@@ -1,4 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormsModule } from '@angular/forms';
+import { TranslateModule } from '@ngx-translate/core';
+
+import { PageTitleComponent } from 'src/app/core/components/page-title/page-title.component';
 
 import { SettingsComponent } from './settings.component';
 
@@ -8,7 +12,14 @@ describe('SettingsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SettingsComponent]
+      declarations: [
+        PageTitleComponent,
+        SettingsComponent
+      ],
+      imports: [
+        FormsModule,
+        TranslateModule.forRoot({})
+      ]
     })
     .compileComponents();
 

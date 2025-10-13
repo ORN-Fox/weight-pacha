@@ -1,5 +1,15 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+
+import { DateService } from 'src/app/core/services/date/date.service';
+import { LocalStorageService } from 'src/app/core/services/local-storage/local-storage.service';
+import { ToastService } from 'src/app/core/services/toast/toast.service';
+import { SerializerService } from 'src/app/core/services/serializer/serializer.service';
+import { SettingsService } from 'src/app/core/services/settings/settings.service';
+
+import { PageTitleComponent } from 'src/app/core/components/page-title/page-title.component';
+import { MeasureComponent } from 'src/app/core/components/measure/measure.component';
 
 import { WeightMonitoringComponent } from './weight-monitoring.component';
 
@@ -9,9 +19,23 @@ describe('WeightMonitoringComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [WeightMonitoringComponent],
+      declarations: [
+        PageTitleComponent,
+        MeasureComponent,
+        WeightMonitoringComponent
+      ],
       imports: [
-        FormsModule
+        ReactiveFormsModule,
+        FormsModule,
+        TranslateModule.forRoot({})
+      ],
+      providers: [
+        DateService,
+        LocalStorageService,
+        ToastService,
+        SerializerService,
+        SettingsService,
+        TranslateService
       ]
     });
     fixture = TestBed.createComponent(WeightMonitoringComponent);
