@@ -54,6 +54,11 @@ a.navbar-item.is-active {
     }
 }
 
+.label-with-length-counter {
+    display: flex;
+    justify-content: space-between;
+}
+
 @media screen and (max-width: 601px) {
     .ngx-pagination.responsive .small-screen {
         display: inline-flex !important;

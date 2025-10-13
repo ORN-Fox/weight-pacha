@@ -48,8 +48,12 @@
         @if (selectedNote) {
             <form [formGroup]="noteForm" (ngSubmit)="saveChanges()">
                 <div class="field">
+                    <div class="label-with-length-counter">
+                        <label class="label">{{ "pages.notes.placeholders.title" | translate }}</label>
+                        <p>{{ noteForm?.get('title')?.value?.length ?? 0 }} / 100</p>
+                    </div>
                     <div class="control is-expanded has-icons-left">
-                        <input class="input" type="text" formControlName="title" placeholder="{{ 'pages.notes.placeholders.title' | translate }}"
+                        <input class="input" type="text" formControlName="title" placeholder="{{ 'pages.notes.placeholders.title' | translate }}" maxlength="100"
                             [ngClass]="{'is-danger': noteForm.get('title')?.errors?.['required'] && noteForm.get('title')?.touched}">
                         <span class="icon is-small is-left">
                             <i class="far fa-book"></i>
@@ -61,6 +65,7 @@
                 </div>
 
                 <div class="field">
+                    <label class="label">{{ "pages.notes.placeholders.description" | translate }}</label>
                     <textarea class="textarea" formControlName="description" rows="20" placeholder="{{ 'pages.notes.placeholders.description' | translate }}"></textarea>
                 </div>
             
