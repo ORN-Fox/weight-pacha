@@ -88,6 +88,8 @@
     },
     "settings": {
       "about": "A propos",
+      "author": "Auteur",
+      "licenseDetails": "Logiciel open source - Licence MIT",
       "pagination": "Pagination",
       "theme": "Thème",
       "title": "Paramètres",
