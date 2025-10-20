@@ -4,11 +4,17 @@
     <section class="section">
         <h1 class="title mb-3">{{ 'commons.language' | translate }}</h1>
         <div class="subtitle">
-            @for (locale of locales; track locale) {
-                <button class="button mx-2" [ngClass]="{'is-primary is-selected': settings.locale == locale}" (click)="updateLocale(locale)">
-                    <img src="/assets/images/locales/{{ locale }}.png" class="mr-3" /> {{ 'commons.languages.' + locale | translate}}
-                </button>
-            }
+            <div class="buttons">
+                @for (locale of locales; track locale) {
+                    <button class="button" [ngClass]="{'is-primary is-selected': settings.locale == locale}"
+                        (click)="updateLocale(locale)">
+                        <span class="icon is-small">
+                            <img src="/assets/images/locales/{{ locale }}.png" />
+                        </span>
+                        <span>{{ 'commons.languages.' + locale | translate}}</span>
+                    </button>
+                }
+            </div>
         </div>
     </section>
 
