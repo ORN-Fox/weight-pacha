@@ -12,7 +12,21 @@
 
     img {
         position: absolute;
-        top: -45%;
-        left: 30%;
+        top: 0;
+        left: 1rem;
+        width: 4rem;
+        height: 4rem;
+
+        @media screen and (min-width: 800px) {
+            top: -45%;
+            left: 15%;
+            height: auto;
+            width: auto;
+        }
+
+        @media screen and (min-width: 1400px) {
+            top: -45%;
+            left: 30%;
+        }
     }
 }
