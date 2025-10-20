@@ -59,7 +59,9 @@
                             }
                         </td>
                         <td class="has-text-centered">
-                            {{ vaccine.age != -1 ? vaccine.age : '' }}
+                            @if (vaccine.age != -1) {
+                                {{ vaccine.age }} {{ 'commons.yearOld' | translate}}
+                            }
                         </td>
                         <td class="has-text-centered">
                             @if (vaccine.editMode) {
