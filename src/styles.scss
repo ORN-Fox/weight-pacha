@@ -10,6 +10,10 @@
     background-color: white;
 }
 
+.navbar.is-fixed-top {
+    z-index: 9999;
+}
+
 a.navbar-item.is-active {
     color: white;
 }

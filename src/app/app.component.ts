@@ -20,6 +20,8 @@ export class AppComponent implements OnInit {
 
   locales: string[] = ['en-US', 'fr-CA', 'fr-FR'];
 
+  isOpenSidebar: boolean = false;
+
   constructor(
     private translateService: TranslateService,
     private appSettingsService: SettingsService
@@ -41,6 +43,10 @@ export class AppComponent implements OnInit {
   updateLocale(locale: string) {
     this.appSettingsService.updateSettings({ locale });
     this.translateService.use(locale);
+  }
+
+  toggleSidebar() {
+    this.isOpenSidebar = !this.isOpenSidebar;
   }
 
 }
