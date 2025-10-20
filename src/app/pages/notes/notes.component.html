@@ -50,7 +50,7 @@
                 <div class="field">
                     <div class="label-with-length-counter">
                         <label class="label">{{ "pages.notes.placeholders.title" | translate }}</label>
-                        <p>{{ noteForm?.get('title')?.value?.length ?? 0 }} / 100</p>
+                        <p>{{ noteForm.get('title')?.value?.length ?? 0 }} / 100</p>
                     </div>
                     <div class="control is-expanded has-icons-left">
                         <input class="input" type="text" formControlName="title" placeholder="{{ 'pages.notes.placeholders.title' | translate }}" maxlength="100"
