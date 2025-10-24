@@ -2,6 +2,7 @@
   "commons": {
     "actions": {
       "add": "Ajouter",
+      "cancel": "Annuler",
       "displayAll": "Afficher tout",
       "no": "Non",
       "save": "Enregistrer",
@@ -130,7 +131,17 @@
       "weightUnit": "Unité de poids"
     },
     "wormables": {
+      "addTitle": "Ajouter un vermifuge",
+      "editTitle": "Modifier un vermifuge",
+      "errors": {
+        "nameRequired": "Le titre est requis",
+        "sameOrBeforeReminderDateError": "La date de rappel doit être après la date d'injection"
+      },
       "noWormableAddNewForStartTracking": "Aucun vermifuge. Ajouter un vaccin pour commencer le suivi",
+      "placeholders": {
+        "description": "Description",
+        "name": "Titre"
+      },
       "tableHeaders": {
         "actions": "Actions",
         "date": "Date",

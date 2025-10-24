@@ -18,6 +18,23 @@ a.navbar-item.is-active {
     color: white;
 }
 
+.modal-header {
+    background-color: #00d1b2;
+    border-top-left-radius: .75rem;
+    border-top-right-radius: .75rem;
+    padding: 1rem;
+    text-align: center;
+
+    .modal-title {
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+}
+
+.mat-mdc-dialog-surface {
+    border-radius: .75rem !important;
+}
+
 .ngx-pagination {
     li {
         &, &.current {
@@ -61,6 +78,10 @@ a.navbar-item.is-active {
 .label-with-length-counter {
     display: flex;
     justify-content: space-between;
+}
+
+.swal2-actions {
+    flex-direction: row-reverse; /* For use same actions order with crud modal */
 }
 
 @media screen and (max-width: 601px) {

@@ -2,6 +2,7 @@ import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
+import { MatDialogModule } from '@angular/material/dialog';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { TranslateModule, TranslateLoader, TranslateService } from '@ngx-translate/core';
@@ -24,6 +25,7 @@ import { NotesComponent } from './pages/notes/notes.component';
 import { VaccinesComponent } from './pages/vaccines/vaccines.component';
 import { WeightMonitoringComponent } from './pages/weight-monitoring/weight-monitoring.component';
 import { WormablesComponent } from './pages/wormables/wormables.component';
+import { WormableDialogComponent } from './pages/wormables/wormable-dialog/wormable-dialog.component';
 import { InvoicesComponent } from './pages/invoices/invoices.component';
 import { SettingsComponent } from './pages/settings/settings.component';
 
@@ -53,12 +55,14 @@ export function appInitializerFactory(translate: TranslateService, settings: Set
         VaccinesComponent,
         WeightMonitoringComponent,
         WormablesComponent,
+        WormableDialogComponent,
         InvoicesComponent,
         SettingsComponent
     ],
     bootstrap: [AppComponent], 
     imports: [
         BrowserModule,
+        MatDialogModule,
         NgxPaginationModule,
         FormsModule,
         ReactiveFormsModule,

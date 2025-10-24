@@ -2,6 +2,7 @@
   "commons": {
     "actions": {
       "add": "Add",
+      "cancel": "Cancel",
       "displayAll": "Display all",
       "no": "No",
       "save": "Save",
@@ -130,7 +131,17 @@
       "weightUnit": "Weight unit"
     },
     "wormables": {
+      "addTitle": "Add wormable",
+      "editTitle": "Edit wormable",
+      "errors": {
+        "nameRequired": "Title is required",
+        "sameOrBeforeReminderDateError": "Reminder date must be after the injection date"
+      },
       "noWormableAddNewForStartTracking": "No wormable. Add new for start tracking",
+      "placeholders": {
+        "description": "Description",
+        "name": "Title"
+      },
       "tableHeaders": {
         "actions": "Actions",
         "date": "Date",
