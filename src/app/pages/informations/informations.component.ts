@@ -59,48 +59,6 @@ export class InformationsComponent {
     }
   }
 
-  private initDatePickers() {
-    setTimeout(() => {
-      // No onChange here because petForm change event interfer with date format rendering
-
-      flatpickr('#birthDateInput', {
-        enableTime: true,
-        altInput: true,
-        altFormat: this.translateService.instant('commons.dateFormats.flatpickr.dateTime'),
-        defaultDate: this.petForm.get('birthDate')?.value?.toDate()
-      });
-
-      flatpickr('#adoptedDateInput', {
-        altInput: true,
-        altFormat: this.translateService.instant('commons.dateFormats.flatpickr.date'),
-        defaultDate: this.petForm.get('adoptedDate')?.value?.toDate()
-      });
-
-      flatpickr('#sterilizeDateInput', {
-        altInput: true,
-        altFormat: this.translateService.instant('commons.dateFormats.flatpickr.date'),
-        defaultDate: this.petForm.get('sterilizeDate')?.value?.toDate()
-      });
-    }, 100);
-  }
-
-  private initForm() {
-    this.petForm = this.formBuilder.group({
-      firstName: [this.petRecord.firstName, [Validators.required]],
-      specie: [this.petRecord.specie, [Validators.required]],
-      breed: [this.petRecord.breed],
-      color: [this.petRecord.color],
-      sex: [this.petRecord.sex, [Validators.required]],
-      birthDate: [this.petRecord.birthDate],
-      adoptedDate: [this.petRecord.adoptedDate],
-      sterilize: [this.petRecord.sterilize],
-      sterilizeDate: [this.petRecord.sterilizeDate],
-      tagNumber: [this.petRecord.tagNumber],
-      tagRageNumber: [this.petRecord.tagRageNumber],
-      description: [this.petRecord.description]
-    });
-  }
-
   private loadPetRecord() {
     this.petRecord = new PetRecord();
 
@@ -112,8 +70,7 @@ export class InformationsComponent {
       this.localStorageService.setItem(this.APP_STORAGE_KEY, { petRecord: serializedPetRecord });
     }
 
-    this.initForm();
-    this.initDatePickers();
+    this.initForm(this.petRecord);
   }
 
   private loadSpecies() {
@@ -123,6 +80,50 @@ export class InformationsComponent {
       { key: 'rabbit', value: PetType.Rabbit },
       { key: 'others', value: PetType.Others },
     ];
+  }
+
+  private initForm(petRecord: PetRecord) {
+    this.petForm = this.formBuilder.group({
+      firstName: [petRecord.firstName, [Validators.required]],
+      specie: [petRecord.specie, [Validators.required]],
+      breed: [petRecord.breed],
+      color: [petRecord.color, [Validators.required]],
+      sex: [petRecord.sex, [Validators.required]],
+      birthDate: [petRecord.birthDate],
+      adoptedDate: [petRecord.adoptedDate],
+      sterilize: [petRecord.sterilize],
+      sterilizeDate: [petRecord.sterilizeDate],
+      tagNumber: [petRecord.tagNumber],
+      tagRageNumber: [petRecord.tagRageNumber],
+      description: [petRecord.description]
+    });
+
+    this.initDatePickers(petRecord);
+  }
+
+  private initDatePickers(petRecord: PetRecord) {
+    setTimeout(() => {
+      // No onChange here because petForm change event interfer with date format rendering
+
+      flatpickr('#birthDateInput', {
+        enableTime: true,
+        altInput: true,
+        altFormat: this.translateService.instant('commons.dateFormats.flatpickr.dateTime'),
+        defaultDate: petRecord.birthDate?.toDate()
+      });
+
+      flatpickr('#adoptedDateInput', {
+        altInput: true,
+        altFormat: this.translateService.instant('commons.dateFormats.flatpickr.date'),
+        defaultDate: petRecord.adoptedDate?.toDate()
+      });
+
+      flatpickr('#sterilizeDateInput', {
+        altInput: true,
+        altFormat: this.translateService.instant('commons.dateFormats.flatpickr.date'),
+        defaultDate: petRecord.sterilizeDate?.toDate()
+      });
+    }, 100);
   }
 
   private updateFlatpickrLocales() {
