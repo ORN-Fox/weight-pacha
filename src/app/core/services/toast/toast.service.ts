@@ -14,8 +14,8 @@ export class ToastService {
     ) {
         this.swalBulma = Swal.mixin({
             customClass: {
-            confirmButton: "button is-success mr-3",
-            cancelButton: "button"
+                confirmButton: "button is-success",
+                cancelButton: "button mr-3"
             },
             buttonsStyling: false
         });
