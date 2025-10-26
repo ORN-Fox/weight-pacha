@@ -1,0 +1,65 @@
+<form [formGroup]="vaccineForm" (ngSubmit)="saveChanges()">
+    <div class="modal-header">
+        <h2 class="modal-title">{{ ("pages.vaccines." + (data.editMode ? "editTitle" : "addTitle")) | translate }}</h2>
+    </div>
+
+    <mat-dialog-content>
+        <div class="field">
+            <label class="label">{{ "pages.vaccines.tableHeaders.date" | translate }}</label>
+            <div class="control has-icons-left">
+                <input type="text" id="injectionDateInput" class="input" formControlName="injectionDate" placeholder="{{ 'commons.dateFormats.date' | translate}}"
+                    [ngClass]="{'is-danger': vaccineForm.get('injectionDate')?.errors?.['required'] && vaccineForm.get('injectionDate')?.touched}">
+                <span class="icon is-small is-left">
+                    <i class="far fa-calendar"></i>
+                </span>
+            </div>
+            @if (vaccineForm.get('injectionDate')?.errors?.['required'] && vaccineForm.get('injectionDate')?.value) {
+                <p class="help is-danger">{{ "pages.vaccines.errors.injectionDateRequired" | translate }}</p>
+            }
+        </div>
+
+        <div class="field">
+            <label class="label">{{ "pages.vaccines.tableHeaders.title" | translate }}</label>
+            <div class="control has-icons-left">
+                <input type="text" class="input" name="name" formControlName="name" placeholder="{{ 'pages.vaccines.placeholders.name' | translate}}"
+                    [ngClass]="{'is-danger': vaccineForm.get('name')?.errors?.['required'] && vaccineForm.get('name')?.touched}">
+                <span class="icon is-small is-left">
+                    <i class="far fa-tag"></i>
+                </span>
+            </div>
+            @if (vaccineForm.get('name')?.errors?.['required'] && vaccineForm.get('name')?.touched) {
+                <p class="help is-danger">{{ "pages.vaccines.errors.nameRequired" | translate }}</p>
+            }
+        </div>
+
+        <div class="field">
+            <label class="label">{{ "pages.vaccines.tableHeaders.reminderDate" | translate }}</label>
+            <div class="control has-icons-left">
+                <input type="text" id="reminderDateInput" class="input" formControlName="reminderDate" placeholder="{{ 'commons.dateFormats.date' | translate}}"
+                    [ngClass]="{'is-danger': vaccineForm.get('reminderDate')?.errors?.['required'] && vaccineForm.get('reminderDate')?.touched}">
+                <span class="icon is-small is-left">
+                    <i class="far fa-calendar"></i>
+                </span>
+            </div>
+            @if (vaccineForm.get('reminderDate')?.errors?.['sameOrBeforeReminderDateError'] && vaccineForm.get('reminderDate')?.value) {
+                <p class="help is-danger">{{ "pages.vaccines.errors.sameOrBeforeReminderDateError" | translate }}</p>
+            }
+        </div>
+
+        <div class="field">
+            <label class="label">{{ "pages.vaccines.tableHeaders.description" | translate }}</label>
+            <textarea class="textarea" name="description" rows="3" formControlName="description" placeholder="{{ 'pages.vaccines.placeholders.description' | translate}}"
+                [ngClass]="{'is-danger': vaccineForm.get('description')?.errors?.['required'] && vaccineForm.get('description')?.touched}"></textarea>
+        </div>
+    </mat-dialog-content>
+    
+    <mat-dialog-actions>
+        <button type="button" class="button" mat-dialog-close>
+            {{ "commons.actions.cancel" | translate }}
+        </button>
+            
+        <button type="submit" class="button is-primary ml-2">
+            <i class="far fa-bookmark mr-2"></i> {{ "commons.actions.save" | translate }}
+        </button>
+    </mat-dialog-actions>
+</form>

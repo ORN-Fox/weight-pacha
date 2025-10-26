@@ -1,18 +1,19 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
-import flatpickr from 'flatpickr';
+import { cloneDeep } from 'lodash';
 import moment from 'moment';
 
 import { LocalStorageService } from 'src/app/core/services/local-storage/local-storage.service';
 import { ToastService } from 'src/app/core/services/toast/toast.service';
 import { SerializerService } from 'src/app/core/services/serializer/serializer.service';
-import { SettingsService } from 'src/app/core/services/settings/settings.service';
 
-import { IInputElementWithFlatpickr } from 'src/app/core/interfaces/IInputElementWithFlatpickr';
 import { ITableHeader } from 'src/app/core/interfaces/ITableHeader';
 
 import { ISerializedVaccine, Vaccine } from 'src/app/core/models/vaccine/vaccine.model';
 import { PetRecord } from 'src/app/core/models/pet-record/pet-record.model';
+
+import { VaccineDialogComponent, VaccineDialogData } from './vaccine-dialog/vaccine-dialog.component';
 
 @Component({
   selector: 'app-vaccines',
@@ -21,6 +22,8 @@ import { PetRecord } from 'src/app/core/models/pet-record/pet-record.model';
   standalone: false
 })
 export class VaccinesComponent {
+
+  readonly dialog = inject(MatDialog);
 
   APP_STORAGE_KEY: string = 'weight-pacha-vaccines';
 
@@ -38,18 +41,13 @@ export class VaccinesComponent {
     private localStorageService: LocalStorageService,
     private toastService: ToastService,
     private translateService: TranslateService,
-    private serializerService: SerializerService,
-    private settingsService: SettingsService
+    private serializerService: SerializerService
   ) {
     this.dateFormat = this.translateService.instant('commons.dateFormats.date');
 
     this.setupTableHeaders();
     this.loadPetRecord();
     this.loadVaccines();
-
-    this.settingsService.settings$.subscribe(() => {
-      this.updateFlatpickrLocales();
-    });
   }
 
   private setupTableHeaders() {
@@ -65,24 +63,11 @@ export class VaccinesComponent {
 
   addVaccine() {
     let vaccine = new Vaccine();
-    vaccine.editMode = true;
-    vaccine.age = this.getAgeFromVaccineDate(vaccine);
-    this.vaccines.push(vaccine);
-
-    this.initDatePickers(vaccine);
+    this.openVaccineDialog(false, vaccine);
   }
 
   updateVaccine(vaccine: Vaccine) {
-    vaccine.editMode = !vaccine.editMode;
-
-    this.initDatePickers(vaccine);
-  }
-
-  saveChanges(vaccine: Vaccine) {
-    vaccine.editMode = false;
-    vaccine.age = this.getAgeFromVaccineDate(vaccine);
-    vaccine.updatedAt = moment();
-    this.saveVaccines();
+    this.openVaccineDialog(true, vaccine);
   }
 
   deleteVaccine(id: string) {
@@ -101,33 +86,6 @@ export class VaccinesComponent {
       return vaccine.injectionDate?.diff(this.petRecord.birthDate, 'years', false);
     }
     return -1;
-  }
-
-  private initDatePickers(vaccine: Vaccine) {
-    setTimeout(() => {
-      flatpickr(`#vaccineInjectionDateInput_${vaccine.id}`, {
-        altInput: true,
-        altFormat: this.translateService.instant('commons.dateFormats.flatpickr.date'),
-        defaultDate: vaccine.injectionDate.toDate(),
-        onChange: (selectedDates: Date[]) => {
-          vaccine.injectionDate = moment(selectedDates[0]);
-          vaccine.age = this.getAgeFromVaccineDate(vaccine);
-        }
-      });
-
-      flatpickr(`#vaccineReminderDateInput_${vaccine.id}`, {
-        altInput: true,
-        altFormat: this.translateService.instant('commons.dateFormats.flatpickr.date'),
-        defaultDate: vaccine.reminderDate?.toDate(),
-        onChange: (selectedDates: Date[]) => {
-          vaccine.reminderDate = selectedDates[0] ? moment(selectedDates[0]) : null;
-        }
-      });
-    }, 100);
-  }
-  
-  private sortVaccinesByInjectionDate(vaccines: Vaccine[]) {
-    return vaccines.sort((firstVaccine, secondVaccine) => firstVaccine.injectionDate.isAfter(secondVaccine.injectionDate, 'day') ? 1 : -1);
   }
 
   private loadVaccines() {
@@ -159,27 +117,40 @@ export class VaccinesComponent {
       this.petRecord.deserilizeFromSave(petRecordJSON);
     }
   }
+
+  private sortVaccinesByInjectionDate(vaccines: Vaccine[]) {
+    return vaccines.sort((firstVaccine, secondVaccine) => firstVaccine.injectionDate.isAfter(secondVaccine.injectionDate, 'day') ? 1 : -1);
+  }
+
+  private openVaccineDialog(editMode: boolean = false, vaccine: Vaccine) {
+      const dialogRef = this.dialog.open(VaccineDialogComponent, {
+        data: { editMode: editMode, vaccine: cloneDeep(vaccine) },
+        autoFocus: false,
+        disableClose: true,
+        width: '40rem'
+      });
+  
+      dialogRef.afterClosed().subscribe((result: VaccineDialogData) => {
+        if (result) {
+          result.vaccine.age = this.getAgeFromVaccineDate(result.vaccine);
+          
+          if (result.editMode) {
+            const index = this.vaccines.findIndex(vaccine => vaccine.id === result.vaccine.id);
+            if (index !== -1) {
+              this.vaccines[index] = result.vaccine;
+            }
+          } else {
+            this.vaccines.push(result.vaccine);
+          }
+          this.saveVaccines();
+        }
+      });
+    }
   
   private saveVaccines() {
     this.vaccines = this.sortVaccinesByInjectionDate(this.vaccines);
     const serializedVaccines = this.serializerService.serializeList(this.vaccines);
     this.localStorageService.setItem(this.APP_STORAGE_KEY, { vaccines: serializedVaccines });
-  }
-    
-  private updateFlatpickrLocales() {
-    const datePickersId = this.vaccines.flatMap((vaccine) => [
-      `#vaccineInjectionDateInput_${vaccine.id}`,
-      `#vaccineReminderDateInput_${vaccine.id}`
-    ]);
-
-    datePickersId.forEach(inputId => {
-      const input = document.querySelector(inputId) as IInputElementWithFlatpickr;
-      if (input?._flatpickr) {
-        input._flatpickr.set('altFormat', this.translateService.instant('commons.dateFormats.flatpickr.date'));
-        input._flatpickr.set('locale', this.settingsService.currentSettings.locale);
-        input._flatpickr.redraw();
-      }
-    });
   }
 
 }

@@ -1,0 +1,54 @@
+<form [formGroup]="invoiceForm" (ngSubmit)="saveChanges()">
+    <div class="modal-header">
+        <h2 class="modal-title">{{ ("pages.invoices." + (data.editMode ? "editTitle" : "addTitle")) | translate }}</h2>
+    </div>
+
+    <mat-dialog-content>
+        <div class="field">
+            <label class="label">{{ "pages.invoices.tableHeaders.date" | translate }}</label>
+            <div class="control has-icons-left">
+                <input type="text" id="billingDateInput" class="input" formControlName="billingDate" placeholder="{{ 'commons.dateFormats.date' | translate}}"
+                    [ngClass]="{'is-danger': invoiceForm.get('billingDate')?.errors?.['required'] && invoiceForm.get('billingDate')?.touched}">
+                <span class="icon is-small is-left">
+                    <i class="far fa-calendar"></i>
+                </span>
+            </div>
+            @if (invoiceForm.get('billingDate')?.errors?.['required'] && invoiceForm.get('billingDate')?.value) {
+                <p class="help is-danger">{{ "pages.invoices.errors.billingDateRequired" | translate }}</p>
+            }
+        </div>
+
+        <div class="field">
+            <label class="label">{{ "pages.invoices.tableHeaders.amount" | translate }}</label>
+            <div class="control has-icons-{{ displaySignPosition }}">
+                <input type="number" class="input" formControlName="amount" step="any" min="0" placeholder="{{ 'pages.invoices.placeholders.amount' | translate}}"
+                    [ngClass]="{'is-danger': invoiceForm.get('amount')?.errors?.['required'] && invoiceForm.get('amount')?.touched}">
+                <span class="icon is-small is-{{ displaySignPosition }}">
+                    {{ 'commons.moneySymbol' | translate }}
+                </span>
+            </div>
+            @if (invoiceForm.get('amount')?.errors?.['required'] && invoiceForm.get('amount')?.touched) {
+                <p class="help is-danger">{{ "pages.invoices.errors.amountRequired" | translate }}</p>
+            }
+            @if (invoiceForm.get('amount')?.errors?.['min'] && invoiceForm.get('min')?.touched) {
+                <p class="help is-danger">{{ "pages.invoices.errors.minAmountError" | translate }}</p>
+            }
+        </div>
+
+        <div class="field">
+            <label class="label">{{ "pages.invoices.tableHeaders.description" | translate }}</label>
+            <textarea class="textarea" name="description" rows="3" formControlName="description" placeholder="{{ 'pages.invoices.placeholders.description' | translate}}"
+                [ngClass]="{'is-danger': invoiceForm.get('description')?.errors?.['required'] && invoiceForm.get('description')?.touched}"></textarea>
+        </div>
+    </mat-dialog-content>
+    
+    <mat-dialog-actions>
+        <button type="button" class="button" mat-dialog-close>
+            {{ "commons.actions.cancel" | translate }}
+        </button>
+            
+        <button type="submit" class="button is-primary ml-2">
+            <i class="far fa-bookmark mr-2"></i> {{ "commons.actions.save" | translate }}
+        </button>
+    </mat-dialog-actions>
+</form>

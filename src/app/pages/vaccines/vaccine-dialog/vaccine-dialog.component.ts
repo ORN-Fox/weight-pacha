@@ -8,33 +8,33 @@ import moment from 'moment';
 
 import { IInputElementWithFlatpickr } from 'src/app/core/interfaces/IInputElementWithFlatpickr';
 
-import { Wormable } from 'src/app/core/models/wormable/wormable.model';
+import { Vaccine } from 'src/app/core/models/vaccine/vaccine.model';
 
-export interface WormableDialogData {
+export interface VaccineDialogData {
   editMode: boolean;
-  wormable: Wormable;
+  vaccine: Vaccine;
 }
 
-enum WormableDatePickerInput {
+enum VaccineDatePickerInput {
   InjectionDateInput = '#injectionDateInput',
   ReminderDateInput = '#reminderDateInput'
 }
 
 @Component({
-  selector: 'app-wormable-dialog',
-  templateUrl: './wormable-dialog.component.html',
-  styleUrl: './wormable-dialog.component.scss',
+  selector: 'app-vaccine-dialog',
+  templateUrl: './vaccine-dialog.component.html',
+  styleUrl: './vaccine-dialog.component.scss',
   standalone: false
 })
-export class WormableDialogComponent {
+export class VaccineDialogComponent {
 
   readonly formBuilder = inject(FormBuilder);
-  readonly dialogRef = inject(MatDialogRef<WormableDialogComponent>);
+  readonly dialogRef = inject(MatDialogRef<VaccineDialogComponent>);
   readonly translateService = inject(TranslateService);
   readonly settingsService = inject(SettingsService);
-  readonly data = inject<WormableDialogData>(MAT_DIALOG_DATA);
+  readonly data = inject<VaccineDialogData>(MAT_DIALOG_DATA);
 
-  wormableForm: FormGroup;
+  vaccineForm: FormGroup;
   
   constructor() {    
     this.settingsService.settings$.subscribe(() => {
@@ -43,14 +43,14 @@ export class WormableDialogComponent {
   }
   
   ngOnInit() {
-    this.initForm(this.data.wormable);
+    this.initForm(this.data.vaccine);
   }
 
   reminderDateValidator(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: boolean } | null => {
       const reminderDate = moment(control.value);
       if (reminderDate) {
-        if (reminderDate.isSameOrBefore(this.data.wormable.injectionDate, 'day')) {
+        if (reminderDate.isSameOrBefore(this.data.vaccine.injectionDate, 'day')) {
           return { 'sameOrBeforeReminderDateError': true };
         }
       }
@@ -59,51 +59,51 @@ export class WormableDialogComponent {
   }
 
   saveChanges() {
-    if (this.wormableForm.valid) {
-      Object.assign(this.data.wormable, this.wormableForm.value);
-      this.data.wormable.injectionDate = moment(this.data.wormable.injectionDate);
-      this.data.wormable.reminderDate = this.data.wormable.reminderDate ? moment(this.data.wormable.reminderDate) : null,
-      this.data.wormable.updatedAt = moment();
+    if (this.vaccineForm.valid) {
+      Object.assign(this.data.vaccine, this.vaccineForm.value);
+      this.data.vaccine.injectionDate = moment(this.data.vaccine.injectionDate);
+      this.data.vaccine.reminderDate = this.data.vaccine.reminderDate ? moment(this.data.vaccine.reminderDate) : null,
+      this.data.vaccine.updatedAt = moment();
 
-      const dialogResult: WormableDialogData = {
+      const dialogResult: VaccineDialogData = {
         editMode: this.data.editMode,
-        wormable: this.data.wormable
+        vaccine: this.data.vaccine
       };
       this.dialogRef.close(dialogResult);
     }
   }
 
-  private initForm(wormable: Wormable) {
-    this.wormableForm = this.formBuilder.group({
-      injectionDate: [wormable.injectionDate, [Validators.required]],
-      name: [wormable.name, [Validators.required]],
-      reminderDate: [wormable.reminderDate, [this.reminderDateValidator()]],
-      description: [wormable.description]
+  private initForm(vaccine: Vaccine) {
+    this.vaccineForm = this.formBuilder.group({
+      injectionDate: [vaccine.injectionDate, [Validators.required]],
+      name: [vaccine.name, [Validators.required]],
+      reminderDate: [vaccine.reminderDate, [this.reminderDateValidator()]],
+      description: [vaccine.description]
     })
 
-    this.initDatePickers(this.data.wormable);
+    this.initDatePickers(this.data.vaccine);
   }
 
-  private initDatePickers(wormable: Wormable) {
+  private initDatePickers(vaccine: Vaccine) {
     setTimeout(() => {
       // No onChange here because petForm change event interfer with date format rendering
 
-      flatpickr(WormableDatePickerInput.InjectionDateInput, {
+      flatpickr(VaccineDatePickerInput.InjectionDateInput, {
         altInput: true,
         altFormat: this.translateService.instant('commons.dateFormats.flatpickr.date'),
-        defaultDate: wormable.injectionDate.toDate()
+        defaultDate: vaccine.injectionDate.toDate()
       });
 
-      flatpickr(WormableDatePickerInput.ReminderDateInput, {
+      flatpickr(VaccineDatePickerInput.ReminderDateInput, {
         altInput: true,
         altFormat: this.translateService.instant('commons.dateFormats.flatpickr.date'),
-        defaultDate: wormable.reminderDate?.toDate()
+        defaultDate: vaccine.reminderDate?.toDate()
       });
     }, 100);
   }
   
   private updateFlatpickrLocales() {
-    [WormableDatePickerInput.InjectionDateInput, WormableDatePickerInput.ReminderDateInput].forEach(inputId => {
+    [VaccineDatePickerInput.InjectionDateInput, VaccineDatePickerInput.ReminderDateInput].forEach(inputId => {
       const input = document.querySelector(inputId) as IInputElementWithFlatpickr;
       if (input?._flatpickr) {
         input._flatpickr.set('altFormat', this.translateService.instant('commons.dateFormats.flatpickr.date'));

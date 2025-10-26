@@ -2,7 +2,6 @@ import { Component, inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { cloneDeep } from 'lodash';
-import moment from 'moment';
 
 import { LocalStorageService } from 'src/app/core/services/local-storage/local-storage.service';
 import { ToastService } from 'src/app/core/services/toast/toast.service';
@@ -23,6 +22,8 @@ import { WormableDialogComponent, WormableDialogData } from './wormable-dialog/w
 })
 export class WormablesComponent {
 
+  readonly dialog = inject(MatDialog);
+
   APP_STORAGE_KEY: string = 'weight-pacha-wormables';
   
   tableHeaders: ITableHeader[];
@@ -32,8 +33,6 @@ export class WormablesComponent {
 
   page: number;
   itemsPerPage: number;
-
-  readonly dialog = inject(MatDialog);
 
   constructor(
     private localStorageService: LocalStorageService,
@@ -116,7 +115,7 @@ export class WormablesComponent {
             this.wormables[index] = result.wormable;
           }
         } else {
-          this.wormables.push(wormable);
+          this.wormables.push(result.wormable);
         }
         this.saveWormables();
       }
