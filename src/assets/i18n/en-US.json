@@ -46,7 +46,7 @@
       "dog": "Dog",
       "errors": {
         "firstNameRequired": "First Name is required",
-        "specieRequired": "Specie required"
+        "specieRequired": "Species required"
       },
       "female": "Female",
       "firstName": "First Name",
@@ -60,7 +60,7 @@
       },
       "rabbit": "Rabbit",
       "sex": "Sex",
-      "specie": "Specie",
+      "specie": "Species",
       "sterilize": "Sterilize",
       "tagNumber": "Tag number",
       "tagRageNumber": "Tag rage number",
