@@ -100,6 +100,7 @@
     },
     "vaccines": {
       "noVaccineAddNewForStartTracking": "Aucun vaccin. Ajouter un vaccin pour commencer le suivi",
+      "noVaccineForRageAlert": "Aucun vaccin contre la rage ! Penser a vacciné votre animal pour sa santé.",
       "tableHeaders": {
         "actions": "Actions",
         "age": "Age",

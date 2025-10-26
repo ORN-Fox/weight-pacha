@@ -1,5 +1,7 @@
 <app-page-title title="informations"></app-page-title>
 
+<app-no-vaccine-rage-alert [petRecord]="petRecord"></app-no-vaccine-rage-alert>
+
 <form class="mb-5" [formGroup]="petForm" (ngSubmit)="saveChanges()">
     <div class="field is-horizontal">
         <div class="field-label is-normal">

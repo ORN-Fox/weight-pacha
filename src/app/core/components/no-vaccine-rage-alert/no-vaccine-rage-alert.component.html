@@ -1,0 +1,6 @@
+@if (displayAlert) {
+    <div class="notification is-warning is-light mb-5">
+        <button class="delete" (click)="displayAlert = false"></button>
+        <i class="far fa-exclamation-triangle fa-lg"></i> {{ "pages.vaccines.noVaccineForRageAlert" | translate }}
+    </div>
+}
