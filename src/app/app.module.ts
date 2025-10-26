@@ -1,5 +1,6 @@
-import { APP_INITIALIZER, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { makeEnvironmentProviders } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -37,12 +38,10 @@ export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
 }
 
-export function appInitializerFactory(translate: TranslateService, settings: SettingsService) {
-    return () => {
-        const locale = settings.currentSettings.locale || 'en-US';
-        translate.setDefaultLang(locale);
-        return translate.use(locale).toPromise();
-    };
+function initializeApp(translate: TranslateService, settings: SettingsService): Promise<void> {
+    const locale = settings.currentSettings.locale || 'en-US';
+    translate.setDefaultLang(locale);
+    return translate.use(locale).toPromise();
 }
 
 @NgModule({ 
@@ -84,12 +83,19 @@ export function appInitializerFactory(translate: TranslateService, settings: Set
     ],
     providers: [
         provideHttpClient(withInterceptorsFromDi()),
-        {
-            provide: APP_INITIALIZER,
-            useFactory: appInitializerFactory,
-            deps: [TranslateService, SettingsService],
-            multi: true
-        }
+        makeEnvironmentProviders([
+            {
+                provide: TranslateService,
+                useClass: TranslateService
+            },
+            {
+                provide: 'INITIALIZE_APP',
+                useFactory: (translate: TranslateService, settings: SettingsService) => {
+                    return initializeApp(translate, settings);
+                },
+                deps: [TranslateService, SettingsService]
+            }
+        ])
     ]
 })
 export class AppModule { }
