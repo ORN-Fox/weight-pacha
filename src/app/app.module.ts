@@ -5,6 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { MatDialogModule } from '@angular/material/dialog';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { FullCalendarModule } from '@fullcalendar/angular';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { TranslateModule, TranslateLoader, TranslateService } from '@ngx-translate/core';
 
@@ -32,6 +33,7 @@ import { InvoicesComponent } from './pages/invoices/invoices.component';
 import { SettingsComponent } from './pages/settings/settings.component';
 
 // Dialogs
+import { CalendarEventDialogComponent } from './pages/calendar/calendar-event-dialog/calendar-event-dialog.component';
 import { InvoiceDialogComponent } from './pages/invoices/invoice-dialog/invoice-dialog.component';
 import { VaccineDialogComponent } from './pages/vaccines/vaccine-dialog/vaccine-dialog.component';
 import { WormableDialogComponent } from './pages/wormables/wormable-dialog/wormable-dialog.component';
@@ -65,6 +67,7 @@ function initializeApp(translate: TranslateService, settings: SettingsService): 
         InvoicesComponent,
         SettingsComponent,
         // Dialogs
+        CalendarEventDialogComponent,
         InvoiceDialogComponent,
         VaccineDialogComponent,
         WormableDialogComponent
@@ -74,6 +77,7 @@ function initializeApp(translate: TranslateService, settings: SettingsService): 
         BrowserModule,
         MatDialogModule,
         NgxPaginationModule,
+        FullCalendarModule,
         FormsModule,
         ReactiveFormsModule,
         TranslateModule.forRoot({

@@ -1,2 +1,7 @@
 <app-page-title title="calendar"></app-page-title>
 
+<button class="button is-primary mb-3" (click)="addCalendarEvent()"><i class="far fa-pencil-alt"></i></button>
+
+<div class="box">
+    <full-calendar [options]="calendarOptions"></full-calendar>
+</div>

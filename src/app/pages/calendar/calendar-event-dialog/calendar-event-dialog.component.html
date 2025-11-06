@@ -1,0 +1,51 @@
+<form [formGroup]="calendarEventForm" (ngSubmit)="saveChanges()">
+    <div class="modal-header">
+        <h2 class="modal-title">{{ ("pages.calendar." + (data.editMode ? "editTitle" : "addTitle")) | translate }}</h2>
+    </div>
+
+    <mat-dialog-content>
+        <div class="field">
+            <label class="label">{{ "pages.calendar.date" | translate }}</label>
+            <div class="control has-icons-left">
+                <input type="text" id="startDateInput" class="input" formControlName="startDate" placeholder="{{ 'commons.dateFormats.dateTime' | translate}}"
+                    [ngClass]="{'is-danger': calendarEventForm.get('startDate')?.errors?.['required'] && calendarEventForm.get('startDate')?.touched}">
+                <span class="icon is-small is-left">
+                    <i class="far fa-calendar"></i>
+                </span>
+            </div>
+            @if (calendarEventForm.get('startDate')?.errors?.['required'] && calendarEventForm.get('injectionDate')?.value) {
+                <p class="help is-danger">{{ "pages.calendar.errors.startDateRequired" | translate }}</p>
+            }
+        </div>
+
+        <div class="field">
+            <label class="label">{{ "pages.calendar.title" | translate }}</label>
+            <div class="control has-icons-left">
+                <input type="text" class="input" name="title" formControlName="title" placeholder="{{ 'pages.calendarEvents.placeholders.title' | translate}}"
+                    [ngClass]="{'is-danger': calendarEventForm.get('title')?.errors?.['required'] && calendarEventForm.get('title')?.touched}">
+                <span class="icon is-small is-left">
+                    <i class="far fa-tag"></i>
+                </span>
+            </div>
+            @if (calendarEventForm.get('title')?.errors?.['required'] && calendarEventForm.get('title')?.touched) {
+                <p class="help is-danger">{{ "pages.calendar.errors.titleRequired" | translate }}</p>
+            }
+        </div>
+
+        <div class="field">
+            <label class="label">{{ "pages.calendar.description" | translate }}</label>
+            <textarea class="textarea" name="description" rows="3" formControlName="description" placeholder="{{ 'pages.calendarEvents.placeholders.description' | translate}}"
+                [ngClass]="{'is-danger': calendarEventForm.get('description')?.errors?.['required'] && calendarEventForm.get('description')?.touched}"></textarea>
+        </div>
+    </mat-dialog-content>
+    
+    <mat-dialog-actions>
+        <button type="button" class="button" mat-dialog-close>
+            {{ "commons.actions.cancel" | translate }}
+        </button>
+            
+        <button type="submit" class="button is-primary ml-2">
+            <i class="far fa-bookmark mr-2"></i> {{ "commons.actions.save" | translate }}
+        </button>
+    </mat-dialog-actions>
+</form>
