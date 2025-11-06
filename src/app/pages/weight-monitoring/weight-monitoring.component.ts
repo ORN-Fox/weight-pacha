@@ -48,7 +48,7 @@ export class WeightMonitoringComponent {
 
   measureForm: FormGroup;
 
-  rangeDateInputInstance: Instance = new Object() as Instance;
+  rangeDateInputInstance: Instance;
 
   constructor(
     private formBuilder: FormBuilder,
