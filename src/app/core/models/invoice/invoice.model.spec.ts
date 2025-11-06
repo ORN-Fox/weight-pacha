@@ -1,5 +1,6 @@
-import { Invoice } from './invoice.model';
 import moment from 'moment';
+
+import { Invoice } from './invoice.model';
 
 describe('Invoice', () => {
     let invoice: Invoice;
