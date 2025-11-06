@@ -21,6 +21,7 @@ import { PageTitleComponent } from './core/components/page-title/page-title.comp
 import { PaginationComponent } from './core/components/pagination/pagination.component';
 
 // Pages
+import { CalendarComponent } from './pages/calendar/calendar.component';
 import { HomeComponent } from './pages/home/home.component';
 import { InformationsComponent } from './pages/informations/informations.component';
 import { NotesComponent } from './pages/notes/notes.component';
@@ -54,6 +55,7 @@ function initializeApp(translate: TranslateService, settings: SettingsService): 
         PageTitleComponent,
         PaginationComponent,
         // Pages
+        CalendarComponent,
         HomeComponent,
         InformationsComponent,
         NotesComponent,

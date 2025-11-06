@@ -18,6 +18,7 @@ export class HomeComponent {
 
   constructor() {
     this.pages = [
+      { path: 'calendar', title: 'calendar', enabled: true },
       { path: 'informations', title: 'informations', enabled: true },
       { path: 'weight', title: 'weight', enabled: true },
       { path: 'notes', title: 'notes', enabled: true },
