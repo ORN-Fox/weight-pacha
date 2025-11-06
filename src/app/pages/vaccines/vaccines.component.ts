@@ -123,29 +123,29 @@ export class VaccinesComponent {
   }
 
   private openVaccineDialog(editMode: boolean = false, vaccine: Vaccine) {
-      const dialogRef = this.dialog.open(VaccineDialogComponent, {
-        data: { editMode: editMode, vaccine: cloneDeep(vaccine) },
-        autoFocus: false,
-        disableClose: true,
-        width: '40rem'
-      });
-  
-      dialogRef.afterClosed().subscribe((result: VaccineDialogData) => {
-        if (result) {
-          result.vaccine.age = this.getAgeFromVaccineDate(result.vaccine);
-          
-          if (result.editMode) {
-            const index = this.vaccines.findIndex(vaccine => vaccine.id === result.vaccine.id);
-            if (index !== -1) {
-              this.vaccines[index] = result.vaccine;
-            }
-          } else {
-            this.vaccines.push(result.vaccine);
+    const dialogRef = this.dialog.open(VaccineDialogComponent, {
+      data: { editMode: editMode, vaccine: cloneDeep(vaccine) },
+      autoFocus: false,
+      disableClose: true,
+      width: '40rem'
+    });
+
+    dialogRef.afterClosed().subscribe((result: VaccineDialogData) => {
+      if (result) {
+        result.vaccine.age = this.getAgeFromVaccineDate(result.vaccine);
+        
+        if (result.editMode) {
+          const index = this.vaccines.findIndex(vaccine => vaccine.id === result.vaccine.id);
+          if (index !== -1) {
+            this.vaccines[index] = result.vaccine;
           }
-          this.saveVaccines();
+        } else {
+          this.vaccines.push(result.vaccine);
         }
-      });
-    }
+        this.saveVaccines();
+      }
+    });
+  }
   
   private saveVaccines() {
     this.vaccines = this.sortVaccinesByInjectionDate(this.vaccines);
