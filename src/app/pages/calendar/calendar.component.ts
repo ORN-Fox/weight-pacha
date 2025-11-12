@@ -2,12 +2,15 @@ import { Component, inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { CalendarOptions } from '@fullcalendar/core';
 import { cloneDeep } from 'lodash';
+import frLocale from '@fullcalendar/core/locales/fr';
+import frCaLocale from '@fullcalendar/core/locales/fr-ca';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import moment from 'moment';
 
 import { LocalStorageService } from 'src/app/core/services/local-storage/local-storage.service';
 import { SerializerService } from 'src/app/core/services/serializer/serializer.service';
+import { SettingsService } from 'src/app/core/services/settings/settings.service';
 
 import { CalendarEvent, IFullCalendarEventModel, ISerializedCalendarEvent } from 'src/app/core/models/calendar-event/calendar-event.model';
 
@@ -31,9 +34,14 @@ export class CalendarComponent {
 
   constructor(
     private localStorageService: LocalStorageService,
-    private serializerService: SerializerService
+    private serializerService: SerializerService,
+    private settingsService: SettingsService
   ) {
     this.loadCalendarEvents();
+
+    this.settingsService.settings$.subscribe(() => {
+      this.updateFullCalendarLocale();
+    });
   }
 
   addCalendarEvent() {
@@ -68,6 +76,8 @@ export class CalendarComponent {
     this.calendarOptions = {
       plugins: [dayGridPlugin, interactionPlugin],
       initialView: 'dayGridMonth',
+      locales: [frLocale, frCaLocale],
+      locale: this.settingsService.currentSettings.locale,
       events: this.convertToFullCalendarModel(calendarEvents),
       dateClick: (info) => {
         const calendarEvent = new CalendarEvent('', moment(info.date));
@@ -85,6 +95,10 @@ export class CalendarComponent {
 
   private refreshCalendarEventsInCalendarOptions() {
     this.calendarOptions.events = this.convertToFullCalendarModel(this.calendarEvents);
+  }
+
+  private updateFullCalendarLocale() {
+    this.calendarOptions.locale = this.settingsService.currentSettings.locale;
   }
 
   private convertToFullCalendarModel(calendarEvents: CalendarEvent[] = []): IFullCalendarEventModel[] {
