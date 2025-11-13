@@ -17,6 +17,7 @@ export class SettingsComponent {
 
   locales: string[] = ['en-US', 'fr-CA', 'fr-FR'];
   themes: string[] = ['light', 'dark'];
+  calendarViewFormats: string[] = ['dayGridMonth', 'listMonth'];
   itemsPerPages: number[] = [10, 25, 50];
   weightUnits: number[] = [0, 1];
   weightUnitsLabels: string[] = ['Kg', 'Lbs'];
@@ -38,6 +39,11 @@ export class SettingsComponent {
     this.settingsService.updateSettings({ theme });
     this.settings = this.settingsService.currentSettings;
     document.documentElement.setAttribute('data-theme', theme);
+  }
+
+  updateCalendarViewFormat(calendarViewFormat: string) {
+    this.settingsService.updateSettings({ calendarViewFormat });
+    this.settings = this.settingsService.currentSettings;
   }
 
   updateItemsPerPage(itemsPerPage: number) {

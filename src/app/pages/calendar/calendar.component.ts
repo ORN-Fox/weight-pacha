@@ -6,6 +6,7 @@ import frLocale from '@fullcalendar/core/locales/fr';
 import frCaLocale from '@fullcalendar/core/locales/fr-ca';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
+import listPlugin from '@fullcalendar/list';
 import moment from 'moment';
 
 import { LocalStorageService } from 'src/app/core/services/local-storage/local-storage.service';
@@ -75,10 +76,11 @@ export class CalendarComponent {
 
   private initCalendarOptions(calendarEvents: CalendarEvent[] = []) {
     this.calendarOptions = {
-      plugins: [dayGridPlugin, interactionPlugin],
-      initialView: 'dayGridMonth',
+      plugins: [dayGridPlugin, interactionPlugin, listPlugin],
       locales: [frLocale, frCaLocale],
       locale: this.settingsService.currentSettings.locale,
+      initialView: this.settingsService.currentSettings.calendarViewFormat,
+      headerToolbar: {
       events: this.convertToFullCalendarModel(calendarEvents),
       dateClick: (info) => {
         const calendarEvent = new CalendarEvent('', moment(info.date));

@@ -26,6 +26,20 @@
     </section>
 
     <section class="section">
+        <h1 class="title mb-3">{{ 'pages.settings.calendarViewFormat' | translate }}</h1>
+        <div class="subtitle">
+            <div class="buttons has-addons">
+                @for (calendarViewFormat of calendarViewFormats; track calendarViewFormat) {
+                <button class="button" [ngClass]="{'is-primary is-selected': settings.calendarViewFormat == calendarViewFormat}"
+                    (click)="updateCalendarViewFormat(calendarViewFormat)">
+                    {{ 'commons.calendarViewFormats.' + calendarViewFormat | translate }}
+                </button>
+                }
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
         <h1 class="title mb-3">{{ 'pages.settings.pagination' | translate }}</h1>
         <div class="subtitle">
             <div class="buttons has-addons">
