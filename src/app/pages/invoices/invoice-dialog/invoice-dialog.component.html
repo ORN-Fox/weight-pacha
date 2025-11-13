@@ -1,6 +1,6 @@
-<form [formGroup]="invoiceForm" (ngSubmit)="saveChanges()">
+<form [formGroup]="invoiceForm" (ngSubmit)="saveInvoice()">
     <div class="modal-header">
-        <h2 class="modal-title">{{ ("pages.invoices." + (data.editMode ? "editTitle" : "addTitle")) | translate }}</h2>
+        <h2 class="modal-title">{{ ("pages.invoices." + (editMode ? "editTitle" : "addTitle")) | translate }}</h2>
     </div>
 
     <mat-dialog-content>

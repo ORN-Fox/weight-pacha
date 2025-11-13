@@ -46,7 +46,7 @@
 
     <div class="column">
         @if (selectedNote) {
-            <form [formGroup]="noteForm" (ngSubmit)="saveChanges()">
+            <form [formGroup]="noteForm" (ngSubmit)="saveNote()">
                 <div class="field">
                     <div class="label-with-length-counter">
                         <label class="label">{{ "pages.notes.placeholders.title" | translate }}</label>

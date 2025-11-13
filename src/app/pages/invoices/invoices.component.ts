@@ -15,6 +15,7 @@ import { ITableHeader } from 'src/app/core/interfaces/ITableHeader';
 import { ISerializedInvoice, Invoice } from 'src/app/core/models/invoice/invoice.model';
 
 import { InvoiceDialogComponent, InvoiceDialogData } from './invoice-dialog/invoice-dialog.component';
+import { DialogAction } from 'src/app/core/enums/dialog-action/dialog.action.enum';
 
 interface IInvoiceChartDataSetPoint extends IChartDataSetPoint {
   x: number;
@@ -154,8 +155,9 @@ export class InvoicesComponent implements AfterViewInit {
   }
 
   private openInvoiceDialog(editMode: boolean = false, invoice: Invoice) {
+    const action = editMode ? DialogAction.UPDATE : DialogAction.ADD;
     const dialogRef = this.dialog.open(InvoiceDialogComponent, {
-      data: { editMode: editMode, invoice: cloneDeep(invoice) },
+      data: { action: action, invoice: cloneDeep(invoice) },
       autoFocus: false,
       disableClose: true,
       width: '40rem'
@@ -163,13 +165,17 @@ export class InvoicesComponent implements AfterViewInit {
 
     dialogRef.afterClosed().subscribe((result: InvoiceDialogData) => {
       if (result) {
-        if (result.editMode) {
-          const index = this.invoices.findIndex(invoice => invoice.id === result.invoice.id);
-          if (index !== -1) {
-            this.invoices[index] = result.invoice;
-          }
-        } else {
-          this.invoices.push(result.invoice);
+        switch (result.action) {
+          case DialogAction.ADD:
+            this.invoices.push(result.invoice);
+            break;
+            
+          case DialogAction.UPDATE:
+            const index = this.invoices.findIndex(invoice => invoice.id === result.invoice.id);
+            if (index !== -1) {
+              this.invoices[index] = result.invoice;
+            }
+            break;
         }
 
         this.computeTotalInvoicedPerYears();

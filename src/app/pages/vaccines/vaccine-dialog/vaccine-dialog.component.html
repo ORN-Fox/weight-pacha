@@ -1,6 +1,6 @@
-<form [formGroup]="vaccineForm" (ngSubmit)="saveChanges()">
+<form [formGroup]="vaccineForm" (ngSubmit)="saveVaccine()">
     <div class="modal-header">
-        <h2 class="modal-title">{{ ("pages.vaccines." + (data.editMode ? "editTitle" : "addTitle")) | translate }}</h2>
+        <h2 class="modal-title">{{ ("pages.vaccines." + (editMode ? "editTitle" : "addTitle")) | translate }}</h2>
     </div>
 
     <mat-dialog-content>

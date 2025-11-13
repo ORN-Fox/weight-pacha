@@ -8,11 +8,14 @@ import { ToastService } from 'src/app/core/services/toast/toast.service';
 import { SerializerService } from 'src/app/core/services/serializer/serializer.service';
 import { SettingsService } from 'src/app/core/services/settings/settings.service';
 
+import { DialogAction } from 'src/app/core/enums/dialog-action/dialog.action.enum';
+
 import { ITableHeader } from 'src/app/core/interfaces/ITableHeader';
 
 import { ISerializedWormable, Wormable } from 'src/app/core/models/wormable/wormable.model';
 
 import { WormableDialogComponent, WormableDialogData } from './wormable-dialog/wormable-dialog.component';
+
 
 @Component({
   selector: 'app-wormables',
@@ -100,8 +103,9 @@ export class WormablesComponent {
   }
 
   private openWormableDialog(editMode: boolean = false, wormable: Wormable) {
+    const action = editMode ? DialogAction.UPDATE : DialogAction.ADD;
     const dialogRef = this.dialog.open(WormableDialogComponent, {
-      data: { editMode: editMode, wormable: cloneDeep(wormable) },
+      data: { action: action, wormable: cloneDeep(wormable) },
       autoFocus: false,
       disableClose: true,
       width: '40rem'
@@ -109,14 +113,19 @@ export class WormablesComponent {
 
     dialogRef.afterClosed().subscribe((result: WormableDialogData) => {
       if (result) {
-        if (result.editMode) {
-          const index = this.wormables.findIndex(wormable => wormable.id === result.wormable.id);
-          if (index !== -1) {
-            this.wormables[index] = result.wormable;
-          }
-        } else {
-          this.wormables.push(result.wormable);
+        switch (result.action) {
+          case DialogAction.ADD:
+            this.wormables.push(result.wormable);
+            break;
+
+          case DialogAction.UPDATE:
+            const index = this.wormables.findIndex(wormable => wormable.id === result.wormable.id);
+            if (index !== -1) {
+              this.wormables[index] = result.wormable;
+            }
+            break;
         }
+        
         this.saveWormables();
       }
     });

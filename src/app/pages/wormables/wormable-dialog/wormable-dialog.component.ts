@@ -6,12 +6,14 @@ import { SettingsService } from 'src/app/core/services/settings/settings.service
 import flatpickr from 'flatpickr';
 import moment from 'moment';
 
+import { DialogAction } from 'src/app/core/enums/dialog-action/dialog.action.enum';
+
 import { IInputElementWithFlatpickr } from 'src/app/core/interfaces/IInputElementWithFlatpickr';
 
 import { Wormable } from 'src/app/core/models/wormable/wormable.model';
 
 export interface WormableDialogData {
-  editMode: boolean;
+  action: DialogAction;
   wormable: Wormable;
 }
 
@@ -35,8 +37,12 @@ export class WormableDialogComponent {
   readonly data = inject<WormableDialogData>(MAT_DIALOG_DATA);
 
   wormableForm: FormGroup;
+
+  editMode: boolean;
   
-  constructor() {    
+  constructor() {
+    this.editMode = this.data.action === DialogAction.UPDATE;
+    
     this.settingsService.settings$.subscribe(() => {
       this.updateFlatpickrLocales();
     });
@@ -58,7 +64,7 @@ export class WormableDialogComponent {
     };
   }
 
-  saveChanges() {
+  saveWormable() {
     if (this.wormableForm.valid) {
       Object.assign(this.data.wormable, this.wormableForm.value);
       this.data.wormable.injectionDate = moment(this.data.wormable.injectionDate);
@@ -66,7 +72,7 @@ export class WormableDialogComponent {
       this.data.wormable.updatedAt = moment();
 
       const dialogResult: WormableDialogData = {
-        editMode: this.data.editMode,
+        action: this.data.action == DialogAction.ADD ? DialogAction.ADD : DialogAction.UPDATE,
         wormable: this.data.wormable
       };
       this.dialogRef.close(dialogResult);

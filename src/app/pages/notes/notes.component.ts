@@ -64,7 +64,7 @@ export class NotesComponent {
     this.selectNote(duplicatedNote);
   }
 
-  saveChanges() {
+  saveNote() {
     if (this.noteForm.valid && this.selectedNote) {
       Object.assign(this.selectedNote, this.noteForm.value);
       this.selectedNote.updatedAt = moment();

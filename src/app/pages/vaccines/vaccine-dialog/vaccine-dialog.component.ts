@@ -6,12 +6,14 @@ import { SettingsService } from 'src/app/core/services/settings/settings.service
 import flatpickr from 'flatpickr';
 import moment from 'moment';
 
+import { DialogAction } from 'src/app/core/enums/dialog-action/dialog.action.enum';
+
 import { IInputElementWithFlatpickr } from 'src/app/core/interfaces/IInputElementWithFlatpickr';
 
 import { Vaccine } from 'src/app/core/models/vaccine/vaccine.model';
 
 export interface VaccineDialogData {
-  editMode: boolean;
+  action: DialogAction;
   vaccine: Vaccine;
 }
 
@@ -36,7 +38,11 @@ export class VaccineDialogComponent {
 
   vaccineForm: FormGroup;
   
-  constructor() {    
+  editMode: boolean;
+
+  constructor() {
+    this.editMode = this.data.action === DialogAction.UPDATE;
+    
     this.settingsService.settings$.subscribe(() => {
       this.updateFlatpickrLocales();
     });
@@ -58,7 +64,7 @@ export class VaccineDialogComponent {
     };
   }
 
-  saveChanges() {
+  saveVaccine() {
     if (this.vaccineForm.valid) {
       Object.assign(this.data.vaccine, this.vaccineForm.value);
       this.data.vaccine.injectionDate = moment(this.data.vaccine.injectionDate);
@@ -66,7 +72,7 @@ export class VaccineDialogComponent {
       this.data.vaccine.updatedAt = moment();
 
       const dialogResult: VaccineDialogData = {
-        editMode: this.data.editMode,
+        action: this.data.action == DialogAction.ADD ? DialogAction.ADD : DialogAction.UPDATE,
         vaccine: this.data.vaccine
       };
       this.dialogRef.close(dialogResult);

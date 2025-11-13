@@ -6,12 +6,14 @@ import { SettingsService } from 'src/app/core/services/settings/settings.service
 import flatpickr from 'flatpickr';
 import moment from 'moment';
 
+import { DialogAction } from 'src/app/core/enums/dialog-action/dialog.action.enum';
+
 import { IInputElementWithFlatpickr } from 'src/app/core/interfaces/IInputElementWithFlatpickr';
 
 import { Invoice } from 'src/app/core/models/invoice/invoice.model';
 
 export interface InvoiceDialogData {
-  editMode: boolean;
+  action: DialogAction;
   invoice: Invoice;
 }
 
@@ -35,9 +37,13 @@ export class InvoiceDialogComponent {
 
   invoiceForm: FormGroup;
 
+  editMode: boolean;
+  
   displaySignPosition: string;
   
-  constructor() {    
+  constructor() {
+    this.editMode = this.data.action === DialogAction.UPDATE;
+    
     this.settingsService.settings$.subscribe(() => {
       this.displaySignPosition = this.translateService.currentLang == 'en-US' ? 'left' : 'right';
 
@@ -49,14 +55,14 @@ export class InvoiceDialogComponent {
     this.initForm(this.data.invoice);
   }
 
-  saveChanges() {
+  saveInvoice() {
     if (this.invoiceForm.valid) {
       Object.assign(this.data.invoice, this.invoiceForm.value);
       this.data.invoice.billingDate = moment(this.data.invoice.billingDate);
       this.data.invoice.updatedAt = moment();
 
       const dialogResult: InvoiceDialogData = {
-        editMode: this.data.editMode,
+        action: this.data.action == DialogAction.ADD ? DialogAction.ADD : DialogAction.UPDATE,
         invoice: this.data.invoice
       };
       this.dialogRef.close(dialogResult);

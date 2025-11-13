@@ -47,7 +47,7 @@ export class InformationsComponent {
     });
   }
 
-  saveChanges() {
+  saveInformations() {
     if (this.petForm.valid) {
       Object.assign(this.petRecord, this.petForm.value);
       this.petRecord.birthDate = moment(this.petRecord.birthDate);

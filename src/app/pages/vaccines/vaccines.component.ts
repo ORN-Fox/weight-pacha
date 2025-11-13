@@ -8,6 +8,8 @@ import { LocalStorageService } from 'src/app/core/services/local-storage/local-s
 import { ToastService } from 'src/app/core/services/toast/toast.service';
 import { SerializerService } from 'src/app/core/services/serializer/serializer.service';
 
+import { DialogAction } from 'src/app/core/enums/dialog-action/dialog.action.enum';
+
 import { ITableHeader } from 'src/app/core/interfaces/ITableHeader';
 
 import { ISerializedVaccine, Vaccine } from 'src/app/core/models/vaccine/vaccine.model';
@@ -123,8 +125,9 @@ export class VaccinesComponent {
   }
 
   private openVaccineDialog(editMode: boolean = false, vaccine: Vaccine) {
+    const action = editMode ? DialogAction.UPDATE : DialogAction.ADD;
     const dialogRef = this.dialog.open(VaccineDialogComponent, {
-      data: { editMode: editMode, vaccine: cloneDeep(vaccine) },
+      data: { action: action, vaccine: cloneDeep(vaccine) },
       autoFocus: false,
       disableClose: true,
       width: '40rem'
@@ -133,15 +136,20 @@ export class VaccinesComponent {
     dialogRef.afterClosed().subscribe((result: VaccineDialogData) => {
       if (result) {
         result.vaccine.age = this.getAgeFromVaccineDate(result.vaccine);
-        
-        if (result.editMode) {
-          const index = this.vaccines.findIndex(vaccine => vaccine.id === result.vaccine.id);
-          if (index !== -1) {
-            this.vaccines[index] = result.vaccine;
-          }
-        } else {
-          this.vaccines.push(result.vaccine);
+
+        switch (result.action) {
+          case DialogAction.ADD:
+            this.vaccines.push(result.vaccine);
+            break;
+            
+          case DialogAction.UPDATE:
+            const index = this.vaccines.findIndex(vaccine => vaccine.id === result.vaccine.id);
+            if (index !== -1) {
+              this.vaccines[index] = result.vaccine;
+            }
+            break;
         }
+        
         this.saveVaccines();
       }
     });

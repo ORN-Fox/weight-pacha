@@ -2,7 +2,7 @@
 
 <app-no-vaccine-rage-alert [petRecord]="petRecord"></app-no-vaccine-rage-alert>
 
-<form class="mb-5" [formGroup]="petForm" (ngSubmit)="saveChanges()">
+<form class="mb-5" [formGroup]="petForm" (ngSubmit)="saveInformations()">
     <div class="field is-horizontal">
         <div class="field-label is-normal">
             <label class="label">{{ "pages.informations.firstName" | translate }}</label>
