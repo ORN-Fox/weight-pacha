@@ -20,7 +20,7 @@ export class Vaccine extends SerializeModel {
 
     // local data
     editMode: boolean;
-    age: number;
+    age: number | null;
 
     constructor(name: string = '', injectionDate: moment.Moment = moment(), reminderDate?: moment.Moment | null) {
         super();
