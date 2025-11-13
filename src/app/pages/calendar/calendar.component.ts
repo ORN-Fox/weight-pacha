@@ -81,6 +81,10 @@ export class CalendarComponent {
       locale: this.settingsService.currentSettings.locale,
       initialView: this.settingsService.currentSettings.calendarViewFormat,
       headerToolbar: {
+        start: 'prev,today,next',
+        center: 'title',
+        end: 'dayGridMonth,listMonth'
+      },
       events: this.convertToFullCalendarModel(calendarEvents),
       dateClick: (info) => {
         const calendarEvent = new CalendarEvent('', moment(info.date));
