@@ -87,7 +87,7 @@ export class VaccinesComponent {
       vaccine.injectionDate = moment(vaccine.injectionDate);
       return vaccine.injectionDate?.diff(this.petRecord.birthDate, 'years', false);
     }
-    return -1;
+    return null;
   }
 
   private loadVaccines() {

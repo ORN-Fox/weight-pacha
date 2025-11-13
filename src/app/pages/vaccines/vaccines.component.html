@@ -23,7 +23,13 @@
                         <td>
                             <div class="description">{{ vaccine.description }}</div>
                         </td>
-                        <td class="has-text-centered">{{ vaccine.age }} {{ 'commons.yearOld' | translate}}</td>
+                        <td class="has-text-centered">
+                            @if (vaccine.age) {
+                                {{ vaccine.age }} {{ 'commons.yearOld' | translate}}
+                            } @else {
+                                ?
+                            }
+                        </td>
                         <td class="has-text-centered">
                             <button type="button" class="button" (click)="updateVaccine(vaccine)">
                                 <i class="far fa-pencil-alt"></i>
