@@ -51,11 +51,13 @@ function initializeApp(translate: TranslateService, settings: SettingsService): 
 @NgModule({ 
     declarations: [
         AppComponent,
+
         // Components
         NoVaccineRageAlertComponent,
         MeasureComponent,
         PageTitleComponent,
         PaginationComponent,
+
         // Pages
         CalendarComponent,
         HomeComponent,
@@ -66,6 +68,7 @@ function initializeApp(translate: TranslateService, settings: SettingsService): 
         WormablesComponent,
         InvoicesComponent,
         SettingsComponent,
+        
         // Dialogs
         CalendarEventDialogComponent,
         InvoiceDialogComponent,
