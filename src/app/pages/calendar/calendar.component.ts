@@ -15,6 +15,7 @@ import { SettingsService } from 'src/app/core/services/settings/settings.service
 import { CalendarEvent, IFullCalendarEventModel, ISerializedCalendarEvent } from 'src/app/core/models/calendar-event/calendar-event.model';
 
 import { CalendarEventDialogComponent, CalendarEventDialogData } from './calendar-event-dialog/calendar-event-dialog.component';
+import { DialogAction } from 'src/app/core/enums/dialog-action/dialog.action.enum';
 
 @Component({
   selector: 'app-calendar',
@@ -84,9 +85,9 @@ export class CalendarComponent {
         this.openCalendarEventDialog(false, calendarEvent);
       },
       eventClick: (arg) => {
-        const calendarEventId = arg.event?._def?.publicId;
+        const calendarEventId: string = arg.event?._def?.publicId;
         if (calendarEventId) {
-          const calendarEvent = this.calendarEvents.filter(a => a.id == calendarEventId)[0];
+          const calendarEvent = this.calendarEvents.filter(calendarEvent => calendarEvent.id == calendarEventId)[0];
           this.openCalendarEventDialog(true, calendarEvent);
         }
       }
@@ -109,8 +110,9 @@ export class CalendarComponent {
   }
 
   private openCalendarEventDialog(editMode: boolean = false, calendarEvent: CalendarEvent) {
+    const action = editMode ? DialogAction.UPDATE : DialogAction.ADD;
     const dialogRef = this.dialog.open(CalendarEventDialogComponent, {
-      data: { editMode: editMode, calendarEvent: cloneDeep(calendarEvent) },
+      data: { action: action, calendarEvent: cloneDeep(calendarEvent) },
       autoFocus: false,
       disableClose: true,
       width: '40rem'
@@ -118,14 +120,23 @@ export class CalendarComponent {
 
     dialogRef.afterClosed().subscribe((result: CalendarEventDialogData) => {
       if (result) {
-        if (result.editMode) {
-          const index = this.calendarEvents.findIndex(calendarEvent => calendarEvent.id === result.calendarEvent.id);
-          if (index !== -1) {
-            this.calendarEvents[index] = result.calendarEvent;
-          }
-        } else {
-          this.calendarEvents.push(result.calendarEvent);
+        switch (result.action) {
+          case DialogAction.ADD:
+            this.calendarEvents.push(result.calendarEvent);
+            break;
+
+          case DialogAction.UPDATE:
+            const indexToUpdate = this.calendarEvents.findIndex(calendarEvent => calendarEvent.id === result.calendarEvent.id);
+            if (indexToUpdate !== -1) {
+              this.calendarEvents[indexToUpdate] = result.calendarEvent;
+            }
+            break;
+
+          case DialogAction.DELETE:
+            this.calendarEvents = this.calendarEvents.filter((calendarEvent) => calendarEvent.id !== result.calendarEvent.id);
+            break;
         }
+        
         this.saveCalendarEvents();
         this.refreshCalendarEventsInCalendarOptions();
       }

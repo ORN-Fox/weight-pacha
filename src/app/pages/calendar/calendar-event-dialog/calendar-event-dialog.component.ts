@@ -2,16 +2,20 @@ import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
-import { SettingsService } from 'src/app/core/services/settings/settings.service';
 import flatpickr from 'flatpickr';
 import moment from 'moment';
+
+import { SettingsService } from 'src/app/core/services/settings/settings.service';
+import { ToastService } from 'src/app/core/services/toast/toast.service';
+
+import { DialogAction } from 'src/app/core/enums/dialog-action/dialog.action.enum';
 
 import { IInputElementWithFlatpickr } from 'src/app/core/interfaces/IInputElementWithFlatpickr';
 
 import { CalendarEvent } from 'src/app/core/models/calendar-event/calendar-event.model';
 
 export interface CalendarEventDialogData {
-  editMode: boolean;
+  action: DialogAction;
   calendarEvent: CalendarEvent;
 }
 
@@ -34,8 +38,12 @@ export class CalendarEventDialogComponent {
   readonly data = inject<CalendarEventDialogData>(MAT_DIALOG_DATA);
 
   calendarEventForm: FormGroup;
+
+  editMode: boolean;
   
-  constructor() {    
+  constructor() {
+    this.editMode = this.data.action === DialogAction.UPDATE;
+
     this.settingsService.settings$.subscribe(() => {
       this.updateFlatpickrLocales();
     });
@@ -45,14 +53,14 @@ export class CalendarEventDialogComponent {
     this.initForm(this.data.calendarEvent);
   }
 
-  saveChanges() {
+  saveCalendarEvent() {
     if (this.calendarEventForm.valid) {
       Object.assign(this.data.calendarEvent, this.calendarEventForm.value);
       this.data.calendarEvent.startDate = moment(this.data.calendarEvent.startDate);
       this.data.calendarEvent.updatedAt = moment();
 
       const dialogResult: CalendarEventDialogData = {
-        editMode: this.data.editMode,
+        action: this.data.action == DialogAction.ADD ? DialogAction.ADD : DialogAction.UPDATE,
         calendarEvent: this.data.calendarEvent
       };
       this.dialogRef.close(dialogResult);

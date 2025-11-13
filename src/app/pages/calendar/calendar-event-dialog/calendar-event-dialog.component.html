@@ -1,6 +1,6 @@
-<form [formGroup]="calendarEventForm" (ngSubmit)="saveChanges()">
+<form [formGroup]="calendarEventForm" (ngSubmit)="saveCalendarEvent()">
     <div class="modal-header">
-        <h2 class="modal-title">{{ ("pages.calendar." + (data.editMode ? "editTitle" : "addTitle")) | translate }}</h2>
+        <h2 class="modal-title">{{ ("pages.calendar." + (editMode ? "editTitle" : "addTitle")) | translate }}</h2>
     </div>
 
     <mat-dialog-content>
