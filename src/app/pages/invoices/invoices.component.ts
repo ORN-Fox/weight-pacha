@@ -111,13 +111,14 @@ export class InvoicesComponent implements AfterViewInit {
     let indexYear = -1;
     this.invoices.forEach(invoice => {
       let targetYear = invoice.billingDate.year();
+      let amount = invoice.amount ?? 0;
 
       if (invoiceYears.filter(invoiceYear => invoiceYear.year == targetYear).length == 0) {
-        const newInvoiceYear = { year: targetYear, totalAmount: invoice.amount };
+        const newInvoiceYear = { year: targetYear, totalAmount: amount };
         invoiceYears.push(newInvoiceYear);
         indexYear++;
       } else {
-        invoiceYears[indexYear].totalAmount += invoice.amount;
+        invoiceYears[indexYear].totalAmount += amount;
       }
     });
 
