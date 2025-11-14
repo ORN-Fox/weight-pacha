@@ -38,14 +38,14 @@
 
     <form [formGroup]="measureForm" (ngSubmit)="addMeasure()">
       <div class="field">
-        <label class="label">{{ "pages.weight.date" | translate }}</label>
+        <label class="label">{{ "commons.fields.date" | translate }}</label>
         <div class="control has-icons-left">
           <input type="text" formControlName="date" id="measureDateInput" class="input" placeholder="{{ 'commons.dateFormats.dateTime' | translate }}"
               [ngClass]="{'is-danger': measureForm.get('date')?.touched && measureForm.get('date')?.invalid}">
           <span class="icon is-small is-left">
             <i class="far fa-calendar"></i>
           </span>
-          @if (measureForm.get('date')?.value) {
+          @if (measureForm.get('date')?.touched) {
             @if (measureForm.get('date')?.errors?.['required']) {
               <p class="help is-danger">{{ "pages.weight.errors.dateRequired" | translate }}</p>
             }

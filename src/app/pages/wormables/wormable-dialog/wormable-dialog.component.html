@@ -5,7 +5,7 @@
 
     <mat-dialog-content>
         <div class="field">
-            <label class="label">{{ "pages.wormables.tableHeaders.date" | translate }}</label>
+            <label class="label">{{ "commons.fields.date" | translate }}</label>
             <div class="control has-icons-left">
                 <input type="text" id="injectionDateInput" class="input" formControlName="injectionDate" placeholder="{{ 'commons.dateFormats.date' | translate}}"
                     [ngClass]="{'is-danger': wormableForm.get('injectionDate')?.errors?.['required'] && wormableForm.get('injectionDate')?.touched}">
@@ -13,27 +13,27 @@
                     <i class="far fa-calendar"></i>
                 </span>
             </div>
-            @if (wormableForm.get('injectionDate')?.errors?.['required'] && wormableForm.get('injectionDate')?.value) {
-                <p class="help is-danger">{{ "pages.wormables.errors.injectionDateRequired" | translate }}</p>
+            @if (wormableForm.get('injectionDate')?.errors?.['required'] && !wormableForm.get('injectionDate')?.value) {
+                <p class="help is-danger">{{ "commons.errors.dateRequired" | translate }}</p>
             }
         </div>
 
         <div class="field">
-            <label class="label">{{ "pages.wormables.tableHeaders.title" | translate }}</label>
+            <label class="label">{{ "commons.fields.title" | translate }}</label>
             <div class="control has-icons-left">
-                <input type="text" class="input" name="name" formControlName="name" placeholder="{{ 'pages.wormables.placeholders.name' | translate}}"
+                <input type="text" class="input" name="name" formControlName="name" placeholder="{{ 'commons.fields.title' | translate}}"
                     [ngClass]="{'is-danger': wormableForm.get('name')?.errors?.['required'] && wormableForm.get('name')?.touched}">
                 <span class="icon is-small is-left">
                     <i class="far fa-tag"></i>
                 </span>
             </div>
             @if (wormableForm.get('name')?.errors?.['required'] && wormableForm.get('name')?.touched) {
-                <p class="help is-danger">{{ "pages.wormables.errors.nameRequired" | translate }}</p>
+                <p class="help is-danger">{{ "commons.errors.titleRequired" | translate }}</p>
             }
         </div>
 
         <div class="field">
-            <label class="label">{{ "pages.wormables.tableHeaders.reminderDate" | translate }}</label>
+            <label class="label">{{ "commons.fields.reminderDate" | translate }}</label>
             <div class="control has-icons-left">
                 <input type="text" id="reminderDateInput" class="input" formControlName="reminderDate" placeholder="{{ 'commons.dateFormats.date' | translate}}"
                     [ngClass]="{'is-danger': wormableForm.get('reminderDate')?.errors?.['required'] && wormableForm.get('reminderDate')?.touched}">
@@ -47,8 +47,8 @@
         </div>
 
         <div class="field">
-            <label class="label">{{ "pages.wormables.tableHeaders.description" | translate }}</label>
-            <textarea class="textarea" name="description" rows="3" formControlName="description" placeholder="{{ 'pages.wormables.placeholders.description' | translate}}"
+            <label class="label">{{ "commons.fields.description" | translate }}</label>
+            <textarea class="textarea" name="description" rows="3" formControlName="description" placeholder="{{ 'commons.fields.description' | translate}}"
                 [ngClass]="{'is-danger': wormableForm.get('description')?.errors?.['required'] && wormableForm.get('description')?.touched}"></textarea>
         </div>
     </mat-dialog-content>

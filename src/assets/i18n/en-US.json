@@ -3,6 +3,7 @@
     "actions": {
       "add": "Add",
       "cancel": "Cancel",
+      "delete": "Delete",
       "displayAll": "Display all",
       "no": "No",
       "save": "Save",
@@ -11,6 +12,10 @@
     },
     "appSource": "Application source",
     "areYouSure": "Are you sure?",
+    "calendarViewFormats": {
+      "dayGridMonth": "Month",
+      "listMonth": "List Month"
+    },
     "commingSoon": "Comming Soon",
     "dateFormats": {
       "date": "YYYY-MM-DD",
@@ -19,6 +24,20 @@
         "date": "Y-m-d",
         "dateTime": "Y-m-d h:i K"
       }
+    },
+    "errors": {
+      "dateInvalid": "Invalid date",
+      "dateRequired": "Date is required",
+      "titleRequired": "Title is required"
+    },
+    "fields": {
+      "age": "Age",
+      "amount": "Amount",
+      "actions": "Actions",
+      "description": "Description",
+      "date": "Date",
+      "reminderDate": "Reminder",
+      "title": "Title"
     },
     "language": "Language",
     "languages": {
@@ -36,13 +55,20 @@
     "youWontBeAbleToRevertThis": "You won't be able to revert this!"
   },
   "pages": {
+    "calendar": {
+      "addTitle": "Add event",
+      "editTitle": "Edit event",
+      "placeholders": {
+        "title": "Appt example"
+      },
+      "title": "Calendar"
+    },
     "informations": {
       "adoptedDate": "Adopted date",
       "birthDate": "Birth date",
       "breed": "Breed",
       "cat": "Cat",
       "color": "Color",
-      "description": "Description",
       "dog": "Dog",
       "errors": {
         "firstNameRequired": "First Name is required",
@@ -67,31 +93,23 @@
       "title": "Informations"
     },
     "invoices": {
-      "noInvoiceAddNewForStartTracking": "No invoice. Add new for start tracking",
-      "tableHeaders": {
-        "actions": "Actions",
-        "amount": "Amount",
-        "date": "Date",
-        "description": "Description"
+      "errors": {
+        "amountRequired": "Amount is required",
+        "minAmountError": "Minimum amount must be positive"
       },
+      "noInvoiceAddNewForStartTracking": "No invoice. Add new for start tracking",
       "title": "Invoices",
       "totalAmount": "Total amount"
     },
     "notes": {
-      "errors": {
-        "titleRequired": "Title is required"
-      },
       "noNoteAddNewNoteForStart": "No note. Add new note for start",
       "noResults": "No results",
-      "placeholders": {
-        "description": "Description",
-        "title": "Title"
-      },
       "title": "Notes"
     },
     "settings": {
       "about": "About",
       "author": "Author",
+      "calendarViewFormat": "Calendar format",
       "licenseDetails": "Open source software - MIT License",
       "pagination": "Pagination",
       "theme": "Theme",
@@ -99,26 +117,20 @@
       "weightUnit": "Weight unit"
     },
     "vaccines": {
+      "addTitle": "Add vaccine",
+      "editTitle": "Edit vaccine",
+      "errors": {
+        "sameOrBeforeReminderDateError": "Reminder date must be after the injection date"
+      },
       "noVaccineAddNewForStartTracking": "No vaccine. Add new for start tracking",
       "noVaccineForRageAlert": "No vaccine for rage ! Consider vaccinating your pet for its health.",
-      "tableHeaders": {
-        "actions": "Actions",
-        "age": "Age",
-        "date": "Date",
-        "description": "Description",
-        "reminderDate": "Reminder",
-        "title": "Title"
-      },
       "title": "Vaccines"
     },
     "weight": {
       "add": "Add",
       "addMeasure": "Add measure",
       "addMeasureToStartWeightTracking": "Add a measure to start weight tracking",
-      "date": "Date",
       "errors": {
-        "dateRequired": "Date is required",
-        "invalidDate": "Invalid date",
         "measureExistsOnThisDate": "A measure exists on this date",
         "weightMustBePositive": "Weight must be positive",
         "weightRequired": "Weight is required"
@@ -135,21 +147,9 @@
       "addTitle": "Add wormable",
       "editTitle": "Edit wormable",
       "errors": {
-        "nameRequired": "Title is required",
         "sameOrBeforeReminderDateError": "Reminder date must be after the injection date"
       },
       "noWormableAddNewForStartTracking": "No wormable. Add new for start tracking",
-      "placeholders": {
-        "description": "Description",
-        "name": "Title"
-      },
-      "tableHeaders": {
-        "actions": "Actions",
-        "date": "Date",
-        "description": "Description",
-        "reminderDate": "Reminder",
-        "title": "Title"
-      },
       "title": "Wormables"
     }
   }

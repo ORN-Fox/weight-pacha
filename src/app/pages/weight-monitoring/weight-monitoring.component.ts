@@ -416,7 +416,7 @@ export class WeightMonitoringComponent {
             },
             title: {
               display: true,
-              text: this.translateService.instant('pages.weight.date')
+              text: this.translateService.instant('commons.fields.date')
             }
           },
           y: {
