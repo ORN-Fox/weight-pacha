@@ -41,6 +41,14 @@
     
     <mat-dialog-actions class="is-justify-content-space-between">
         <div>
+            @if (editMode) {
+                <button type="button" class="button is-danger" (click)="deleteCalendarEvent()">
+                    <i class="far fa-trash mr-2"></i> {{ "commons.actions.delete" | translate }}
+                </button>
+            }
+        </div>
+
+        <div>
             <button type="button" class="button" mat-dialog-close>
                 {{ "commons.actions.cancel" | translate }}
             </button>

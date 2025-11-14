@@ -35,6 +35,7 @@ export class CalendarEventDialogComponent {
   readonly dialogRef = inject(MatDialogRef<CalendarEventDialogComponent>);
   readonly translateService = inject(TranslateService);
   readonly settingsService = inject(SettingsService);
+  readonly toastService = inject(ToastService);
   readonly data = inject<CalendarEventDialogData>(MAT_DIALOG_DATA);
 
   calendarEventForm: FormGroup;
@@ -51,6 +52,14 @@ export class CalendarEventDialogComponent {
   
   ngOnInit() {
     this.initForm(this.data.calendarEvent);
+  }
+
+  deleteCalendarEvent() {
+    this.toastService.showConfirm().then((result: { isConfirmed: boolean; }) => {
+      if (result.isConfirmed) {
+        this.onDeleteCalendarEvent();
+      }
+    });
   }
 
   saveCalendarEvent() {
@@ -99,6 +108,14 @@ export class CalendarEventDialogComponent {
         input._flatpickr.redraw();
       }
     });
+  }
+
+  private onDeleteCalendarEvent() {
+    const dialogResult: CalendarEventDialogData = {
+      action: DialogAction.DELETE,
+      calendarEvent: this.data.calendarEvent
+    }
+    this.dialogRef.close(dialogResult);
   }
 
 }
