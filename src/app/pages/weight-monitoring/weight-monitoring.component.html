@@ -47,10 +47,10 @@
           </span>
           @if (measureForm.get('date')?.touched) {
             @if (measureForm.get('date')?.errors?.['required']) {
-              <p class="help is-danger">{{ "pages.weight.errors.dateRequired" | translate }}</p>
+              <p class="help is-danger">{{ "commons.errors.dateRequired" | translate }}</p>
             }
             @if (measureForm.get('date')?.errors?.['invalidDate']) {
-              <p class="help is-danger">{{ "pages.weight.errors.invalidDate" | translate }}</p>
+              <p class="help is-danger">{{ "commons.errors.dateInvalid" | translate }}</p>
             }
             @if (measureForm.get('date')?.errors?.['existingMeasureAtDate']) {
               <p class="help is-danger">{{ "pages.weight.errors.measureExistsOnThisDate" | translate }}</p>

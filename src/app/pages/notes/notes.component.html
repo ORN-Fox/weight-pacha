@@ -25,7 +25,7 @@
                                 <p>{{ note.title }}</p>
                                 <p class="subtitle has-text-grey-light">{{ note.updatedAt ? note.updatedAt.format(dateTimeFormat) : note.createdAt.format(dateTimeFormat) }}</p>
                             } @else {
-                                <p class="has-text-grey-light">{{ "pages.notes.placeholders.title" | translate }}</p>
+                                <p class="has-text-grey-light">{{ "commons.fields.title" | translate }}</p>
                             }
                         </div>
 
@@ -49,24 +49,24 @@
             <form [formGroup]="noteForm" (ngSubmit)="saveNote()">
                 <div class="field">
                     <div class="label-with-length-counter">
-                        <label class="label">{{ "pages.notes.placeholders.title" | translate }}</label>
+                        <label class="label">{{ "commons.fields.title" | translate }}</label>
                         <p>{{ noteForm.get('title')?.value?.length ?? 0 }} / 100</p>
                     </div>
                     <div class="control is-expanded has-icons-left">
-                        <input class="input" type="text" formControlName="title" placeholder="{{ 'pages.notes.placeholders.title' | translate }}" maxlength="100"
                             [ngClass]="{'is-danger': noteForm.get('title')?.errors?.['required'] && noteForm.get('title')?.touched}">
+                        <input class="input" type="text" formControlName="title" placeholder="{{ 'commons.fields.title' | translate }}" maxlength="100"
                         <span class="icon is-small is-left">
                             <i class="far fa-book"></i>
                         </span>
                     </div>
                     @if (noteForm.get('title')?.errors?.['required'] && noteForm.get('title')?.touched) {
-                        <p class="help is-danger">{{ "pages.notes.errors.titleRequired" | translate }}</p>
+                        <p class="help is-danger">{{ "commons.errors.titleRequired" | translate }}</p>
                     }
                 </div>
 
                 <div class="field">
-                    <label class="label">{{ "pages.notes.placeholders.description" | translate }}</label>
-                    <textarea class="textarea" formControlName="description" rows="20" placeholder="{{ 'pages.notes.placeholders.description' | translate }}"></textarea>
+                    <label class="label">{{ "commons.fields.description" | translate }}</label>
+                    <textarea class="textarea" formControlName="description" rows="20" placeholder="{{ 'commons.fields.description' | translate }}"></textarea>
                 </div>
             
                 <div class="field">

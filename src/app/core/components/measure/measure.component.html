@@ -3,7 +3,7 @@
     <form [formGroup]="measureForm" (ngSubmit)="saveMeasure()">
       <div class="add-measure">
         <div class="field">
-          <label class="label">{{ "pages.weight.date" | translate }}</label>
+          <label class="label">{{ "commons.fields.date" | translate }}</label>
           <div class="control has-icons-left">
             <input type="text" id="measureDateInput_{{ measure.id }}" class="input" formControlName="date" placeholder="{{ 'commons.dateFormats.dateTime' | translate }}"
               [ngClass]="{'is-danger': measureForm.get('date')?.touched && measureForm.get('date')?.invalid}">
@@ -12,10 +12,10 @@
             </span>
             @if (measureForm.get('date')?.value) {
               @if (measureForm.get('date')?.errors?.['required']) {
-                <p class="help is-danger">{{ "pages.weight.errors.dateRequired" | translate }}</p>
+                <p class="help is-danger">{{ "commons.errors.dateRequired" | translate }}</p>
               }
               @if (measureForm.get('date')?.errors?.['invalidDate']) {
-                <p class="help is-danger">{{ "pages.weight.errors.invalidDate" | translate }}</p>
+                <p class="help is-danger">{{ "commons.errors.dateInvalid" | translate }}</p>
               }
               @if (measureForm.get('date')?.errors?.['existingMeasureAtDate']) {
                 <p class="help is-danger">{{ "pages.weight.errors.measureExistsOnThisDate" | translate }}</p>
