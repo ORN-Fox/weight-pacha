@@ -78,6 +78,7 @@ export class WeightMonitoringComponent {
       altInput: true,
       altFormat: this.translateService.instant('commons.dateFormats.flatpickr.date'),
       defaultDate: this.getRangeDates(),
+      position: 'below',
       onChange: (selectedDates: Date[]) => {
         this.onChangeRangeDates(selectedDates);
       }
@@ -88,6 +89,7 @@ export class WeightMonitoringComponent {
       enableTime: true,
       altInput: true,
       altFormat: this.translateService.instant('commons.dateFormats.flatpickr.date'),
+      position: 'below'
     });
 
     this.initChart();

@@ -102,13 +102,15 @@ export class VaccineDialogComponent {
       flatpickr(VaccineDatePickerInput.InjectionDateInput, {
         altInput: true,
         altFormat: this.translateService.instant('commons.dateFormats.flatpickr.date'),
-        defaultDate: vaccine.injectionDate.toDate()
+        defaultDate: vaccine.injectionDate.toDate(),
+        position: 'below'
       });
 
       flatpickr(VaccineDatePickerInput.ReminderDateInput, {
         altInput: true,
         altFormat: this.translateService.instant('commons.dateFormats.flatpickr.date'),
-        defaultDate: vaccine.reminderDate?.toDate()
+        defaultDate: vaccine.reminderDate?.toDate(),
+        position: 'below'
       });
     }, 100);
   }

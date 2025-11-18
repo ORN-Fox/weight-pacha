@@ -102,13 +102,15 @@ export class WormableDialogComponent {
       flatpickr(WormableDatePickerInput.InjectionDateInput, {
         altInput: true,
         altFormat: this.translateService.instant('commons.dateFormats.flatpickr.date'),
-        defaultDate: wormable.injectionDate.toDate()
+        defaultDate: wormable.injectionDate.toDate(),
+        position: 'below'
       });
 
       flatpickr(WormableDatePickerInput.ReminderDateInput, {
         altInput: true,
         altFormat: this.translateService.instant('commons.dateFormats.flatpickr.date'),
-        defaultDate: wormable.reminderDate?.toDate()
+        defaultDate: wormable.reminderDate?.toDate(),
+        position: 'below'
       });
     }, 100);
   }

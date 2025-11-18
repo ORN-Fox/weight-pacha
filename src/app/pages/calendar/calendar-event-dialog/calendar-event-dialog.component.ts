@@ -100,6 +100,7 @@ export class CalendarEventDialogComponent {
         altInput: true,
         altFormat: this.translateService.instant('commons.dateFormats.flatpickr.dateTime'),
         defaultDate: calendarEvent.startDate.toDate(),
+        position: 'below'
       });
     }, 100);
   }

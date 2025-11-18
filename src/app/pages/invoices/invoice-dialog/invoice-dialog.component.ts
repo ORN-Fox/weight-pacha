@@ -91,7 +91,8 @@ export class InvoiceDialogComponent {
       flatpickr(InvoiceDatePickerInput.BillingDateInput, {
         altInput: true,
         altFormat: this.translateService.instant('commons.dateFormats.flatpickr.date'),
-        defaultDate: invoice.billingDate.toDate()
+        defaultDate: invoice.billingDate.toDate(),
+        position: 'below'
       });
     }, 100);
   }
