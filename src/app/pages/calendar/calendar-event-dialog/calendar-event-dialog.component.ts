@@ -41,6 +41,7 @@ export class CalendarEventDialogComponent {
   calendarEventForm: FormGroup;
 
   editMode: boolean;
+  submitted: boolean = false;
   
   constructor() {
     this.editMode = this.data.action === DialogAction.UPDATE;
@@ -63,10 +64,14 @@ export class CalendarEventDialogComponent {
   }
 
   saveCalendarEvent() {
+    this.submitted = true;
+
     if (this.calendarEventForm.valid) {
       Object.assign(this.data.calendarEvent, this.calendarEventForm.value);
       this.data.calendarEvent.startDate = moment(this.data.calendarEvent.startDate);
       this.data.calendarEvent.updatedAt = moment();
+
+      this.submitted = false;
 
       const dialogResult: CalendarEventDialogData = {
         action: this.data.action == DialogAction.ADD ? DialogAction.ADD : DialogAction.UPDATE,
@@ -94,7 +99,7 @@ export class CalendarEventDialogComponent {
         enableTime: true,
         altInput: true,
         altFormat: this.translateService.instant('commons.dateFormats.flatpickr.dateTime'),
-        defaultDate: calendarEvent.startDate.toDate()
+        defaultDate: calendarEvent.startDate.toDate(),
       });
     }, 100);
   }

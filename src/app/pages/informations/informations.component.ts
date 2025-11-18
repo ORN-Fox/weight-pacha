@@ -33,6 +33,8 @@ export class InformationsComponent {
 
   species: ISpecie[];
 
+  submitted: boolean = false;
+
   constructor(
     private formBuilder: FormBuilder,
     private translateService: TranslateService,
@@ -48,6 +50,8 @@ export class InformationsComponent {
   }
 
   saveInformations() {
+    this.submitted = true;
+
     if (this.petForm.valid) {
       Object.assign(this.petRecord, this.petForm.value);
       this.petRecord.birthDate = moment(this.petRecord.birthDate);
@@ -56,6 +60,8 @@ export class InformationsComponent {
       this.petRecord.updatedAt = moment();
       const serializedPetRecord = this.petRecord.serializeForSave();
       this.localStorageService.setItem(this.APP_STORAGE_KEY, serializedPetRecord);
+
+      this.submitted = false;
     }
   }
 

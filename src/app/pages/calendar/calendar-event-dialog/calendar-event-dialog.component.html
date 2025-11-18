@@ -8,12 +8,12 @@
             <label class="label">{{ "commons.fields.date" | translate }}</label>
             <div class="control has-icons-left">
                 <input type="text" id="startDateInput" class="input" formControlName="startDate" placeholder="{{ 'commons.dateFormats.dateTime' | translate}}"
-                    [ngClass]="{'is-danger': calendarEventForm.get('startDate')?.errors?.['required'] && calendarEventForm.get('startDate')?.touched}">
+                    [ngClass]="{'is-danger': calendarEventForm.get('startDate')?.errors?.['required'] && (submitted || calendarEventForm.get('startDate')?.value === '')}">
                 <span class="icon is-small is-left">
                     <i class="far fa-calendar"></i>
                 </span>
             </div>
-            @if (calendarEventForm.get('startDate')?.errors?.['required'] && !calendarEventForm.get('startDate')?.value) {
+            @if (calendarEventForm.get('startDate')?.errors?.['required'] && (submitted || calendarEventForm.get('startDate')?.value === '')) {
                 <p class="help is-danger">{{ "commons.errors.dateRequired" | translate }}</p>
             }
         </div>
@@ -22,12 +22,12 @@
             <label class="label">{{ "commons.fields.title" | translate }}</label>
             <div class="control has-icons-left">
                 <input type="text" class="input" name="title" formControlName="title" placeholder="{{ 'commons.fields.title' | translate}}"
-                    [ngClass]="{'is-danger': calendarEventForm.get('title')?.errors?.['required'] && calendarEventForm.get('title')?.touched}">
+                    [ngClass]="{'is-danger': calendarEventForm.get('title')?.errors?.['required'] && (submitted || calendarEventForm.get('title')?.touched)}">
                 <span class="icon is-small is-left">
                     <i class="far fa-tag"></i>
                 </span>
             </div>
-            @if (calendarEventForm.get('title')?.errors?.['required'] && calendarEventForm.get('title')?.touched) {
+            @if (calendarEventForm.get('title')?.errors?.['required'] && (submitted || calendarEventForm.get('title')?.touched)) {
                 <p class="help is-danger">{{ "commons.errors.titleRequired" | translate }}</p>
             }
         </div>

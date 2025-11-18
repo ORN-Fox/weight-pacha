@@ -39,6 +39,7 @@ export class VaccineDialogComponent {
   vaccineForm: FormGroup;
   
   editMode: boolean;
+  submitted: boolean = false;
 
   constructor() {
     this.editMode = this.data.action === DialogAction.UPDATE;
@@ -65,11 +66,15 @@ export class VaccineDialogComponent {
   }
 
   saveVaccine() {
+    this.submitted = true;
+
     if (this.vaccineForm.valid) {
       Object.assign(this.data.vaccine, this.vaccineForm.value);
       this.data.vaccine.injectionDate = moment(this.data.vaccine.injectionDate);
       this.data.vaccine.reminderDate = this.data.vaccine.reminderDate ? moment(this.data.vaccine.reminderDate) : null,
       this.data.vaccine.updatedAt = moment();
+
+      this.submitted = false;
 
       const dialogResult: VaccineDialogData = {
         action: this.data.action == DialogAction.ADD ? DialogAction.ADD : DialogAction.UPDATE,

@@ -8,12 +8,12 @@
             <label class="label">{{ "commons.fields.date" | translate }}</label>
             <div class="control has-icons-left">
                 <input type="text" id="billingDateInput" class="input" formControlName="billingDate" placeholder="{{ 'commons.dateFormats.date' | translate}}"
-                    [ngClass]="{'is-danger': invoiceForm.get('billingDate')?.errors?.['required'] && invoiceForm.get('billingDate')?.touched}">
+                    [ngClass]="{'is-danger': invoiceForm.get('billingDate')?.errors?.['required'] && (submitted || invoiceForm.get('billingDate')?.value === '')}">
                 <span class="icon is-small is-left">
                     <i class="far fa-calendar"></i>
                 </span>
             </div>
-            @if (invoiceForm.get('billingDate')?.errors?.['required'] && !invoiceForm.get('billingDate')?.value) {
+            @if (invoiceForm.get('billingDate')?.errors?.['required'] && (submitted || invoiceForm.get('billingDate')?.value === '')) {
                 <p class="help is-danger">{{ "commons.errors.dateRequired" | translate }}</p>
             }
         </div>
@@ -22,16 +22,18 @@
             <label class="label">{{ "commons.fields.amount" | translate }}</label>
             <div class="control has-icons-{{ displaySignPosition }}">
                 <input type="number" class="input" formControlName="amount" step="any" min="0" placeholder="123"
-                    [ngClass]="{'is-danger': invoiceForm.get('amount')?.errors?.['required'] && invoiceForm.get('amount')?.touched}">
+                    [ngClass]="{'is-danger': invoiceForm.get('amount')?.errors?.['required'] && (submitted || invoiceForm.get('amount')?.touched)}">
                 <span class="icon is-small is-{{ displaySignPosition }}">
                     {{ 'commons.moneySymbol' | translate }}
                 </span>
             </div>
-            @if (invoiceForm.get('amount')?.errors?.['required'] && invoiceForm.get('amount')?.touched) {
-                <p class="help is-danger">{{ "pages.invoices.errors.amountRequired" | translate }}</p>
-            }
-            @if (invoiceForm.get('amount')?.errors?.['min'] && invoiceForm.get('amount')?.touched) {
-                <p class="help is-danger">{{ "pages.invoices.errors.minAmountError" | translate }}</p>
+            @if (submitted || invoiceForm.get('amount')?.touched) {
+                @if (invoiceForm.get('amount')?.errors?.['required']) {
+                    <p class="help is-danger">{{ "pages.invoices.errors.amountRequired" | translate }}</p>
+                }
+                @if (invoiceForm.get('amount')?.errors?.['min']) {
+                    <p class="help is-danger">{{ "pages.invoices.errors.minAmountError" | translate }}</p>
+                }
             }
         </div>
 

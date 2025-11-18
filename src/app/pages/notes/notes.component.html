@@ -53,13 +53,13 @@
                         <p>{{ noteForm.get('title')?.value?.length ?? 0 }} / 100</p>
                     </div>
                     <div class="control is-expanded has-icons-left">
-                            [ngClass]="{'is-danger': noteForm.get('title')?.errors?.['required'] && noteForm.get('title')?.touched}">
                         <input class="input" type="text" formControlName="title" placeholder="{{ 'commons.fields.title' | translate }}" maxlength="100"
+                            [ngClass]="{'is-danger': noteForm.get('title')?.errors?.['required'] && (submitted || noteForm.get('title')?.touched)}">
                         <span class="icon is-small is-left">
                             <i class="far fa-book"></i>
                         </span>
                     </div>
-                    @if (noteForm.get('title')?.errors?.['required'] && noteForm.get('title')?.touched) {
+                    @if (noteForm.get('title')?.errors?.['required'] && (submitted || noteForm.get('title')?.touched)) {
                         <p class="help is-danger">{{ "commons.errors.titleRequired" | translate }}</p>
                     }
                 </div>

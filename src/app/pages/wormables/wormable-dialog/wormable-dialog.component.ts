@@ -39,6 +39,7 @@ export class WormableDialogComponent {
   wormableForm: FormGroup;
 
   editMode: boolean;
+  submitted: boolean = false;
   
   constructor() {
     this.editMode = this.data.action === DialogAction.UPDATE;
@@ -65,11 +66,15 @@ export class WormableDialogComponent {
   }
 
   saveWormable() {
+    this.submitted = true;
+
     if (this.wormableForm.valid) {
       Object.assign(this.data.wormable, this.wormableForm.value);
       this.data.wormable.injectionDate = moment(this.data.wormable.injectionDate);
       this.data.wormable.reminderDate = this.data.wormable.reminderDate ? moment(this.data.wormable.reminderDate) : null,
       this.data.wormable.updatedAt = moment();
+
+      this.submitted = false;
 
       const dialogResult: WormableDialogData = {
         action: this.data.action == DialogAction.ADD ? DialogAction.ADD : DialogAction.UPDATE,

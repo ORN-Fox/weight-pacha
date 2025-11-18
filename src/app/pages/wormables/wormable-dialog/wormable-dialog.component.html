@@ -8,12 +8,12 @@
             <label class="label">{{ "commons.fields.date" | translate }}</label>
             <div class="control has-icons-left">
                 <input type="text" id="injectionDateInput" class="input" formControlName="injectionDate" placeholder="{{ 'commons.dateFormats.date' | translate}}"
-                    [ngClass]="{'is-danger': wormableForm.get('injectionDate')?.errors?.['required'] && wormableForm.get('injectionDate')?.touched}">
+                    [ngClass]="{'is-danger': wormableForm.get('injectionDate')?.errors?.['required'] && (submitted || wormableForm.get('injectionDate')?.value === '')}">
                 <span class="icon is-small is-left">
                     <i class="far fa-calendar"></i>
                 </span>
             </div>
-            @if (wormableForm.get('injectionDate')?.errors?.['required'] && !wormableForm.get('injectionDate')?.value) {
+            @if (wormableForm.get('injectionDate')?.errors?.['required'] && (submitted || wormableForm.get('injectionDate')?.value === '')) {
                 <p class="help is-danger">{{ "commons.errors.dateRequired" | translate }}</p>
             }
         </div>
@@ -22,12 +22,12 @@
             <label class="label">{{ "commons.fields.title" | translate }}</label>
             <div class="control has-icons-left">
                 <input type="text" class="input" name="name" formControlName="name" placeholder="{{ 'commons.fields.title' | translate}}"
-                    [ngClass]="{'is-danger': wormableForm.get('name')?.errors?.['required'] && wormableForm.get('name')?.touched}">
+                    [ngClass]="{'is-danger': wormableForm.get('name')?.errors?.['required'] && (submitted || wormableForm.get('name')?.touched)}">
                 <span class="icon is-small is-left">
                     <i class="far fa-tag"></i>
                 </span>
             </div>
-            @if (wormableForm.get('name')?.errors?.['required'] && wormableForm.get('name')?.touched) {
+            @if (wormableForm.get('name')?.errors?.['required'] && (submitted || wormableForm.get('name')?.touched)) {
                 <p class="help is-danger">{{ "commons.errors.titleRequired" | translate }}</p>
             }
         </div>
@@ -36,7 +36,7 @@
             <label class="label">{{ "commons.fields.reminderDate" | translate }}</label>
             <div class="control has-icons-left">
                 <input type="text" id="reminderDateInput" class="input" formControlName="reminderDate" placeholder="{{ 'commons.dateFormats.date' | translate}}"
-                    [ngClass]="{'is-danger': wormableForm.get('reminderDate')?.errors?.['required'] && wormableForm.get('reminderDate')?.touched}">
+                    [ngClass]="{'is-danger': wormableForm.get('reminderDate')?.invalid && wormableForm.get('reminderDate')?.touched}">
                 <span class="icon is-small is-left">
                     <i class="far fa-calendar"></i>
                 </span>

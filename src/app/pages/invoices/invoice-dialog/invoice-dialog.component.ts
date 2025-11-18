@@ -38,6 +38,7 @@ export class InvoiceDialogComponent {
   invoiceForm: FormGroup;
 
   editMode: boolean;
+  submitted: boolean = false;
   
   displaySignPosition: string;
   
@@ -56,10 +57,14 @@ export class InvoiceDialogComponent {
   }
 
   saveInvoice() {
+    this.submitted = true;
+    
     if (this.invoiceForm.valid) {
       Object.assign(this.data.invoice, this.invoiceForm.value);
       this.data.invoice.billingDate = moment(this.data.invoice.billingDate);
       this.data.invoice.updatedAt = moment();
+
+      this.submitted = false;
 
       const dialogResult: InvoiceDialogData = {
         action: this.data.action == DialogAction.ADD ? DialogAction.ADD : DialogAction.UPDATE,

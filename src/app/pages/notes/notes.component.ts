@@ -25,6 +25,8 @@ export class NotesComponent {
   selectedNote: Note | null;
   noteForm: FormGroup;
 
+  submitted: boolean = false;
+
   dateTimeFormat: string;
   searchText: string;
 
@@ -65,6 +67,7 @@ export class NotesComponent {
   }
 
   saveNote() {
+    this.submitted = true;
     if (this.noteForm.valid && this.selectedNote) {
       Object.assign(this.selectedNote, this.noteForm.value);
       this.selectedNote.updatedAt = moment();
@@ -73,6 +76,8 @@ export class NotesComponent {
       if (index !== -1) {
         this.notes[index] = this.selectedNote;
       }
+
+      this.submitted = false;
 
       this.saveNotes();
     }
@@ -102,6 +107,8 @@ export class NotesComponent {
   }
 
   private initNoteForm() {
+    this.submitted = false;
+
     this.noteForm = this.formBuilder.group({
       title: [this.selectedNote?.title, [Validators.required]],
       description: [this.selectedNote?.description]

@@ -8,12 +8,12 @@
             <label class="label">{{ "commons.fields.date" | translate }}</label>
             <div class="control has-icons-left">
                 <input type="text" id="injectionDateInput" class="input" formControlName="injectionDate" placeholder="{{ 'commons.dateFormats.date' | translate}}"
-                    [ngClass]="{'is-danger': vaccineForm.get('injectionDate')?.errors?.['required'] && vaccineForm.get('injectionDate')?.touched}">
+                    [ngClass]="{'is-danger': vaccineForm.get('injectionDate')?.errors?.['required'] && (submitted || vaccineForm.get('injectionDate')?.value === '')}">
                 <span class="icon is-small is-left">
                     <i class="far fa-calendar"></i>
                 </span>
             </div>
-            @if (vaccineForm.get('injectionDate')?.errors?.['required'] && !vaccineForm.get('injectionDate')?.value) {
+            @if (vaccineForm.get('injectionDate')?.errors?.['required'] && (submitted || vaccineForm.get('injectionDate')?.value === '')) {
                 <p class="help is-danger">{{ "commons.errors.dateRequired" | translate }}</p>
             }
         </div>
@@ -22,12 +22,12 @@
             <label class="label">{{ "commons.fields.title" | translate }}</label>
             <div class="control has-icons-left">
                 <input type="text" class="input" name="name" formControlName="name" placeholder="{{ 'commons.fields.title' | translate}}"
-                    [ngClass]="{'is-danger': vaccineForm.get('name')?.errors?.['required'] && vaccineForm.get('name')?.touched}">
+                    [ngClass]="{'is-danger': vaccineForm.get('name')?.errors?.['required'] && (submitted || vaccineForm.get('name')?.touched)}">
                 <span class="icon is-small is-left">
                     <i class="far fa-tag"></i>
                 </span>
             </div>
-            @if (vaccineForm.get('name')?.errors?.['required'] && vaccineForm.get('name')?.touched) {
+            @if (vaccineForm.get('name')?.errors?.['required'] && (submitted || vaccineForm.get('name')?.touched)) {
                 <p class="help is-danger">{{ "commons.errors.titleRequired" | translate }}</p>
             }
         </div>
@@ -36,7 +36,7 @@
             <label class="label">{{ "commons.fields.reminderDate" | translate }}</label>
             <div class="control has-icons-left">
                 <input type="text" id="reminderDateInput" class="input" formControlName="reminderDate" placeholder="{{ 'commons.dateFormats.date' | translate}}"
-                    [ngClass]="{'is-danger': vaccineForm.get('reminderDate')?.errors?.['required'] && vaccineForm.get('reminderDate')?.touched}">
+                    [ngClass]="{'is-danger': vaccineForm.get('reminderDate')?.invalid && vaccineForm.get('reminderDate')?.touched}">
                 <span class="icon is-small is-left">
                     <i class="far fa-calendar"></i>
                 </span>
