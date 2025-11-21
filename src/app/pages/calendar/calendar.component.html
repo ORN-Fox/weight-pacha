@@ -3,5 +3,15 @@
 <button class="button is-primary mb-3" (click)="addCalendarEvent()"><i class="far fa-pencil-alt"></i></button>
 
 <div class="box mb-5">
-    <full-calendar [options]="calendarOptions"></full-calendar>
+    <full-calendar [options]="calendarOptions">
+        <ng-template #eventContent let-arg>
+            <p>
+                @if (shouldDisplayCustomData()) {
+                    <i class="{{ arg.event.extendedProps.icon }} mr-1" [style]="{'color': arg.event.backgroundColor}"></i>
+                    <span class="fc-event-time">{{ getEventTime(arg.event.start) }}</span>
+                }
+                <span class="fc-event-title">{{ arg.event.title }}</span>
+            </p>
+        </ng-template>
+    </full-calendar>
 </div>

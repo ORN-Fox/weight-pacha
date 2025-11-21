@@ -20,6 +20,7 @@
     "dateFormats": {
       "date": "YYYY-MM-DD",
       "dateTime": "YYYY-MM-DD hh:mm A",
+      "time": "hh:mm A",
       "flatpickr": {
         "date": "Y-m-d",
         "dateTime": "Y-m-d h:i K"

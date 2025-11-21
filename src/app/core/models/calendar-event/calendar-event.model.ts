@@ -4,6 +4,12 @@ import { DateService } from "../../services/date/date.service";
 
 import { ISerializeModel, SerializeModel } from "../serialize.model";
 
+export enum CalendarEventSource {
+    CALENDAR = 0,
+    VACCINE,
+    WORMABLE
+}
+
 export interface ISerializedCalendarEvent extends ISerializeModel {
     title: string;
     startDate: string | null;
@@ -15,6 +21,11 @@ export interface IFullCalendarEventModel {
     title: string;
     start: Date;
     description: string;
+
+    // local data
+    backgroundColor: string;
+    eventSource: number;
+    icon: string;
 }
 
 export class CalendarEvent extends SerializeModel {
@@ -23,11 +34,18 @@ export class CalendarEvent extends SerializeModel {
     startDate: moment.Moment;
     description: string = '';
 
-    constructor(title: string = '', startDate: moment.Moment = moment()) {
+    // local data
+    eventSource: number;
+
+    constructor(title: string = '', startDate: moment.Moment = moment(), eventSource: number = CalendarEventSource.CALENDAR) {
         super();
 
         this.title = title;
         this.startDate = startDate;
+        
+
+        // local data
+        this.eventSource = eventSource;
     }
 
     convertToFullCalendarModel(): IFullCalendarEventModel {
@@ -35,7 +53,12 @@ export class CalendarEvent extends SerializeModel {
             id: this.id,
             title: this.title,
             start: this.startDate.toDate(),
-            description: this.description
+            description: this.description,
+            
+            // local data
+            backgroundColor: this.getBackgroundColorWithType(),
+            eventSource: this.eventSource,
+            icon: this.getIconWithEventSource()
         }
     }
     
@@ -60,6 +83,34 @@ export class CalendarEvent extends SerializeModel {
             this.description = serializeCalendarEvent.description;
         } catch (exception) {
             console.error('Exception on deserialize calendar event model', exception);
+        }
+    }
+
+    private getBackgroundColorWithType(): string {
+        switch (this.eventSource) {
+            case CalendarEventSource.VACCINE:
+                return '#f29d5c';
+
+            case CalendarEventSource.WORMABLE:
+                return '#628bdd';
+
+            case CalendarEventSource.CALENDAR:
+            default:
+                return '#00d1b2';
+        }
+    }
+
+    private getIconWithEventSource(): string {
+        switch (this.eventSource) {
+            case CalendarEventSource.VACCINE:
+                return 'fa fa-syringe';
+
+            case CalendarEventSource.WORMABLE:
+                return 'fa fa-shield-virus';
+
+            case CalendarEventSource.CALENDAR:
+            default:
+                return 'fa fa-calendar';
         }
     }
 
