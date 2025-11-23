@@ -10,6 +10,7 @@ This application allows you to better manage the monitoring of your favorite pet
 
 ### Features
 
+- Calendar (vaccine and wormable crud event is not available, coming soon in 0.3.0)
 - Informations
 - Weight tracking
 - Notes
