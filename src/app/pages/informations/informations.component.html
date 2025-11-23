@@ -1,6 +1,8 @@
 <app-page-title title="informations"></app-page-title>
 
-<form class="mb-5" [formGroup]="petForm" (ngSubmit)="saveChanges()">
+<app-no-vaccine-rage-alert [petRecord]="petRecord"></app-no-vaccine-rage-alert>
+
+<form class="mb-5" [formGroup]="petForm" (ngSubmit)="saveInformations()">
     <div class="field is-horizontal">
         <div class="field-label is-normal">
             <label class="label">{{ "pages.informations.firstName" | translate }}</label>
@@ -9,12 +11,12 @@
             <div class="field">
                 <div class="control is-expanded has-icons-left">
                     <input class="input" type="text" formControlName="firstName" placeholder="{{ 'pages.informations.placeholders.firstName' | translate}}"
-                           [ngClass]="{'is-danger': petForm.get('firstName')?.errors?.['required'] && petForm.get('firstName')?.touched}">
+                           [ngClass]="{'is-danger': petForm.get('firstName')?.errors?.['required'] && (submitted || petForm.get('firstName')?.touched)}">
                     <span class="icon is-small is-left">
                         <i class="far fa-heart"></i>
                     </span>
                 </div>
-                @if (petForm.get('firstName')?.errors?.['required'] && petForm.get('firstName')?.touched) {
+                @if (petForm.get('firstName')?.errors?.['required'] && (submitted || petForm.get('firstName')?.touched)) {
                     <p class="help is-danger">{{ "pages.informations.errors.firstNameRequired" | translate }}</p>
                 }
             </div>
@@ -29,13 +31,13 @@
             <div class="field">
                 <div class="control radios">
                     @for (specie of species; track specie) {
-                        <label class="radio custom-radio-with-icon has-text-centered" [ngClass]="{'active': petForm.get('specie')?.value == specie.value}">
+                        <label class="radio custom-radio-with-icon has-text-centered" [ngClass]="{'active': petForm.get('specie')?.value == specie.value, 'is-danger': submitted && !petForm.get('specie')?.value}">
                             <input type="radio" formControlName="specie" value="{{ specie.value }}" />
                             <img [src]="'/assets/images/animals/' + specie.key + '.png'" alt=""> {{ ("pages.informations." + specie.key) | translate }}
                         </label>
                     }
                 </div>
-                @if (petForm.get('specie')?.errors?.['required'] && petForm.get('specie')?.touched) {
+                @if (petForm.get('specie')?.errors?.['required'] && (submitted || petForm.get('specie')?.touched)) {
                     <p class="help is-danger">{{ "pages.informations.errors.specieRequired" | translate }}</p>
                 }
             </div>
@@ -73,7 +75,7 @@
             </div>
         </div>
     </div>
-    
+
     <div class="field is-horizontal">
         <div class="field-label">
             <label class="label">{{ "pages.informations.sex" | translate }}</label>
@@ -184,7 +186,7 @@
 
     <div class="field is-horizontal">
         <div class="field-label is-normal">
-            <label class="label">{{ "pages.informations.description" | translate }}</label>
+            <label class="label">{{ "commons.fields.description" | translate }}</label>
         </div>
         <div class="field-body">
             <div class="field">
@@ -202,7 +204,9 @@
         <div class="field-body">
             <div class="field">
                 <div class="control">
-                    <button type="submit" class="button is-primary"><i class="far fa-bookmark mr-2"></i> {{ "commons.actions.save" | translate }}</button>
+                    <button type="submit" class="button is-primary">
+                        <i class="far fa-bookmark mr-2"></i> {{ "commons.actions.save" | translate }}
+                    </button>
                 </div>
             </div>
         </div>

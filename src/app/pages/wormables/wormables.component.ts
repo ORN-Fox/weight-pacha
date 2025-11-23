@@ -1,17 +1,21 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
-import flatpickr from 'flatpickr';
-import moment from 'moment';
+import { cloneDeep } from 'lodash';
 
 import { LocalStorageService } from 'src/app/core/services/local-storage/local-storage.service';
 import { ToastService } from 'src/app/core/services/toast/toast.service';
 import { SerializerService } from 'src/app/core/services/serializer/serializer.service';
 import { SettingsService } from 'src/app/core/services/settings/settings.service';
 
-import { IInputElementWithFlatpickr } from 'src/app/core/interfaces/IInputElementWithFlatpickr';
+import { DialogAction } from 'src/app/core/enums/dialog-action/dialog.action.enum';
+
 import { ITableHeader } from 'src/app/core/interfaces/ITableHeader';
 
 import { ISerializedWormable, Wormable } from 'src/app/core/models/wormable/wormable.model';
+
+import { WormableDialogComponent, WormableDialogData } from './wormable-dialog/wormable-dialog.component';
+
 
 @Component({
   selector: 'app-wormables',
@@ -20,6 +24,8 @@ import { ISerializedWormable, Wormable } from 'src/app/core/models/wormable/worm
   standalone: false
 })
 export class WormablesComponent {
+
+  readonly dialog = inject(MatDialog);
 
   APP_STORAGE_KEY: string = 'weight-pacha-wormables';
   
@@ -38,13 +44,11 @@ export class WormablesComponent {
     private serializerService: SerializerService,
     private settingsService: SettingsService
   ) {
-    this.dateFormat = this.translateService.instant('commons.dateFormats.date');
-
     this.setupTableHeaders();
     this.loadWormables();
 
     this.settingsService.settings$.subscribe(() => {
-      this.updateFlatpickrLocales();
+      this.dateFormat = this.translateService.instant('commons.dateFormats.date');
     });
   }
 
@@ -60,21 +64,11 @@ export class WormablesComponent {
 
   addWormable() {
     let wormable = new Wormable();
-    wormable.editMode = true;
-    this.wormables.push(wormable);
-
-    this.initDatePickers(wormable);
+    this.openWormableDialog(false, wormable);
   }
 
   updateWormable(wormable: Wormable) {
-    wormable.editMode = !wormable.editMode;
-    this.initDatePickers(wormable);
-  }
-
-  saveChanges(wormable: Wormable) {
-    wormable.editMode = false;
-    wormable.updatedAt = moment();
-    this.saveWormables();
+    this.openWormableDialog(true, wormable);
   }
 
   deleteWormable(id: string) {
@@ -84,32 +78,6 @@ export class WormablesComponent {
         this.saveWormables();
       }
     });
-  }
-
-  private initDatePickers(wormable: Wormable) {
-    setTimeout(() => {
-      flatpickr(`#wormableInjectionDateInput_${wormable.id}`, {
-        altInput: true,
-        altFormat: this.translateService.instant('commons.dateFormats.flatpickr.date'),
-        defaultDate: wormable.injectionDate.toDate(),
-        onChange: (selectedDates: Date[]) => {
-          wormable.injectionDate = moment(selectedDates[0]);
-        }
-      });
-
-      flatpickr(`#wormableReminderDateInput_${wormable.id}`, {
-        altInput: true,
-        altFormat: this.translateService.instant('commons.dateFormats.flatpickr.date'),
-        defaultDate: wormable.reminderDate?.toDate(),
-        onChange: (selectedDates: Date[]) => {
-          wormable.reminderDate = selectedDates[0] ? moment(selectedDates[0]) : null;
-        }
-      });
-    }, 100);
-  }
-    
-  private sortWormablesByInjectionDate(wormables: Wormable[]) {
-    return wormables.sort((firstWormable, secondWormable) => firstWormable.injectionDate.isAfter(secondWormable.injectionDate, 'day') ? 1 : -1);
   }
 
   private loadWormables() {
@@ -129,27 +97,44 @@ export class WormablesComponent {
       this.localStorageService.setItem(this.APP_STORAGE_KEY, { wormables: this.wormables });
     }
   }
+
+  private sortWormablesByInjectionDate(wormables: Wormable[]) {
+    return wormables.sort((firstWormable, secondWormable) => firstWormable.injectionDate.isAfter(secondWormable.injectionDate, 'day') ? 1 : -1);
+  }
+
+  private openWormableDialog(editMode: boolean = false, wormable: Wormable) {
+    const action = editMode ? DialogAction.UPDATE : DialogAction.ADD;
+    const dialogRef = this.dialog.open(WormableDialogComponent, {
+      data: { action: action, wormable: cloneDeep(wormable) },
+      autoFocus: false,
+      disableClose: true,
+      width: '40rem'
+    });
+
+    dialogRef.afterClosed().subscribe((result: WormableDialogData) => {
+      if (result) {
+        switch (result.action) {
+          case DialogAction.ADD:
+            this.wormables.push(result.wormable);
+            break;
+
+          case DialogAction.UPDATE:
+            const index = this.wormables.findIndex(wormable => wormable.id === result.wormable.id);
+            if (index !== -1) {
+              this.wormables[index] = result.wormable;
+            }
+            break;
+        }
+        
+        this.saveWormables();
+      }
+    });
+  }
   
   private saveWormables() {
     this.wormables = this.sortWormablesByInjectionDate(this.wormables);
     const serializedWormables = this.serializerService.serializeList(this.wormables);
     this.localStorageService.setItem(this.APP_STORAGE_KEY, { wormables: serializedWormables });
-  }
-      
-  private updateFlatpickrLocales() {
-    const datePickersId = this.wormables.flatMap((wormable) => [
-      `#wormableInjectionDateInput_${wormable.id}`,
-      `#wormableReminderDateInput_${wormable.id}`
-    ]);
-
-    datePickersId.forEach(inputId => {
-      const input = document.querySelector(inputId) as IInputElementWithFlatpickr;
-      if (input?._flatpickr) {
-        input._flatpickr.set('altFormat', this.translateService.instant('commons.dateFormats.flatpickr.date'));
-        input._flatpickr.set('locale', this.settingsService.currentSettings.locale);
-        input._flatpickr.redraw();
-      }
-    });
   }
 
 }

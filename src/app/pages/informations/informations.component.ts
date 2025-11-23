@@ -33,6 +33,8 @@ export class InformationsComponent {
 
   species: ISpecie[];
 
+  submitted: boolean = false;
+
   constructor(
     private formBuilder: FormBuilder,
     private translateService: TranslateService,
@@ -47,7 +49,9 @@ export class InformationsComponent {
     });
   }
 
-  saveChanges() {
+  saveInformations() {
+    this.submitted = true;
+
     if (this.petForm.valid) {
       Object.assign(this.petRecord, this.petForm.value);
       this.petRecord.birthDate = moment(this.petRecord.birthDate);
@@ -56,6 +60,8 @@ export class InformationsComponent {
       this.petRecord.updatedAt = moment();
       const serializedPetRecord = this.petRecord.serializeForSave();
       this.localStorageService.setItem(this.APP_STORAGE_KEY, serializedPetRecord);
+
+      this.submitted = false;
     }
   }
 
@@ -87,8 +93,8 @@ export class InformationsComponent {
       firstName: [petRecord.firstName, [Validators.required]],
       specie: [petRecord.specie, [Validators.required]],
       breed: [petRecord.breed],
-      color: [petRecord.color, [Validators.required]],
-      sex: [petRecord.sex, [Validators.required]],
+      color: [petRecord.color],
+      sex: [petRecord.sex],
       birthDate: [petRecord.birthDate],
       adoptedDate: [petRecord.adoptedDate],
       sterilize: [petRecord.sterilize],
@@ -109,19 +115,22 @@ export class InformationsComponent {
         enableTime: true,
         altInput: true,
         altFormat: this.translateService.instant('commons.dateFormats.flatpickr.dateTime'),
-        defaultDate: petRecord.birthDate?.toDate()
+        defaultDate: petRecord.birthDate?.toDate(),
+        position: 'below'
       });
 
       flatpickr('#adoptedDateInput', {
         altInput: true,
         altFormat: this.translateService.instant('commons.dateFormats.flatpickr.date'),
-        defaultDate: petRecord.adoptedDate?.toDate()
+        defaultDate: petRecord.adoptedDate?.toDate(),
+        position: 'below'
       });
 
       flatpickr('#sterilizeDateInput', {
         altInput: true,
         altFormat: this.translateService.instant('commons.dateFormats.flatpickr.date'),
-        defaultDate: petRecord.sterilizeDate?.toDate()
+        defaultDate: petRecord.sterilizeDate?.toDate(),
+        position: 'below'
       });
     }, 100);
   }

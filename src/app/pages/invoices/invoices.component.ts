@@ -1,8 +1,8 @@
-import { AfterViewInit, Component } from '@angular/core';
+import { AfterViewInit, Component, inject } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
+import { cloneDeep } from 'lodash';
 import Chart from 'chart.js/auto';
-import flatpickr from 'flatpickr';
-import moment from 'moment';
 
 import { LocalStorageService } from 'src/app/core/services/local-storage/local-storage.service';
 import { ToastService } from 'src/app/core/services/toast/toast.service';
@@ -10,10 +10,12 @@ import { SerializerService } from 'src/app/core/services/serializer/serializer.s
 import { SettingsService } from 'src/app/core/services/settings/settings.service';
 
 import { IChartDataSetPoint } from 'src/app/core/interfaces/IChartDataSetPoint';
-import { IInputElementWithFlatpickr } from 'src/app/core/interfaces/IInputElementWithFlatpickr';
 import { ITableHeader } from 'src/app/core/interfaces/ITableHeader';
 
 import { ISerializedInvoice, Invoice } from 'src/app/core/models/invoice/invoice.model';
+
+import { InvoiceDialogComponent, InvoiceDialogData } from './invoice-dialog/invoice-dialog.component';
+import { DialogAction } from 'src/app/core/enums/dialog-action/dialog.action.enum';
 
 interface IInvoiceChartDataSetPoint extends IChartDataSetPoint {
   x: number;
@@ -32,6 +34,8 @@ export interface ITotalInvoicedPerYear {
   standalone: false
 })
 export class InvoicesComponent implements AfterViewInit {
+
+  readonly dialog = inject(MatDialog);
 
   APP_STORAGE_KEY: string = 'weight-pacha-invoices';
 
@@ -56,14 +60,13 @@ export class InvoicesComponent implements AfterViewInit {
     private serializerService: SerializerService,
     private settingsService: SettingsService
   ) {
-    this.dateFormat = this.translateService.instant('commons.dateFormats.date');
-    this.displaySignPosition = this.translateService.currentLang == 'en-US' ? 'left' : 'right';
-
     this.setupTableHeaders();
     this.loadInvoices();
 
     this.settingsService.settings$.subscribe(() => {
-      this.updateFlatpickrLocales();
+      this.dateFormat = this.translateService.instant('commons.dateFormats.date');
+      this.displaySignPosition = this.translateService.currentLang == 'en-US' ? 'left' : 'right';
+
       this.updateChartLocale();
     });
   }
@@ -83,51 +86,24 @@ export class InvoicesComponent implements AfterViewInit {
 
   addInvoice() {
     let invoice = new Invoice();
-    invoice.editMode = true;
-    this.invoices.push(invoice);
-
-    this.initDatePickers(invoice);
+    this.openInvoiceDialog(false, invoice);
   }
 
   updateInvoice(invoice: Invoice) {
-    invoice.editMode = !invoice.editMode;
-    this.initDatePickers(invoice);
-  }
-
-  saveChanges(invoice: Invoice) {
-    invoice.editMode = false;
-    invoice.updatedAt = moment();
-    this.saveInvoices();
-
-    this.computeTotalInvoicedPerYears();
-    this.updateChart();
+    this.openInvoiceDialog(true, invoice);
   }
 
   deleteInvoice(id: string) {
     this.toastService.showConfirm().then((result: { isConfirmed: boolean; }) => {
       if (result.isConfirmed) {
         this.invoices = this.invoices.filter(invoice => invoice.id != id);
-        this.saveInvoices();
-
+        
         this.computeTotalInvoicedPerYears();
         this.updateChart();
+
+        this.saveInvoices();
       }
     });
-  }
-
-  private initDatePickers(invoice: Invoice) {
-    setTimeout(() => {
-      flatpickr(`#invoiceBillingDateInput_${invoice.id}`, {
-        altInput: true,
-        altFormat: this.translateService.instant('commons.dateFormats.flatpickr.date'),
-        defaultDate: invoice.billingDate?.toDate(),
-        onChange: (selectedDates: Date[]) => {
-          invoice.billingDate = moment(selectedDates[0]);
-
-          this.updateChart();
-        }
-      });
-    }, 100);
   }
 
   private computeTotalInvoicedPerYears() {
@@ -135,13 +111,14 @@ export class InvoicesComponent implements AfterViewInit {
     let indexYear = -1;
     this.invoices.forEach(invoice => {
       let targetYear = invoice.billingDate.year();
+      let amount = invoice.amount ?? 0;
 
       if (invoiceYears.filter(invoiceYear => invoiceYear.year == targetYear).length == 0) {
-        const newInvoiceYear = { year: targetYear, totalAmount: invoice.amount };
+        const newInvoiceYear = { year: targetYear, totalAmount: amount };
         invoiceYears.push(newInvoiceYear);
         indexYear++;
       } else {
-        invoiceYears[indexYear].totalAmount += invoice.amount;
+        invoiceYears[indexYear].totalAmount += amount;
       }
     });
 
@@ -178,23 +155,42 @@ export class InvoicesComponent implements AfterViewInit {
     this.initChartData();
   }
 
+  private openInvoiceDialog(editMode: boolean = false, invoice: Invoice) {
+    const action = editMode ? DialogAction.UPDATE : DialogAction.ADD;
+    const dialogRef = this.dialog.open(InvoiceDialogComponent, {
+      data: { action: action, invoice: cloneDeep(invoice) },
+      autoFocus: false,
+      disableClose: true,
+      width: '40rem'
+    });
+
+    dialogRef.afterClosed().subscribe((result: InvoiceDialogData) => {
+      if (result) {
+        switch (result.action) {
+          case DialogAction.ADD:
+            this.invoices.push(result.invoice);
+            break;
+            
+          case DialogAction.UPDATE:
+            const index = this.invoices.findIndex(invoice => invoice.id === result.invoice.id);
+            if (index !== -1) {
+              this.invoices[index] = result.invoice;
+            }
+            break;
+        }
+
+        this.computeTotalInvoicedPerYears();
+        this.updateChart();
+
+        this.saveInvoices();
+      }
+    });
+  }
+
   private saveInvoices() {
     this.invoices = this.sortInvoicesByBillingDate(this.invoices);
     const serializedInvoices = this.serializerService.serializeList(this.invoices);
     this.localStorageService.setItem(this.APP_STORAGE_KEY, { invoices: serializedInvoices });
-  }
-  
-  private updateFlatpickrLocales() {
-    const datePickersId = this.invoices.map((invoice) => `#invoiceBillingDateInput_${invoice.id}`);
-
-    datePickersId.forEach(inputId => {
-      const input = document.querySelector(inputId) as IInputElementWithFlatpickr;
-      if (input?._flatpickr) {
-        input._flatpickr.set('altFormat', this.translateService.instant('commons.dateFormats.flatpickr.date'));
-        input._flatpickr.set('locale', this.settingsService.currentSettings.locale);
-        input._flatpickr.redraw();
-      }
-    });
   }
 
   //#region Chart related

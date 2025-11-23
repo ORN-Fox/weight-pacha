@@ -47,8 +47,9 @@ export class WeightMonitoringComponent {
   healthWeightOffset: number = .5;
 
   measureForm: FormGroup;
+  submitted: boolean = false;
 
-  rangeDateInputInstance: Instance = new Object() as Instance;
+  rangeDateInputInstance: Instance;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -77,6 +78,7 @@ export class WeightMonitoringComponent {
       altInput: true,
       altFormat: this.translateService.instant('commons.dateFormats.flatpickr.date'),
       defaultDate: this.getRangeDates(),
+      position: 'below',
       onChange: (selectedDates: Date[]) => {
         this.onChangeRangeDates(selectedDates);
       }
@@ -87,6 +89,7 @@ export class WeightMonitoringComponent {
       enableTime: true,
       altInput: true,
       altFormat: this.translateService.instant('commons.dateFormats.flatpickr.date'),
+      position: 'below'
     });
 
     this.initChart();
@@ -172,6 +175,8 @@ export class WeightMonitoringComponent {
   }
 
   addMeasure() {
+    this.submitted = true;
+
     if (this.measureForm.valid) {
       let measure = new Measure();
       Object.assign(measure, this.measureForm.value);
@@ -181,6 +186,8 @@ export class WeightMonitoringComponent {
       this.sourceMeasures = this.sortMeasuresByDate(this.sourceMeasures);
       this.measures = this.filterMeasuresInRangeDates();
       this.saveMeasures();
+
+      this.submitted = false;
 
       let dataPoint: IWeightChartDataSetPoint = {
         x: measure.date,
@@ -416,7 +423,7 @@ export class WeightMonitoringComponent {
             },
             title: {
               display: true,
-              text: this.translateService.instant('pages.weight.date')
+              text: this.translateService.instant('commons.fields.date')
             }
           },
           y: {

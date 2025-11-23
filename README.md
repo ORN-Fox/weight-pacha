@@ -1,4 +1,4 @@
-# Weight-Pacha 0.1.1
+# Weight-Pacha 0.2.0
 
 ![Preview](./preview.png)
 ![Preview Informations Page](./preview_informations.png)
@@ -10,6 +10,7 @@ This application allows you to better manage the monitoring of your favorite pet
 
 ### Features
 
+- Calendar (vaccine and wormable crud event is not available, coming soon in 0.3.0)
 - Informations
 - Weight tracking
 - Notes

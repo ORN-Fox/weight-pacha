@@ -142,6 +142,7 @@ export class MeasureComponent implements OnChanges {
           altInput: true,
           altFormat: this.translateService.instant('commons.dateFormats.flatpickr.dateTime'),
           defaultDate: this.measureForm.get('date')?.value?.toDate(),
+          position: 'below',
           onChange: (selectedDates: Date[]) => {
             this.measureDiff = this.getDiffWithPreviousMeasure(moment(selectedDates[0]));
           }

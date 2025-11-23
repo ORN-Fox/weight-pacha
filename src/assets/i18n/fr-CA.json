@@ -2,6 +2,8 @@
   "commons": {
     "actions": {
       "add": "Ajouter",
+      "cancel": "Annuler",
+      "delete": "Supprimer",
       "displayAll": "Afficher tout",
       "no": "Non",
       "save": "Enregistrer",
@@ -10,14 +12,33 @@
     },
     "appSource": "Source de l'application",
     "areYouSure": "Es-tu sûr ?",
+    "calendarViewFormats": {
+      "dayGridMonth": "Mois",
+      "listMonth": "Liste mois"
+    },
     "commingSoon": "A venir",
     "dateFormats": {
       "date": "YYYY-MM-DD",
       "dateTime": "YYYY-MM-DD HH:mm",
+      "time": "HH:mm",
       "flatpickr": {
         "date": "d-m-Y",
         "dateTime": "d-m-Y H:i"
       }
+    },
+    "errors": {
+      "dateInvalid": "La date est invalide",
+      "dateRequired": "La date est requise",
+      "titleRequired": "Le titre est requis"
+    },
+    "fields": {
+      "age": "Age",
+      "amount": "Montant",
+      "actions": "Actions",
+      "description": "Description",
+      "date": "Date",
+      "reminderDate": "Rappel",
+      "title": "Titre"
     },
     "language": "Langue",
     "languages": {
@@ -35,13 +56,20 @@
     "youWontBeAbleToRevertThis": "Tu ne pourras pas revenir en arrière !"
   },
   "pages": {
+    "calendar": {
+      "addTitle": "Ajouter un événement",
+      "editTitle": "Modifier l'événement",
+      "placeholders": {
+        "title": "Exemple RDV"
+      },
+      "title": "Calendrier"
+    },
     "informations": {
       "adoptedDate": "Date d'adoption",
       "birthDate": "Date de naissance",
       "breed": "Race",
       "cat": "Chat",
       "color": "Couleur",
-      "description": "Description",
       "dog": "Chien",
       "errors": {
         "firstNameRequired": "Le prénom est requis",
@@ -66,31 +94,23 @@
       "title": "Informations"
     },
     "invoices": {
-      "noInvoiceAddNewForStartTracking": "Aucune facture. Ajouter une facture pour commencer",
-      "tableHeaders": {
-        "actions": "Actions",
-        "amount": "Montant",
-        "date": "Date",
-        "description": "Description"
+      "errors": {
+        "amountRequired": "Le montant est requis",
+        "minAmountError": "Le montant minimum doit être positif"
       },
+      "noInvoiceAddNewForStartTracking": "Aucune facture. Ajouter une facture pour commencer",
       "title": "Factures",
       "totalAmount": "Montant total"
     },
     "notes": {
-      "errors": {
-        "titleRequired": "Le titre est requis"
-      },
       "noNoteAddNewNoteForStart": "Aucune note. Ajouter une note pour commencer",
       "noResults": "Aucun résultats",
-      "placeholders": {
-        "description": "Description",
-        "title": "Titre"
-      },
       "title": "Notes"
     },
     "settings": {
       "about": "A propos",
       "author": "Auteur",
+      "calendarViewFormat": "Format du calendrier",
       "licenseDetails": "Logiciel open source - Licence MIT",
       "pagination": "Pagination",
       "theme": "Thème",
@@ -98,25 +118,20 @@
       "weightUnit": "Unités de poids"
     },
     "vaccines": {
-      "noVaccineAddNewForStartTracking": "Aucun vaccin. Ajouter un vaccin pour commencer le suivi",
-      "tableHeaders": {
-        "actions": "Actions",
-        "age": "Age",
-        "date": "Date",
-        "description": "Description",
-        "reminderDate": "Rappel",
-        "title": "Titre"
+      "addTitle": "Ajouter un vaccin",
+      "editTitle": "Modifier un vaccin",
+      "errors": {
+        "sameOrBeforeReminderDateError": "La date de rappel doit être après la date d'injection"
       },
+      "noVaccineAddNewForStartTracking": "Aucun vaccin. Ajouter un vaccin pour commencer le suivi",
+      "noVaccineForRageAlert": "Aucun vaccin contre la rage ! Penser a vacciné votre animal pour sa santé.",
       "title": "Vaccins"
     },
     "weight": {
       "add": "Ajouter",
       "addMeasure": "Ajouter une mesure",
       "addMeasureToStartWeightTracking": "Ajouter une mesure pour débuter le suivi du poids",
-      "date": "Date",
       "errors": {
-        "dateRequired": "La date est requise",
-        "invalidDate": "La date est invalide",
         "measureExistsOnThisDate": "Une mesure existe à cette date",
         "weightMustBePositive": "Le poids doit être positif",
         "weightRequired": "Le poids est requis"
@@ -130,14 +145,12 @@
       "weightUnit": "Unité de poids"
     },
     "wormables": {
-      "noWormableAddNewForStartTracking": "Aucun vermifuge. Ajouter un vaccin pour commencer le suivi",
-      "tableHeaders": {
-        "actions": "Actions",
-        "date": "Date",
-        "description": "Description",
-        "reminderDate": "Rappel",
-        "title": "Titre"
+      "addTitle": "Ajouter un vermifuge",
+      "editTitle": "Modifier un vermifuge",
+      "errors": {
+        "sameOrBeforeReminderDateError": "La date de rappel doit être après la date d'injection"
       },
+      "noWormableAddNewForStartTracking": "Aucun vermifuge. Ajouter un vaccin pour commencer le suivi",
       "title": "Vermifuges"
     }
   }

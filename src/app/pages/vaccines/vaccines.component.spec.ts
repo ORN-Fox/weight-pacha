@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { TranslateModule } from '@ngx-translate/core';
 
+import { NoVaccineRageAlertComponent } from 'src/app/core/components/no-vaccine-rage-alert/no-vaccine-rage-alert.component';
 import { PaginationComponent } from 'src/app/core/components/pagination/pagination.component';
 import { PageTitleComponent } from 'src/app/core/components/page-title/page-title.component';
 
@@ -15,6 +16,7 @@ describe('VaccinesComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [
+        NoVaccineRageAlertComponent,
         PageTitleComponent,
         PaginationComponent,
         VaccinesComponent

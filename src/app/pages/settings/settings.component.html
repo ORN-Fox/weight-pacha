@@ -1,6 +1,6 @@
 <app-page-title title="settings"></app-page-title>
 
-<div class="box">
+<div class="box settings">
     <section class="section">
         <h1 class="title mb-3">{{ 'commons.language' | translate }}</h1>
         <div class="subtitle">
@@ -22,6 +22,20 @@
         <h1 class="title mb-3">{{ 'pages.settings.theme' | translate }}</h1>
         <div class="subtitle">
             {{ 'commons.commingSoon' | translate }}
+        </div>
+    </section>
+
+    <section class="section">
+        <h1 class="title mb-3">{{ 'pages.settings.calendarViewFormat' | translate }}</h1>
+        <div class="subtitle">
+            <div class="buttons has-addons">
+                @for (calendarViewFormat of calendarViewFormats; track calendarViewFormat) {
+                <button class="button" [ngClass]="{'is-primary is-selected': settings.calendarViewFormat == calendarViewFormat}"
+                    (click)="updateCalendarViewFormat(calendarViewFormat)">
+                    {{ 'commons.calendarViewFormats.' + calendarViewFormat | translate }}
+                </button>
+                }
+            </div>
         </div>
     </section>
 
@@ -56,8 +70,8 @@
     <section class="section">
         <h1 class="title mb-3">{{ 'pages.settings.about' | translate }}</h1>
         <div class="subtitle">
-            <p>Poids pacha v0.1.1</p>
-            <p>
+            <p class="mb-2">Poids pacha v0.2.0</p>
+            <p class="mb-2">
                 <a href="https://github.com/ORN-Fox/weight-pacha" target="_blank" rel="noopener" title="Github"
                     aria-label="Github repository">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
@@ -67,7 +81,12 @@
                 </a>
                 <span class="mx-2">{{ 'pages.settings.licenseDetails' | translate }}</span>
             </p>
-            <p>{{ 'pages.settings.author' | translate }} : ORN_Fox</p>
+            <p>
+                {{ 'pages.settings.author' | translate }} : 
+                <a href="https://github.com/ORN-Fox" target="_blank" rel="noopener" title="ORN_Fox Github Profile" aria-label="ORN_Fox Github profile">
+                    ORN_Fox <i class="far fa-external-link ms-2"></i>
+                </a>
+            </p>
         </div>
     </section>
 </div>

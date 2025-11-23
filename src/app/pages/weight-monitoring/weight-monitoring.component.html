@@ -38,19 +38,19 @@
 
     <form [formGroup]="measureForm" (ngSubmit)="addMeasure()">
       <div class="field">
-        <label class="label">{{ "pages.weight.date" | translate }}</label>
+        <label class="label">{{ "commons.fields.date" | translate }}</label>
         <div class="control has-icons-left">
           <input type="text" formControlName="date" id="measureDateInput" class="input" placeholder="{{ 'commons.dateFormats.dateTime' | translate }}"
-              [ngClass]="{'is-danger': measureForm.get('date')?.touched && measureForm.get('date')?.invalid}">
+              [ngClass]="{'is-danger': measureForm.get('date')?.touched && (submitted || measureForm.get('date')?.value === '')}">
           <span class="icon is-small is-left">
             <i class="far fa-calendar"></i>
           </span>
-          @if (measureForm.get('date')?.value) {
+          @if (submitted || measureForm.get('date')?.value === '') {
             @if (measureForm.get('date')?.errors?.['required']) {
-              <p class="help is-danger">{{ "pages.weight.errors.dateRequired" | translate }}</p>
+              <p class="help is-danger">{{ "commons.errors.dateRequired" | translate }}</p>
             }
-            @if (measureForm.get('date')?.errors?.['invalidDate']) {
-              <p class="help is-danger">{{ "pages.weight.errors.invalidDate" | translate }}</p>
+            @if (measureForm.get('date')?.errors?.['invalidDate'] && measureForm.get('date')?.value) {
+              <p class="help is-danger">{{ "commons.errors.dateInvalid" | translate }}</p>
             }
             @if (measureForm.get('date')?.errors?.['existingMeasureAtDate']) {
               <p class="help is-danger">{{ "pages.weight.errors.measureExistsOnThisDate" | translate }}</p>
@@ -62,13 +62,12 @@
       <div class="field">
         <label class="label">{{"pages.weight.weight" | translate}}</label>
         <div class="control has-icons-left has-icons-right">
-          <input type="number" formControlName="weight" class="input" [ngClass]="{'is-danger': measureForm.get('weight')?.touched && measureForm.get('weight')?.invalid}" 
-              step="any" min="0" placeholder="2">
+          <input type="number" formControlName="weight" class="input" [ngClass]="{'is-danger': measureForm.get('weight')?.invalid && (submitted || measureForm.get('weight')?.touched)}"  step="any" min="0" placeholder="2">
           <span class="icon is-small is-left">
             <i class="far fa-weight-hanging"></i>
           </span>
           <span class="icon is-small is-right">{{ getMeasureUnitLabel() }}</span>
-          @if (measureForm.get('weight')?.touched) {
+          @if (submitted || measureForm.get('weight')?.touched) {
             @if (measureForm.get('weight')?.errors?.['required']) {
               <p class="help is-danger">{{ "pages.weight.errors.weightRequired" | translate }}</p>
             }
@@ -130,7 +129,8 @@
     <div class="field">
       <label class="label">{{ "pages.weight.healthyWeight" | translate }}</label>
       <div class="control has-icons-left has-icons-right">
-        <input type="number" name="healthWeight" class="input" [(ngModel)]="healthWeight" (ngModelChange)="updateHealthWeight()" step="any" min="1" max="20" placeholder="4">
+        <input type="number" name="healthWeight" class="input" [ngClass]="{'is-danger': !healthWeight || healthWeight < 0}"
+         [(ngModel)]="healthWeight" (ngModelChange)="updateHealthWeight()" step="any" min="1" max="20" placeholder="4">
         <span class="icon is-small is-left">
           <i class="far fa-weight-hanging"></i>
         </span>

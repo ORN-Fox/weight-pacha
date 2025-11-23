@@ -10,6 +10,10 @@
         border-color: #4258ff;
     }
 
+    &.is-danger {
+        border-color: red;
+    }
+
     input {
         visibility: hidden;
     }

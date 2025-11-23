@@ -6,20 +6,20 @@ import { ISerializeModel, SerializeModel } from '../serialize.model';
 
 export interface ISerializedInvoice extends ISerializeModel {
     billingDate: string;
-    amount: number;
+    amount: number | null;
     description: string | null;
 }
 
 export class Invoice extends SerializeModel {
 
     billingDate: moment.Moment;
-    amount: number;
+    amount: number | null;
     description: string | null;
 
     // local data
     editMode: boolean;
 
-    constructor(billingDate: moment.Moment = moment(), amount: number = 0) {
+    constructor(billingDate: moment.Moment = moment(), amount: number | null = null) {
         super();
         
         this.billingDate = billingDate;

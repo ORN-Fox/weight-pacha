@@ -1,0 +1,119 @@
+$black: #000;
+$white: #fff;
+
+$fc-primary: #00d1b2;
+$fc-primary-hover: #00b89f;
+
+.fc {
+    /* Buttons */
+    .fc-button {
+        background-color: $fc-primary;
+        border-color: $fc-primary;
+        color: $white;
+        border-radius: 4px;
+        padding: .25em .5em;
+        font-size: .875rem;
+        border: 1px solid $fc-primary;
+        cursor: pointer;
+    }
+
+    .fc-button:hover:not(:disabled) {
+        background-color: $fc-primary-hover;
+        border-color: $fc-primary-hover;
+    }
+
+    .fc-button:active:not(:disabled),
+    .fc-button.fc-button-active:not(:disabled) {
+        background-color: $fc-primary-hover;
+        border-color: $fc-primary-hover;
+    }
+
+    .fc-button:focus {
+        box-shadow: 0 0 0 .125em rgba(0, 209, 178, .25);
+    }
+
+    /* Toolbar */
+    .fc-toolbar {
+        margin-bottom: 1.5rem;
+    }
+
+    .fc-toolbar-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin: 0 1rem;
+    }
+
+    /* Calendar grid */
+    .fc-scrollgrid {
+        // border: 1px solid #dbdbdb;
+        border-radius: 4px;
+        overflow: hidden;
+    }
+
+    /* Days header */
+    .fc-col-header-cell {
+        background-color: $fc-primary;
+        border: 1px solid $fc-primary;
+        padding: .5em;
+        text-align: center;
+        font-weight: 600;
+        color: $white;
+
+        .fc-col-header-cell-cushion {
+            color: $white;
+        }
+    }
+
+    /* Daygrid calendar */
+    .fc-daygrid-day, .fc-daygrid-day.fc-day-today {
+        &:hover {
+            background-color: #f8f8f8;
+
+            .fc-daygrid-day-number {
+                font-weight: bold;
+            }
+        }
+    }
+    
+    .fc-daygrid-day {
+        border: 1px solid #dbdbdb;
+        background-color: $white;
+        cursor: pointer;
+
+        &.fc-day-today {
+            background-color: #f5f5f5;
+        }
+    }
+
+    /* Events */
+    .fc-event {
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        padding: .25em .5em;
+        font-size: .75rem;
+    }
+
+    .fc-dayGridMonth-view .fc-event:hover {
+        transform: scale(1.15);
+    }
+
+    /* Events popover */
+    .fc-popover {
+        background: white;
+        border: none;
+        border-radius: 4px;
+        box-shadow: 0 .5em 1em -.125em rgba($black, 0.1), 0 0 0 1px rgba($black, .02);
+        padding: 0;
+    }
+
+    .fc-popover-header {
+        background-color: $white;
+        border-bottom: 1px solid #dbdbdb;
+        padding: .5em .75em;
+    }
+
+    .fc-popover-body {
+        padding: .75em;
+    }
+}

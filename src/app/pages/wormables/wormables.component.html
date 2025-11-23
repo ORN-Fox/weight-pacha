@@ -8,66 +8,23 @@
             <thead>
                 <tr>
                     @for (tableHeader of tableHeaders; track tableHeader) {
-                        <th class="is-primary" [align]="tableHeader.align" [ngStyle]="{'width': tableHeader.width}">{{ ('pages.wormables.tableHeaders.' + tableHeader.title) | translate }}</th>
+                        <th class="is-primary" [align]="tableHeader.align" [ngStyle]="{'width': tableHeader.width}">{{ ('commons.fields.' + tableHeader.title) | translate }}</th>
                     }
                 </tr>
             </thead>
             <tbody>
                 @for (wormable of wormables | paginate: { itemsPerPage: itemsPerPage, currentPage: page }; track wormable) {
                 <tr class="wormable">
-                    <td class="has-text-centered">
-                        @if (wormable.editMode) {
-                            <div class="control has-icons-left">
-                                <input type="text" id="wormableInjectionDateInput_{{ wormable.id }}" class="input" name="injectionDate">
-                                <span class="icon is-small is-left">
-                                    <i class="far fa-calendar"></i>
-                                </span>
-                            </div>
-                        } @else {
-                            {{ wormable.injectionDate ? wormable.injectionDate.format(dateFormat) : '' }}
-                        }
-                    </td>
+                    <td class="has-text-centered">{{ wormable.injectionDate ? wormable.injectionDate.format(dateFormat) : '' }}</td>
+                    <td>{{ wormable.name }}</td>
+                    <td class="has-text-centered">{{ wormable.reminderDate ? wormable.reminderDate.format(dateFormat) : '' }}</td>
                     <td>
-                        @if (wormable.editMode) {
-                            <div class="control has-icons-left">
-                                <input type="text" class="input" name="name" [(ngModel)]="wormable.name">
-                                <span class="icon is-small is-left">
-                                    <i class="far fa-tag"></i>
-                                </span>
-                            </div>
-                        } @else {
-                            {{ wormable.name }}
-                        }
+                        <div class="description">{{ wormable.description }}</div>
                     </td>
                     <td class="has-text-centered">
-                        @if (wormable.editMode) {
-                            <div class="control has-icons-left">
-                                <input type="text" id="wormableReminderDateInput_{{wormable.id}}" class="input" name="reminderDate">
-                                <span class="icon is-small is-left">
-                                    <i class="far fa-calendar"></i>
-                                </span>
-                            </div>
-                        } @else {
-                            {{ wormable.reminderDate ? wormable.reminderDate.format(dateFormat) : '' }}
-                        }
-                    </td>
-                    <td>
-                        @if (wormable.editMode) {
-                            <textarea class="textarea" name="description" [(ngModel)]="wormable.description" rows="1"></textarea>
-                        } @else {
-                            <div class="description">{{ wormable.description }}</div>
-                        }
-                    </td>
-                    <td class="has-text-centered">
-                        @if (wormable.editMode) {
-                            <button type="button" class="button" (click)="saveChanges(wormable)">
-                                <i class="far fa-bookmark"></i>
-                            </button>
-                        } @else {
-                            <button type="button" class="button" (click)="updateWormable(wormable)">
-                                <i class="far fa-pencil-alt"></i>
-                            </button>
-                        }
+                        <button type="button" class="button" (click)="updateWormable(wormable)">
+                            <i class="far fa-pencil-alt"></i>
+                        </button>
 
                         <button type="button" class="button btn-delete ml-2" (click)="deleteWormable(wormable.id)">
                             <i class="far fa-trash"></i>

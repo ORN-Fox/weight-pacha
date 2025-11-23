@@ -3,6 +3,7 @@ import { ISerializeModel, SerializeModel } from "../serialize.model";
 export interface ISettings extends ISerializeModel {
     locale: string;
     theme?: string;
+    calendarViewFormat?: string;
     itemsPerPage?: number;
     weightUnit?: number;
 }
@@ -11,6 +12,7 @@ export class Settings extends SerializeModel {
 
     locale: string;
     theme?: string;
+    calendarViewFormat?: string;
     itemsPerPage?: number;
     weightUnit?: number;
 
@@ -19,6 +21,7 @@ export class Settings extends SerializeModel {
         
         this.locale = 'en-US';
         this.theme = 'light';
+        this.calendarViewFormat = 'dayGridMonth';
         this.itemsPerPage = 10;
         this.weightUnit = 0;
     }
@@ -27,6 +30,7 @@ export class Settings extends SerializeModel {
         let serializedFields = {
             locale: this.locale,
             theme: this.theme,
+            calendarViewFormat: this.calendarViewFormat,
             itemsPerPage: this.itemsPerPage,
             weightUnit: this.weightUnit
         };
@@ -42,6 +46,7 @@ export class Settings extends SerializeModel {
             
             this.locale = serializedSettings.locale || this.locale;
             this.theme = serializedSettings.theme || this.theme;
+            this.calendarViewFormat = serializedSettings.calendarViewFormat || this.calendarViewFormat;
             this.itemsPerPage = serializedSettings.itemsPerPage || this.itemsPerPage;
             this.weightUnit = serializedSettings.weightUnit || this.weightUnit;
         } catch (exception) {
