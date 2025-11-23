@@ -1,6 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { CalendarEventDialogComponent } from './calendar-event-dialog.component';
+import moment from 'moment';
+import { CalendarEvent } from 'src/app/core/models/calendar-event/calendar-event.model';
 
 describe('CalendarEventDialogComponent', () => {
   let component: CalendarEventDialogComponent;
@@ -8,7 +13,28 @@ describe('CalendarEventDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CalendarEventDialogComponent]
+      declarations: [
+        CalendarEventDialogComponent
+      ],
+      imports: [
+        ReactiveFormsModule,
+        FormsModule,
+        MatDialogModule,
+        TranslateModule.forRoot({})
+      ],
+      providers: [
+        { 
+          provide: MatDialogRef, 
+          useValue: {}
+        },
+        {
+          provide: MAT_DIALOG_DATA,
+          useValue: {
+            action: 0,
+            calendarEvent: new CalendarEvent()
+          }
+        },
+      ],
     })
     .compileComponents();
 

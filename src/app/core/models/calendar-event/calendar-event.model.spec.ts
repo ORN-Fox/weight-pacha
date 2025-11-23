@@ -2,7 +2,7 @@ import moment from 'moment';
 
 import { CalendarEvent } from './calendar-event.model';
 
-describe('Invoice', () => {
+describe('CalendarEvent', () => {
     let calendarEvent: CalendarEvent;
 
     beforeEach(() => {
@@ -16,9 +16,9 @@ describe('Invoice', () => {
     it('should initialize with default values', () => {
         expect(calendarEvent.id).toBeDefined();
         expect(calendarEvent.title).toBe('');
-        expect(moment.isMoment(calendarEvent.startDate)).toBe(true);
-        expect(calendarEvent.description).toBeUndefined();
-        expect(moment.isMoment(calendarEvent.createdAt)).toBe(true);
+        expect(moment.isMoment(calendarEvent.startDate)).toBeTruthy();
+        expect(calendarEvent.description).toBeNull();
+        expect(moment.isMoment(calendarEvent.createdAt)).toBeTruthy();
         expect(calendarEvent.updatedAt).toBeUndefined();
     });
 });

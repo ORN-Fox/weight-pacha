@@ -13,14 +13,14 @@ export enum CalendarEventSource {
 export interface ISerializedCalendarEvent extends ISerializeModel {
     title: string;
     startDate: string | null;
-    description: string;
+    description: string | null;
 }
 
 export interface IFullCalendarEventModel {
     id: string;
     title: string;
     start: Date;
-    description: string;
+    description: string | null;
 
     // local data
     backgroundColor: string;
@@ -32,7 +32,7 @@ export class CalendarEvent extends SerializeModel {
 
     title: string;
     startDate: moment.Moment;
-    description: string = '';
+    description: string | null = null;
 
     // local data
     eventSource: number;

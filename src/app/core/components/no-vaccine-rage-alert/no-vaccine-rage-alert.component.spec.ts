@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { NoVaccineRageAlertComponent } from './no-vaccine-rage-alert.component';
 
@@ -8,7 +9,12 @@ describe('NoVaccineRageAlertComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [NoVaccineRageAlertComponent]
+      declarations: [
+        NoVaccineRageAlertComponent
+      ],
+      imports: [
+        TranslateModule.forRoot({})
+      ],
     })
     .compileComponents();
 

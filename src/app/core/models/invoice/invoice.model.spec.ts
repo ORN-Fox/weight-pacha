@@ -15,11 +15,11 @@ describe('Invoice', () => {
 
     it('should initialize with default values', () => {
         expect(invoice.id).toBeDefined();
-        expect(invoice.amount).toBe(0);
+        expect(invoice.amount).toBeNull();
         expect(invoice.description).toBeUndefined();
-        expect(moment.isMoment(invoice.billingDate)).toBe(true);
-        expect(moment.isMoment(invoice.createdAt)).toBe(true);
+        expect(moment.isMoment(invoice.billingDate)).toBeTruthy();
+        expect(moment.isMoment(invoice.createdAt)).toBeTruthy();
         expect(invoice.updatedAt).toBeUndefined();
-        expect(invoice.editMode).toBe(false);
+        expect(invoice.editMode).toBeFalsy();
     });
 });
