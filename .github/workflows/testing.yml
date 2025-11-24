@@ -1,5 +1,4 @@
 name: Execute Unit Tests
-
 on:
   push:
     branches: [ "dev" ]
@@ -8,25 +7,23 @@ on:
 
 jobs:
   test:
-
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
         node-version: [24.x]
-
     steps:
     - uses: actions/checkout@v3
-    
+
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-        
-    - name: Install dependencies and run tests
-      run: |
-        npm install
-        npm run test --watch=false --browsers=ChromeHeadless
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Run tests in CI mode
+      run: npm run test:ci
       env:
-        CI: true # set environment variable to run tests in CI mode
+        CI: true
