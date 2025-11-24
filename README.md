@@ -1,4 +1,4 @@
-# Weight-Pacha 0.2.0
+# Weight-Pacha 0.3.0-dev
 
 ![Preview](./preview.png)
 ![Preview Informations Page](./preview_informations.png)
