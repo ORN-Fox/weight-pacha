@@ -27,6 +27,6 @@ jobs:
     - name: Install dependencies and run tests
       run: |
         npm install
-        npm run test
+        npm run test --watch=false --browsers=ChromeHeadless
       env:
         CI: true # set environment variable to run tests in CI mode
