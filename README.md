@@ -20,9 +20,9 @@ This application allows you to better manage the monitoring of your favorite pet
 
 ## Development server
 
-Current project version is **20.1.6**
+Current angular project version is **20.1.6**
 
-Created project version is **16.1.4** with [Angular CLI](https://github.com/angular/angular-cli)
+Created angular project version is **16.1.4** with [Angular CLI](https://github.com/angular/angular-cli)
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
 
