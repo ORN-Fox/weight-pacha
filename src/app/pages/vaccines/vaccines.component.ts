@@ -26,8 +26,12 @@ import { VaccineDialogComponent, VaccineDialogData } from './vaccine-dialog/vacc
 export class VaccinesComponent {
 
   readonly dialog = inject(MatDialog);
+  readonly localStorageService = inject(LocalStorageService);
+  readonly toastService = inject(ToastService);
+  readonly translateService = inject(TranslateService);
+  readonly serializerService = inject(SerializerService); 
 
-  APP_STORAGE_KEY: string = 'weight-pacha-vaccines';
+  private readonly APP_STORAGE_KEY: string = 'weight-pacha-vaccines';
 
   tableHeaders: ITableHeader[];
   vaccines: Vaccine[];
@@ -39,12 +43,7 @@ export class VaccinesComponent {
   page: number;
   itemsPerPage: number;
 
-  constructor(
-    private localStorageService: LocalStorageService,
-    private toastService: ToastService,
-    private translateService: TranslateService,
-    private serializerService: SerializerService
-  ) {
+  constructor() {
     this.dateFormat = this.translateService.instant('commons.dateFormats.date');
 
     this.setupTableHeaders();

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import flatpickr from 'flatpickr';
 import { english } from "flatpickr/dist/l10n/default.js"
@@ -16,16 +16,16 @@ import { Settings } from './core/models/settings/settings.model';
 })
 export class AppComponent implements OnInit {
 
+  readonly translateService = inject(TranslateService);
+  readonly appSettingsService = inject(SettingsService);
+
   settings: Settings;
 
   locales: string[] = ['en-US', 'fr-CA', 'fr-FR'];
 
   isOpenSidebar: boolean = false;
 
-  constructor(
-    private translateService: TranslateService,
-    private appSettingsService: SettingsService
-  ) {}
+  constructor() {}
 
   ngOnInit() {
     this.appSettingsService.settings$.subscribe(settings => {

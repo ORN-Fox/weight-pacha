@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import Swal, { SweetAlertResult } from 'sweetalert2';
 
@@ -7,11 +7,11 @@ import Swal, { SweetAlertResult } from 'sweetalert2';
 })
 export class ToastService {
 
+    readonly translateService = inject(TranslateService);
+
     swalBulma: typeof Swal;
 
-    constructor(
-        private translateService: TranslateService
-    ) {
+    constructor() {
         this.swalBulma = Swal.mixin({
             customClass: {
                 confirmButton: "button",

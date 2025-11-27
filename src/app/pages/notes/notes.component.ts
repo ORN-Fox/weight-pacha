@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { cloneDeep } from 'lodash';
@@ -18,7 +18,13 @@ import { ISerializedNote, Note } from 'src/app/core/models/note/note.model';
 })
 export class NotesComponent {
 
-  APP_STORAGE_KEY: string = 'weight-pacha-notes';
+  readonly formBuilder = inject(FormBuilder);
+  readonly localStorageService = inject(LocalStorageService);
+  readonly serializerService = inject(SerializerService);
+  readonly toastService = inject(ToastService);
+  readonly translateService = inject(TranslateService);
+
+  private readonly APP_STORAGE_KEY: string = 'weight-pacha-notes';
 
   sourceNotes: Note[];
   notes: Note[];
@@ -30,13 +36,7 @@ export class NotesComponent {
   dateTimeFormat: string;
   searchText: string;
 
-  constructor(
-    private formBuilder: FormBuilder,
-    private localStorageService: LocalStorageService,
-    private serializerService: SerializerService,
-    private toastService: ToastService,
-    private translateService: TranslateService
-  ) {
+  constructor() {
     this.dateTimeFormat = this.translateService.instant('commons.dateFormats.dateTime');
 
     this.loadNotes();

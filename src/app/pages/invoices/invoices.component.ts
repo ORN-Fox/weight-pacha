@@ -36,8 +36,13 @@ export interface ITotalInvoicedPerYear {
 export class InvoicesComponent implements AfterViewInit {
 
   readonly dialog = inject(MatDialog);
-
-  APP_STORAGE_KEY: string = 'weight-pacha-invoices';
+  readonly localStorageService = inject(LocalStorageService);
+  readonly toastService = inject(ToastService);
+  readonly translateService = inject(TranslateService);
+  readonly serializerService = inject(SerializerService);
+  readonly settingsService = inject(SettingsService);
+  
+  private readonly APP_STORAGE_KEY: string = 'weight-pacha-invoices';
 
   chart: any;
   data: any;
@@ -53,13 +58,7 @@ export class InvoicesComponent implements AfterViewInit {
   dateFormat: string;
   displaySignPosition: string;
 
-  constructor(
-    private localStorageService: LocalStorageService,
-    private toastService: ToastService,
-    private translateService: TranslateService,
-    private serializerService: SerializerService,
-    private settingsService: SettingsService
-  ) {
+  constructor() {
     this.setupTableHeaders();
     this.loadInvoices();
 

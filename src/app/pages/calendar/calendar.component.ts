@@ -31,6 +31,9 @@ import { CalendarEventDialogComponent, CalendarEventDialogData } from './calenda
 export class CalendarComponent {
 
   readonly dialog = inject(MatDialog);
+  readonly localStorageService = inject(LocalStorageService);
+  readonly serializerService = inject(SerializerService);
+  readonly settingsService = inject(SettingsService);
   readonly translateService = inject(TranslateService);
 
   APP_STORAGE_KEY: string = 'weight-pacha-calendar';
@@ -43,11 +46,7 @@ export class CalendarComponent {
 
   timeFormat: string;
 
-  constructor(
-    private localStorageService: LocalStorageService,
-    private serializerService: SerializerService,
-    private settingsService: SettingsService
-  ) {
+  constructor() {
     this.loadCalendarEvents();
 
     this.settingsService.settings$.subscribe(() => {

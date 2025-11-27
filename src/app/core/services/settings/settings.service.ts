@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 import { LocalStorageService } from '../local-storage/local-storage.service';
@@ -10,13 +10,13 @@ import { Settings, ISettings } from '../../models/settings/settings.model';
 })
 export class SettingsService {
 
+    readonly localStorageService = inject(LocalStorageService);
+
     private readonly STORAGE_KEY = 'weight-pacha-settings';
     private settings: Settings;
     private settingsSubject: BehaviorSubject<Settings>;
 
-    constructor(
-        private localStorageService: LocalStorageService
-    ) {
+    constructor() {
         this.settings = new Settings();
         this.settingsSubject = new BehaviorSubject<Settings>(this.settings);
         this.loadSettings();

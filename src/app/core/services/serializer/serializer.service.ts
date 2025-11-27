@@ -6,7 +6,7 @@ import { isEmpty } from 'lodash';
 })
 export class SerializerService {
 
-    constructor() { }
+    constructor() {}
 
     serializeList(list: any[]) {
         if (isEmpty(list)) {

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnChanges, Output } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import flatpickr from 'flatpickr';
@@ -26,6 +26,10 @@ export interface IMeasureDiff {
 })
 export class MeasureComponent implements OnChanges {
 
+  readonly formBuilder = inject(FormBuilder);
+  readonly translateService = inject(TranslateService);
+  readonly settingsService = inject(SettingsService);
+
   @Input() measures: Measure[];
   @Input() measure: Measure;
   @Input() measureUnitLabel: string;
@@ -39,11 +43,7 @@ export class MeasureComponent implements OnChanges {
   measureDiff: IMeasureDiff;
   dateTimeFormat: string;
 
-  constructor(
-    private formBuilder: FormBuilder,
-    private translateService: TranslateService,
-    private settingsService: SettingsService
-  ) {
+  constructor() {
     this.dateTimeFormat = this.translateService.instant('commons.dateFormats.dateTime');
 
     this.settingsService.settings$.subscribe(() => {

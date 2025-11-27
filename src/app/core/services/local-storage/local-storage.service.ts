@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
 })
 export class LocalStorageService {
 
-  constructor() { }
+  constructor() {}
 
   isItemExist(key: string): boolean {
     return this.getItem(key) !== null;

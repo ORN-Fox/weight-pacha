@@ -26,8 +26,13 @@ import { WormableDialogComponent, WormableDialogData } from './wormable-dialog/w
 export class WormablesComponent {
 
   readonly dialog = inject(MatDialog);
-
-  APP_STORAGE_KEY: string = 'weight-pacha-wormables';
+  readonly localStorageService = inject(LocalStorageService);
+  readonly toastService = inject(ToastService);
+  readonly translateService = inject(TranslateService);
+  readonly serializerService = inject(SerializerService);
+  readonly settingsService = inject(SettingsService);
+  
+  private readonly APP_STORAGE_KEY: string = 'weight-pacha-wormables';
   
   tableHeaders: ITableHeader[];
   wormables: Wormable[];
@@ -37,13 +42,7 @@ export class WormablesComponent {
   page: number;
   itemsPerPage: number;
 
-  constructor(
-    private localStorageService: LocalStorageService,
-    private toastService: ToastService,
-    private translateService: TranslateService,
-    private serializerService: SerializerService,
-    private settingsService: SettingsService
-  ) {
+  constructor() {
     this.setupTableHeaders();
     this.loadWormables();
 

@@ -6,7 +6,7 @@ import moment from 'moment';
 })
 export class DateService {
 
-  constructor() { }
+  constructor() {}
 
   static getMomentFromStringDate(date: string | null): moment.Moment | null {
     if (date) {

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import flatpickr from 'flatpickr';
@@ -26,7 +26,12 @@ interface ISpecie {
 })
 export class InformationsComponent {
 
-  APP_STORAGE_KEY: string = 'weight-pacha-data-pet-record';
+  readonly formBuilder = inject(FormBuilder);
+  readonly translateService = inject(TranslateService);
+  readonly localStorageService = inject(LocalStorageService);
+  readonly settingsService = inject(SettingsService);
+
+  private readonly APP_STORAGE_KEY: string = 'weight-pacha-data-pet-record';
 
   petForm: FormGroup;
   petRecord: PetRecord;
@@ -35,12 +40,7 @@ export class InformationsComponent {
 
   submitted: boolean = false;
 
-  constructor(
-    private formBuilder: FormBuilder,
-    private translateService: TranslateService,
-    private localStorageService: LocalStorageService,
-    private settingsService: SettingsService
-  ) {    
+  constructor() {    
     this.loadSpecies();
     this.loadPetRecord();
     

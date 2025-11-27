@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 
 import { SettingsService } from 'src/app/core/services/settings/settings.service';
@@ -13,6 +13,9 @@ import { Settings } from 'src/app/core/models/settings/settings.model';
 })
 export class SettingsComponent {
 
+  readonly settingsService = inject(SettingsService);
+  readonly translateService = inject(TranslateService);
+
   settings: Settings;
 
   locales: string[] = ['en-US', 'fr-CA', 'fr-FR'];
@@ -22,10 +25,7 @@ export class SettingsComponent {
   weightUnits: number[] = [0, 1];
   weightUnitsLabels: string[] = ['Kg', 'Lbs'];
 
-  constructor(
-    private settingsService: SettingsService,
-    private translateService: TranslateService
-  ) {
+  constructor() {
     this.settings = this.settingsService.currentSettings;
   }
 

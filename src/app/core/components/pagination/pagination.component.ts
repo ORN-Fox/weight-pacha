@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 
 import { SettingsService } from '../../services/settings/settings.service';
 
@@ -12,6 +12,8 @@ import { Settings } from '../../models/settings/settings.model';
 })
 export class PaginationComponent implements OnInit {
 
+  readonly settingsService = inject(SettingsService);
+
   @Input() page: number;
 
   @Output() pageChange: EventEmitter<number> = new EventEmitter<number>();
@@ -22,9 +24,7 @@ export class PaginationComponent implements OnInit {
   itemsPerPages: number[] = [10, 25, 50];
   itemsPerPage: number;
 
-  constructor(
-    private settingsService: SettingsService
-  ) {
+  constructor() {
     this.settings = this.settingsService.currentSettings;
     
     this.itemsPerPage = this.settings.itemsPerPage || this.itemsPerPages[0];

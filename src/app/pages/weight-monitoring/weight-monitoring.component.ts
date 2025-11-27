@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import Chart from 'chart.js/auto';
@@ -35,7 +35,14 @@ interface IWeightChartDataSetPoint extends IChartDataSetPoint {
 })
 export class WeightMonitoringComponent {
 
-  APP_STORAGE_KEY: string = 'weight-pacha-data-measures';
+  readonly formBuilder = inject(FormBuilder);
+  readonly localStorageService = inject(LocalStorageService);
+  readonly toastService = inject(ToastService);
+  readonly translateService = inject(TranslateService);
+  readonly serializerService = inject(SerializerService);
+  readonly settingsService = inject(SettingsService);
+
+  private readonly APP_STORAGE_KEY: string = 'weight-pacha-data-measures';
 
   chart: any;
   data: any;
@@ -51,14 +58,7 @@ export class WeightMonitoringComponent {
 
   rangeDateInputInstance: Instance;
 
-  constructor(
-    private formBuilder: FormBuilder,
-    private localStorageService: LocalStorageService,
-    private toastService: ToastService,
-    private translateService: TranslateService,
-    private serializerService: SerializerService,
-    private settingsService: SettingsService
-  ) {
+  constructor() {
     this.settingsService.settings$.subscribe(() => {
       this.updateFlatpickrLocales();
       this.updateChartLocale();

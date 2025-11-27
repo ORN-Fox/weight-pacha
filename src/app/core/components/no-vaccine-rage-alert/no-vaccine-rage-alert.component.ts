@@ -16,8 +16,7 @@ export class NoVaccineRageAlertComponent implements OnInit {
 
   displayAlert: boolean = false;
 
-  constructor()
-  {}
+  constructor() {}
 
   ngOnInit() {
     this.displayAlert = this.isNoVaccinedForRage();
