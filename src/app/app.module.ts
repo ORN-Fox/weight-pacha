@@ -22,6 +22,7 @@ import { PageTitleComponent } from './core/components/page-title/page-title.comp
 import { PaginationComponent } from './core/components/pagination/pagination.component';
 
 // Pages
+import { AccountComponent } from './pages/account/account.component';
 import { CalendarComponent } from './pages/calendar/calendar.component';
 import { HomeComponent } from './pages/home/home.component';
 import { InformationsComponent } from './pages/informations/informations.component';
@@ -59,6 +60,7 @@ function initializeApp(translate: TranslateService, settings: SettingsService): 
         PaginationComponent,
 
         // Pages
+        AccountComponent,
         CalendarComponent,
         HomeComponent,
         InformationsComponent,

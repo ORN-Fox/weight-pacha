@@ -7,6 +7,7 @@ import { French } from "flatpickr/dist/l10n/fr.js";
 import { SettingsService } from './core/services/settings/settings.service';
 
 import { Settings } from './core/models/settings/settings.model';
+import { User } from './core/models/user/user.model';
 
 @Component({
   selector: 'app-root',
@@ -20,12 +21,16 @@ export class AppComponent implements OnInit {
   readonly appSettingsService = inject(SettingsService);
 
   settings: Settings;
+  user: User;
 
   locales: string[] = ['en-US', 'fr-CA', 'fr-FR'];
 
   isOpenSidebar: boolean = false;
 
-  constructor() {}
+  constructor() {
+    this.user = new User();
+    this.user.username = 'Moose';
+  }
 
   ngOnInit() {
     this.appSettingsService.settings$.subscribe(settings => {

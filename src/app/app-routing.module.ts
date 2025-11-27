@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { HomeComponent } from './pages/home/home.component';
+import { AccountComponent } from './pages/account/account.component';
 import { CalendarComponent } from './pages/calendar/calendar.component';
 import { InformationsComponent } from './pages/informations/informations.component';
 import { NotesComponent } from './pages/notes/notes.component';
@@ -13,6 +14,7 @@ import { SettingsComponent } from './pages/settings/settings.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
+  { path: 'account', component: AccountComponent },
   { path: 'calendar', component: CalendarComponent },
   { path: 'informations', component: InformationsComponent },
   { path: 'notes', component: NotesComponent },
