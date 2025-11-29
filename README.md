@@ -1,5 +1,7 @@
 # Weight-Pacha 0.3.0-dev
 
+[![Build Application](https://github.com/ORN-Fox/weight-pacha/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/ORN-Fox/weight-pacha/actions/workflows/build.yml)
+
 ![Preview](./preview.png)
 ![Preview Informations Page](./preview_informations.png)
 ![Preview Weight Tracking Page](./preview_weight_tracking.png)
