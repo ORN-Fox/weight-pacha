@@ -1,13 +1,16 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { tap } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
+import { throwError } from 'rxjs';
 import flatpickr from 'flatpickr';
 import moment from 'moment';
 
 import { ApiService } from 'src/app/core/services/api/api.service';
 import { AuthService } from 'src/app/core/services/auth/auth.service';
 import { LocalStorageService } from 'src/app/core/services/local-storage/local-storage.service';
+import { ToastService } from 'src/app/core/services/toast/toast.service';
 import { SettingsService } from 'src/app/core/services/settings/settings.service';
 
 import { PetType } from 'src/app/core/enums/pet-type/pet-type.enum';
@@ -38,11 +41,11 @@ export class InformationsComponent {
   readonly apiService = inject(ApiService);
   readonly authService = inject(AuthService);
   readonly formBuilder = inject(FormBuilder);
-  readonly translateService = inject(TranslateService);
   readonly localStorageService = inject(LocalStorageService);
+  readonly router = inject(Router);
+  readonly toastService = inject(ToastService);
+  readonly translateService = inject(TranslateService);
   readonly settingsService = inject(SettingsService);
-
-  private readonly APP_STORAGE_KEY: string = 'weight-pacha-data-pet-record';
 
   petForm: FormGroup;
   petRecord: PetRecord;
@@ -51,7 +54,9 @@ export class InformationsComponent {
 
   submitted: boolean = false;
 
-  constructor() {    
+  constructor() {
+    this.initForm(new PetRecord());
+
     this.loadSpecies();
     this.loadPetRecord();
     
@@ -72,15 +77,19 @@ export class InformationsComponent {
 
       const serializedPetRecord = this.petRecord.serializeForSave();
       this.apiService.put<ISerializedPetRecord>(`/pet-record/${ this.authService.selectedPetRecordValue.id }/update`, serializedPetRecord).pipe(
-        tap(async (serializedPetRecord: ISerializedPetRecord) => {
+        tap(async () => {
           this.submitted = false;
 
-          let petRecord = new PetRecord();
-          petRecord.deserilizeFromSave(serializedPetRecord);
-          this.petRecord = petRecord;
-
-          this.initForm(this.petRecord);
-        })
+          this.toastService.showToast('success', this.translateService.instant('commons.toast.success.save'));
+          this.router.navigate(['/home']);
+        }),
+        catchError(err => {
+          this.submitted = false;
+          
+          this.toastService.showToast('error', this.translateService.instant('commons.toast.error.save'));
+          console.error('Unable to update pet record', err);
+          return throwError(err);
+        }),
       ).subscribe();
     }
   }
@@ -93,7 +102,12 @@ export class InformationsComponent {
         this.petRecord = petRecord;
 
         this.initForm(this.petRecord);
-      })
+      }),
+      catchError(err => {
+        this.toastService.showToast('error', this.translateService.instant('commons.toast.error.load'));
+        console.error('Unable to load pet record', err);
+        return throwError(err);
+      }),
     ).subscribe();
   }
 

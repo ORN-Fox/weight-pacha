@@ -52,6 +52,15 @@
       "next": "Suivant",
       "previous": "Précédent"
     },
+    "toast": {
+      "error": {
+        "load": "Erreur de chargement",
+        "save": "Erreur de sauvegarde"
+      },
+      "success": {
+        "save": "Sauvegarde réussie"
+      }
+    },
     "yearOld": "ans",
     "youWontBeAbleToRevertThis": "Tu ne pourras pas revenir en arrière !"
   },

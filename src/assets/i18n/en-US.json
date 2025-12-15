@@ -52,6 +52,15 @@
       "next": "Next",
       "previous": "Previous"
     },
+    "toast": {
+      "error": {
+        "load": "Loading failed !",
+        "save": "Saving failed !"
+      },
+      "success": {
+        "save": "Saved successfully"
+      }
+    },
     "yearOld": "year old",
     "youWontBeAbleToRevertThis": "You won't be able to revert this!"
   },
