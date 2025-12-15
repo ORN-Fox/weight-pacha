@@ -32,9 +32,9 @@ export class AccountTabSecurityComponent {
 
   private initPasswordForm() {
     this.passwordForm = this.formBuilder.group({
-      oldPassword: [null, [Validators.required]],
-      newPassword: [null, [Validators.required]],
-      newPasswordConfirmation: [null, [Validators.required]],
+      oldPassword: [null, [Validators.required, Validators.min(8), Validators.max(128)]],
+      newPassword: [null, [Validators.required, Validators.min(8), Validators.max(128)]],
+      newPasswordConfirmation: [null, [Validators.required, Validators.min(8), Validators.max(128)]],
     });
   }
 
