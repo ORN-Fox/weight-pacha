@@ -1,0 +1,56 @@
+<p class="title has-text-black">Modifier mon mot de passe</p>
+
+<form [formGroup]="passwordForm" (ngSubmit)="savePassword()">
+    <div class="field">
+        <label class="label">{{ "commons.fields.oldPassword" | translate }}</label>
+        <div class="control has-icons-left">
+            <input type="type" id="oldPassword" class="input" formControlName="oldPassword"
+                placeholder="{{ 'commons.oldPassword' | translate}}"
+                [ngClass]="{'is-danger': passwordForm.get('oldPassword')?.errors?.['required'] && (submitted || passwordForm.get('oldPassword')?.touched)}">
+            <span class="icon is-small is-left">
+                <i class="far fa-key"></i>
+            </span>
+        </div>
+        @if (passwordForm.get('oldPassword')?.errors?.['required'] && (submitted || passwordForm.get('billingDate')?.touched)) {
+            <p class="help is-danger">{{ "commons.errors.oldPasswordRequired" | translate }}</p>
+        }
+    </div>
+
+    <div class="field">
+        <label class="label">{{ "commons.fields.newPassword" | translate }}</label>
+        <div class="control has-icons-left">
+            <input type="type" id="newPassword" class="input" formControlName="newPassword"
+                placeholder="{{ 'commons.newPassword' | translate}}"
+                [ngClass]="{'is-danger': passwordForm.get('newPassword')?.errors?.['required'] && (submitted || passwordForm.get('newPassword')?.touched)}">
+            <span class="icon is-small is-left">
+                <i class="far fa-key"></i>
+            </span>
+        </div>
+        @if (passwordForm.get('newPassword')?.errors?.['required'] && (submitted || passwordForm.get('newPassword')?.touched)) {
+            <p class="help is-danger">{{ "commons.errors.newPasswordRequired" | translate }}</p>
+        }
+    </div>
+
+    <div class="field">
+        <label class="label">{{ "commons.fields.newPasswordConfirmation" | translate }}</label>
+        <div class="control has-icons-left">
+            <input type="type" id="newPasswordConfirmation" class="input" formControlName="newPasswordConfirmation"
+                placeholder="{{ 'commons.newPasswordConfirmation' | translate}}"
+                [ngClass]="{'is-danger': passwordForm.get('newPasswordConfirmation')?.errors?.['required'] && (submitted || passwordForm.get('newPasswordConfirmation')?.touched)}">
+            <span class="icon is-small is-left">
+                <i class="far fa-key"></i>
+            </span>
+        </div>
+        @if (passwordForm.get('newPasswordConfirmation')?.errors?.['required'] && (submitted || passwordForm.get('newPasswordConfirmation')?.touched)) {
+            <p class="help is-danger">{{ "commons.errors.newPasswordConfirmationRequired" | translate }}</p>
+        }
+    </div>
+
+    <div class="field">
+        <div class="control">
+            <button type="submit" class="button is-primary">
+                <i class="far fa-bookmark mr-2"></i> {{ "commons.actions.save" | translate }}
+            </button>
+        </div>
+    </div>
+</form>

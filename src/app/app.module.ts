@@ -23,6 +23,7 @@ import { PaginationComponent } from './core/components/pagination/pagination.com
 
 // Pages
 import { AccountComponent } from './pages/account/account.component';
+import { AccountTabSecurityComponent } from './pages/account/tabs/account-tab-security/account-tab-security.component';
 import { CalendarComponent } from './pages/calendar/calendar.component';
 import { HomeComponent } from './pages/home/home.component';
 import { InformationsComponent } from './pages/informations/informations.component';
@@ -61,6 +62,7 @@ function initializeApp(translate: TranslateService, settings: SettingsService): 
 
         // Pages
         AccountComponent,
+        AccountTabSecurityComponent,
         CalendarComponent,
         HomeComponent,
         InformationsComponent,
