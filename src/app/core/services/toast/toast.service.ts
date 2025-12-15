@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import Swal, { SweetAlertResult } from 'sweetalert2';
+import Swal, { SweetAlertIcon, SweetAlertResult } from 'sweetalert2';
 
 @Injectable({
     providedIn: 'root'
@@ -29,6 +29,27 @@ export class ToastService {
             showCancelButton: true,
             cancelButtonText: this.translateService.instant('commons.actions.no'),
             confirmButtonText: this.translateService.instant('commons.actions.yes')
+        });
+    }
+
+    showToast(icon: SweetAlertIcon, title: string | HTMLElement | JQuery | undefined) {
+        this.getToastConfig().fire({
+            icon,
+            title
+        });
+    }
+
+    private getToastConfig(): typeof Swal {
+        return this.swalBulma.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
         });
     }
 
