@@ -83,12 +83,14 @@
         <div class="field-body">
             <div class="field">
                 <div class="control radios">
-                    <label class="radio custom-radio-with-icon radio-female" [ngClass]="{'active': petForm.get('sex')?.value == 0}">
-                        <input type="radio" formControlName="sex" value="0">
+                    <label class="radio custom-radio-with-icon radio-female"
+                        [ngClass]="{'active': petForm.get('sex')?.value == 1}">
+                        <input type="radio" formControlName="sex" value="1">
                         <i class="far fa-venus fa-2x"></i> {{ "pages.informations.female" | translate }}
                     </label>
-                    <label class="radio custom-radio-with-icon radio-male" [ngClass]="{'active': petForm.get('sex')?.value == 1}">
-                        <input type="radio" formControlName="sex" value="1">
+                    <label class="radio custom-radio-with-icon radio-male"
+                        [ngClass]="{'active': petForm.get('sex')?.value == 2}">
+                        <input type="radio" formControlName="sex" value="2">
                         <i class="far fa-mars fa-2x"></i> {{ "pages.informations.male" | translate }}
                     </label>
                 </div>
