@@ -33,4 +33,14 @@ export class LocalStorageService {
     }
   }
 
+  removeItem(key: string) {
+    try {
+      if (this.isItemExist(key)) {
+        localStorage.removeItem(key);
+      }
+    } catch (e) {
+      console.error('Unable to remove item in local storage', key);
+    }
+  }
+
 }
