@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { FormsModule } from '@angular/forms';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -34,7 +36,9 @@ describe('InvoicesComponent', () => {
         ToastService,
         SerializerService,
         SettingsService,
-        TranslateService
+        TranslateService,
+        provideHttpClient(),
+        provideHttpClientTesting()
       ],
     })
     .compileComponents();

@@ -1,7 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { FormsModule, ReactiveFormsModule, FormBuilder } from '@angular/forms';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { TranslateModule } from '@ngx-translate/core';
+
+import { AuthService } from 'src/app/core/services/auth/auth.service';
 
 import { NoVaccineRageAlertComponent } from 'src/app/core/components/no-vaccine-rage-alert/no-vaccine-rage-alert.component';
 import { PageTitleComponent } from 'src/app/core/components/page-title/page-title.component';
@@ -27,11 +31,36 @@ describe('InformationsComponent', () => {
         NgxPaginationModule,
         TranslateModule.forRoot({})
       ],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        {
+          provide: AuthService,
+          useValue: {
+            selectedPetRecordValue: { id: 1 }
+          }
+        }
+      ]
     })
     .compileComponents();
 
     fixture = TestBed.createComponent(InformationsComponent);
     component = fixture.componentInstance;
+    const fb = TestBed.inject(FormBuilder);
+    component.petForm = fb.group({
+      firstName: [''],
+      specie: [''],
+      breed: [''],
+      color: [''],
+      sex: [''],
+      birthDate: [''],
+      adoptedDate: [''],
+      sterilize: [''],
+      sterilizeDate: [''],
+      tagNumber: [''],
+      tagRageNumber: [''],
+      description: ['']
+    });
     fixture.detectChanges();
   });
 

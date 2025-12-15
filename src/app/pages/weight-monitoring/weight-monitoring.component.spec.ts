@@ -1,7 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
+import { AuthService } from 'src/app/core/services/auth/auth.service';
 import { DateService } from 'src/app/core/services/date/date.service';
 import { LocalStorageService } from 'src/app/core/services/local-storage/local-storage.service';
 import { ToastService } from 'src/app/core/services/toast/toast.service';
@@ -35,7 +38,15 @@ describe('WeightMonitoringComponent', () => {
         ToastService,
         SerializerService,
         SettingsService,
-        TranslateService
+        TranslateService,
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        {
+          provide: AuthService,
+          useValue: {
+            selectedPetRecordValue: { id: 1 }
+          }
+        }
       ]
     });
     fixture = TestBed.createComponent(WeightMonitoringComponent);
