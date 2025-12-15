@@ -1,9 +1,10 @@
 import { NgModule } from '@angular/core';
-import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { HttpClient, provideHttpClient, withInterceptors, withInterceptorsFromDi } from '@angular/common/http';
 import { makeEnvironmentProviders } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { MatDialogModule } from '@angular/material/dialog';
+import { ngxAuthInterceptor, provideNgxAuthProviders } from 'ngx-auth';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
@@ -97,7 +98,12 @@ function initializeApp(translate: TranslateService, settings: SettingsService): 
         AppRoutingModule
     ],
     providers: [
-        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClient(
+            withInterceptors([
+                ngxAuthInterceptor,
+            ]),
+            withInterceptorsFromDi()
+        ),
         makeEnvironmentProviders([
             {
                 provide: TranslateService,

@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { ngxProtectedGuard, ngxPublicGuard } from 'ngx-auth';
 
 import { HomeComponent } from './pages/home/home.component';
 import { AccountComponent } from './pages/account/account.component';
@@ -13,17 +14,17 @@ import { InvoicesComponent } from './pages/invoices/invoices.component';
 import { SettingsComponent } from './pages/settings/settings.component';
 
 const routes: Routes = [
-  { path: 'home', component: HomeComponent },
-  { path: 'account', component: AccountComponent },
-  { path: 'calendar', component: CalendarComponent },
-  { path: 'informations', component: InformationsComponent },
-  { path: 'notes', component: NotesComponent },
-  { path: 'vaccines', component: VaccinesComponent },
-  { path: 'weight', component: WeightMonitoringComponent },
-  { path: 'wormables', component: WormablesComponent },
-  { path: 'invoices', component: InvoicesComponent },
-  { path: 'settings', component: SettingsComponent },
-  { path: '**', redirectTo: '/home' }
+  { path: 'home', component: HomeComponent, canActivate: [ngxProtectedGuard] },
+  { path: 'account', component: AccountComponent, canActivate: [ngxProtectedGuard] },
+  { path: 'calendar', component: CalendarComponent, canActivate: [ngxProtectedGuard] },
+  { path: 'informations', component: InformationsComponent, canActivate: [ngxProtectedGuard] },
+  { path: 'notes', component: NotesComponent, canActivate: [ngxProtectedGuard] },
+  { path: 'vaccines', component: VaccinesComponent, canActivate: [ngxProtectedGuard] },
+  { path: 'weight', component: WeightMonitoringComponent, canActivate: [ngxProtectedGuard] },
+  { path: 'wormables', component: WormablesComponent, canActivate: [ngxProtectedGuard] },
+  { path: 'invoices', component: InvoicesComponent, canActivate: [ngxProtectedGuard] },
+  { path: 'settings', component: SettingsComponent, canActivate: [ngxProtectedGuard] },
+  { path: '**', redirectTo: '/login' }
 ];
 
 @NgModule({

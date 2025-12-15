@@ -39,6 +39,7 @@
     "flatpickr": "^4.6.13",
     "lodash": "^4.17.21",
     "moment": "^2.30.1",
+    "ngx-auth": "^7.1.0",
     "ngx-pagination": "^6.0.3",
     "rxjs": "~7.8.0",
     "sweetalert2": "^11.23.0",
