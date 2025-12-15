@@ -18,6 +18,12 @@ interface ISpecie {
   value: number;
 }
 
+enum FlatpickrInstances {
+  BirthDate = 'birthDateInput',
+  AdoptedDate = 'adoptedDateInput',
+  SterilizeDate = 'sterilizeDateInput'
+}
+
 @Component({
   selector: 'app-informations',
   templateUrl: './informations.component.html',
@@ -111,7 +117,7 @@ export class InformationsComponent {
     setTimeout(() => {
       // No onChange here because petForm change event interfer with date format rendering
 
-      flatpickr('#birthDateInput', {
+      flatpickr(`#${FlatpickrInstances.BirthDate}`, {
         enableTime: true,
         altInput: true,
         altFormat: this.translateService.instant('commons.dateFormats.flatpickr.dateTime'),
@@ -119,14 +125,14 @@ export class InformationsComponent {
         position: 'below'
       });
 
-      flatpickr('#adoptedDateInput', {
+      flatpickr(`#${FlatpickrInstances.AdoptedDate}`, {
         altInput: true,
         altFormat: this.translateService.instant('commons.dateFormats.flatpickr.date'),
         defaultDate: petRecord.adoptedDate?.toDate(),
         position: 'below'
       });
 
-      flatpickr('#sterilizeDateInput', {
+      flatpickr(`#${FlatpickrInstances.SterilizeDate}`, {
         altInput: true,
         altFormat: this.translateService.instant('commons.dateFormats.flatpickr.date'),
         defaultDate: petRecord.sterilizeDate?.toDate(),
@@ -136,10 +142,11 @@ export class InformationsComponent {
   }
 
   private updateFlatpickrLocales() {
-    ['birthDateInput', 'adoptedDateInput', 'sterilizeDateInput'].forEach(inputId => {
+    const flatpickrInstances = [FlatpickrInstances.BirthDate, FlatpickrInstances.AdoptedDate, FlatpickrInstances.SterilizeDate];
+    flatpickrInstances.forEach(inputId => {
       const input = document.querySelector(`#${inputId}`) as IInputElementWithFlatpickr;
       if (input?._flatpickr) {
-        const format = inputId === 'birthDateInput' ? 'commons.dateFormats.flatpickr.dateTime' : 'commons.dateFormats.flatpickr.date';
+        const format = inputId === FlatpickrInstances.BirthDate ? 'commons.dateFormats.flatpickr.dateTime' : 'commons.dateFormats.flatpickr.date';
         input._flatpickr.set('altFormat', this.translateService.instant(format));
         input._flatpickr.set('locale', this.settingsService.currentSettings.locale);
         input._flatpickr.redraw();
