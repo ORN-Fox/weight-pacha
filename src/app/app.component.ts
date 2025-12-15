@@ -1,13 +1,8 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
-import flatpickr from 'flatpickr';
-import { english } from "flatpickr/dist/l10n/default.js"
-import { French } from "flatpickr/dist/l10n/fr.js";
 
-import { SettingsService } from './core/services/settings/settings.service';
+import { Router } from '@angular/router';
 
-import { Settings } from './core/models/settings/settings.model';
-import { User } from './core/models/user/user.model';
+import { AuthService } from 'src/app/core/services/auth/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -17,41 +12,20 @@ import { User } from './core/models/user/user.model';
 })
 export class AppComponent implements OnInit {
 
-  readonly translateService = inject(TranslateService);
-  readonly appSettingsService = inject(SettingsService);
+  readonly authService = inject(AuthService);
+  readonly router = inject(Router);
 
-  settings: Settings;
-  user: User;
-
-  locales: string[] = ['en-US', 'fr-CA', 'fr-FR'];
-
-  isOpenSidebar: boolean = false;
-
-  constructor() {
-    this.user = new User();
-    this.user.username = 'Moose';
-  }
+  constructor() {}
 
   ngOnInit() {
-    this.appSettingsService.settings$.subscribe(settings => {
-      this.settings = this.appSettingsService.currentSettings;
-      
-      const locale = settings.locale || 'en-US';
-      this.translateService.use(locale);
-      
-      flatpickr.localize(locale === 'en-US' ? english : French);
-      
-      document.documentElement.setAttribute('data-theme', settings.theme || 'light');
-    });
+    this.redirectToHomeIfAlreadyAuthenticaded();
   }
 
-  updateLocale(locale: string) {
-    this.appSettingsService.updateSettings({ locale });
-    this.translateService.use(locale);
-  }
-
-  toggleSidebar() {
-    this.isOpenSidebar = !this.isOpenSidebar;
+  private redirectToHomeIfAlreadyAuthenticaded() {
+    if (this.authService.isAuthenticated()) {
+      this.authService.loadCurrentUser().subscribe();
+      this.router.navigate(['/home']);
+    }
   }
 
 }

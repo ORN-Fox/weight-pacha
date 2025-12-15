@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ngxProtectedGuard, ngxPublicGuard } from 'ngx-auth';
 
+import { LoginComponent } from './pages/login/login.component';
 import { HomeComponent } from './pages/home/home.component';
 import { AccountComponent } from './pages/account/account.component';
 import { CalendarComponent } from './pages/calendar/calendar.component';
@@ -14,6 +15,7 @@ import { InvoicesComponent } from './pages/invoices/invoices.component';
 import { SettingsComponent } from './pages/settings/settings.component';
 
 const routes: Routes = [
+  { path: 'login', component: LoginComponent, canActivate: [ngxPublicGuard] },
   { path: 'home', component: HomeComponent, canActivate: [ngxProtectedGuard] },
   { path: 'account', component: AccountComponent, canActivate: [ngxProtectedGuard] },
   { path: 'calendar', component: CalendarComponent, canActivate: [ngxProtectedGuard] },

@@ -14,6 +14,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 // Services
+import { AuthService } from './core/services/auth/auth.service';
 import { SettingsService } from './core/services/settings/settings.service';
 
 // Components
@@ -24,7 +25,9 @@ import { PageTitleComponent } from './core/components/page-title/page-title.comp
 import { PaginationComponent } from './core/components/pagination/pagination.component';
 
 // Pages
+import { LoginComponent } from './pages/login/login.component';
 import { AccountComponent } from './pages/account/account.component';
+import { AccountTabInformationsComponent } from './pages/account/tabs/account-tab-informations/account-tab-informations.component';
 import { AccountTabSecurityComponent } from './pages/account/tabs/account-tab-security/account-tab-security.component';
 import { CalendarComponent } from './pages/calendar/calendar.component';
 import { HomeComponent } from './pages/home/home.component';
@@ -64,7 +67,9 @@ function initializeApp(translate: TranslateService, settings: SettingsService): 
         PaginationComponent,
 
         // Pages
+        LoginComponent,
         AccountComponent,
+        AccountTabInformationsComponent,
         AccountTabSecurityComponent,
         CalendarComponent,
         HomeComponent,
@@ -106,6 +111,11 @@ function initializeApp(translate: TranslateService, settings: SettingsService): 
             ]),
             withInterceptorsFromDi()
         ),
+        provideNgxAuthProviders({
+            authService: AuthService,
+            protectedRedirectUri: '/home',
+            publicRedirectUri: '/login',
+        }),
         makeEnvironmentProviders([
             {
                 provide: TranslateService,

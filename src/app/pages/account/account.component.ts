@@ -1,5 +1,6 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnDestroy } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import { Subscription } from 'rxjs';
 
 import { AuthService } from 'src/app/core/services/auth/auth.service';
 
@@ -15,10 +16,12 @@ interface ITabConfig {
   styleUrl: './account.component.scss',
   standalone: false
 })
-export class AccountComponent {
+export class AccountComponent implements OnDestroy {
 
   readonly authService = inject(AuthService);
   readonly translateService = inject(TranslateService);
+
+  logoutSub: Subscription;
 
   tabs: ITabConfig[] = [
     { id: 'informations', name: 'Informations', icon: 'address-card' },
@@ -30,10 +33,18 @@ export class AccountComponent {
     this.selectTab(this.tabs[0]);
   }
 
+  ngOnDestroy() {
+    this.logoutSub.unsubscribe();
+  }
+
   selectTab(tab: ITabConfig) {
     if (tab && tab?.id != this.selectedTab?.id) {
       this.selectedTab = tab;
     }
+  }
+
+  protected logout() {
+    this.logoutSub = this.authService.logout().subscribe();
   }
 
 }

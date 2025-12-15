@@ -1,0 +1,58 @@
+<section class="hero is-fullheight">
+    <div class="hero-body">
+        <div class="container has-text-centered">
+            <div class="column is-4 is-offset-4">
+                <h3 class="title has-text-black">Login</h3>
+                <hr class="login-hr">
+                <p class="subtitle has-text-black">Facilitez vous le suivi de vos animaux</p>
+
+                <div class="box">
+                    <figure class="avatar mb-3">
+                        <img src="favicon.ico">
+                    </figure>
+
+                    <form [formGroup]="loginForm" (ngSubmit)="login()">
+                        <div class="field">
+                            <div class="control">
+                                <input type="email" formControlName="email" class="input" placeholder="Your Email" [ngClass]="{'is-danger': loginForm.get('email')?.errors?.['required'] && (submitted || loginForm.get('email')?.touched)}">
+                            </div>
+                            @if (loginForm.get('email')?.errors?.['required'] && (submitted || loginForm.get('email')?.touched)) {
+                                <p class="help is-danger has-text-left">{{ "pages.informations.errors.emailRequired" | translate }}</p>
+                            }
+                        </div>
+
+                        <div class="field">
+                            <div class="control">
+                                <input type="password" formControlName="password" class="input" placeholder="Your Password" [ngClass]="{'is-danger': loginForm.get('password')?.errors?.['required'] && (submitted || loginForm.get('password')?.touched)}">
+                            </div>
+                            @if (loginForm.get('password')?.errors?.['required'] && (submitted || loginForm.get('password')?.touched)) {
+                                <p class="help is-danger has-text-left">{{ "pages.informations.errors.passwordRequired" | translate }}</p>
+                            }
+                        </div>
+
+                        <div class="field">
+                            <label class="checkbox">
+                                <input type="checkbox" formControlName="rememberMe">
+                                Remember me
+                            </label>
+                        </div>
+
+                        <button type="submit" class="button is-block is-info is-fullwidth">
+                            Login <i class="fa fa-sign-in" aria-hidden="true"></i>
+                        </button>
+                    </form>
+                </div>
+
+                <p class="has-text-grey">
+                    <a href="#">Sign Up</a> &nbsp;·&nbsp;
+                    <a href="#">Forgot Password</a> &nbsp;·&nbsp;
+                    <a href="https://github.com/ORN-Fox/weight-pacha" target="_blank" rel="noopener" title="Github"
+                    aria-label="Github repository">
+                        Need Help? <i class="fas fa-external-link"></i>
+                    </a>
+                </p>
+                <p class="has-text-grey">v0.3.0-dev</p>
+            </div>
+        </div>
+    </div>
+</section>

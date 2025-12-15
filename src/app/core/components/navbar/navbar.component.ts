@@ -1,11 +1,18 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 import flatpickr from 'flatpickr';
 import { english } from "flatpickr/dist/l10n/default.js"
 import { French } from "flatpickr/dist/l10n/fr.js";
 
+import { AuthService } from '../../services/auth/auth.service';
 import { SettingsService } from '../../services/settings/settings.service';
+
+import { PetRecord } from '../../models/pet-record/pet-record.model';
 import { Settings } from '../../models/settings/settings.model';
+import { User } from '../../models/user/user.model';
+import { PetType } from '../../enums/pet-type/pet-type.enum';
 
 @Component({
   selector: 'app-navbar',
@@ -15,10 +22,21 @@ import { Settings } from '../../models/settings/settings.model';
 })
 export class NavbarComponent implements OnInit, OnDestroy {
 
+  readonly authService = inject(AuthService);
+  readonly router = inject(Router);
   readonly settingsService = inject(SettingsService);
   readonly translateService = inject(TranslateService);
 
   settings: Settings;
+
+  user: User;
+  private userSub: Subscription;
+
+  petRecords: PetRecord[];
+  private petRecordsSub: Subscription;
+
+  selectedPetRecord: PetRecord;
+  private selectedPetRecordSub: Subscription;
 
   locales: string[] = ['en-US', 'fr-CA', 'fr-FR'];
 
@@ -27,6 +45,18 @@ export class NavbarComponent implements OnInit, OnDestroy {
   constructor() { }
 
   ngOnInit() {
+    this.userSub = this.authService.user$.subscribe(user => {
+      this.user = user;
+    });
+
+    this.petRecordsSub = this.authService.petRecords$.subscribe(petRecords => {
+      this.petRecords = petRecords;
+    });
+
+    this.selectedPetRecordSub = this.authService.selectedPetRecord$.subscribe(selectedPetRecord => {
+      this.selectedPetRecord = selectedPetRecord;
+    });
+
     this.settingsService.settings$.subscribe(settings => {
       this.settings = this.settingsService.currentSettings;
 
@@ -39,6 +69,12 @@ export class NavbarComponent implements OnInit, OnDestroy {
     });
   }
 
+  ngOnDestroy() {
+    this.userSub?.unsubscribe();
+    this.petRecordsSub?.unsubscribe();
+    this.selectedPetRecordSub?.unsubscribe();
+  }
+
   updateLocale(locale: string) {
     this.settingsService.updateSettings({ locale });
     this.translateService.use(locale);
@@ -48,5 +84,25 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.isOpenSidebar = !this.isOpenSidebar;
   }
 
+  getPetRecordIcon(specie: number): string {
+    switch (specie) {
+      case PetType.Dog:
+        return 'dog';
+      case PetType.Cat:
+        return 'cat';
+      case PetType.Rabbit:
+        return 'rabbit';
+      case PetType.Others:
+      default:
+        return 'others';
+    }
+  }
+
+  selectPetRecord(petRecord: PetRecord) {
+    if (this.authService.selectedPetRecordValue.id != petRecord.id) {
+      this.authService.selectedPetRecordValue = petRecord;
+      this.router.navigate(['/home']);
+    }
+  }
 
 }
