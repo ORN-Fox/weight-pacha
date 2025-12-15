@@ -36,7 +36,7 @@ export abstract class SerializeModel {
             this.createdAt = DateService.getMomentFromStringDate(serializeVaccine.createdAt) as moment.Moment;
             this.updatedAt = DateService.getMomentFromStringDate(serializeVaccine.updatedAt);
         } catch (exception) {
-            console.error('Exception on deserialize vaccine model', exception);
+            console.error('Exception on deserialize model', exception);
         }
     }
 
