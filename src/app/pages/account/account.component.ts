@@ -34,7 +34,7 @@ export class AccountComponent implements OnDestroy {
   }
 
   ngOnDestroy() {
-    this.logoutSub.unsubscribe();
+    this.logoutSub?.unsubscribe();
   }
 
   selectTab(tab: ITabConfig) {

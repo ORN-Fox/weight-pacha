@@ -25,7 +25,7 @@ export class LoginComponent implements OnDestroy {
   }
 
   ngOnDestroy() {
-    this.loginSub.unsubscribe();
+    this.loginSub?.unsubscribe();
   }
 
   protected login() {
