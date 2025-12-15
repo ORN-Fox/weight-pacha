@@ -1,9 +1,12 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
+import { tap } from 'rxjs/operators';
 import flatpickr from 'flatpickr';
 import moment from 'moment';
 
+import { ApiService } from 'src/app/core/services/api/api.service';
+import { AuthService } from 'src/app/core/services/auth/auth.service';
 import { LocalStorageService } from 'src/app/core/services/local-storage/local-storage.service';
 import { SettingsService } from 'src/app/core/services/settings/settings.service';
 
@@ -11,7 +14,7 @@ import { PetType } from 'src/app/core/enums/pet-type/pet-type.enum';
 
 import { IInputElementWithFlatpickr } from 'src/app/core/interfaces/IInputElementWithFlatpickr';
 
-import { PetRecord } from 'src/app/core/models/pet-record/pet-record.model';
+import { ISerializedPetRecord, PetRecord } from 'src/app/core/models/pet-record/pet-record.model';
 
 interface ISpecie {
   key: string;
@@ -32,6 +35,8 @@ enum FlatpickrInstances {
 })
 export class InformationsComponent {
 
+  readonly apiService = inject(ApiService);
+  readonly authService = inject(AuthService);
   readonly formBuilder = inject(FormBuilder);
   readonly translateService = inject(TranslateService);
   readonly localStorageService = inject(LocalStorageService);
@@ -64,25 +69,32 @@ export class InformationsComponent {
       this.petRecord.adoptedDate = this.petRecord.adoptedDate ? moment(this.petRecord.adoptedDate) : null,
       this.petRecord.sterilizeDate = this.petRecord.sterilizeDate ? moment(this.petRecord.sterilizeDate) : null,
       this.petRecord.updatedAt = moment();
-      const serializedPetRecord = this.petRecord.serializeForSave();
-      this.localStorageService.setItem(this.APP_STORAGE_KEY, serializedPetRecord);
 
-      this.submitted = false;
+      const serializedPetRecord = this.petRecord.serializeForSave();
+      this.apiService.put<ISerializedPetRecord>(`/pet-record/${ this.authService.selectedPetRecordValue.id }/update`, serializedPetRecord).pipe(
+        tap(async (serializedPetRecord: ISerializedPetRecord) => {
+          this.submitted = false;
+
+          let petRecord = new PetRecord();
+          petRecord.deserilizeFromSave(serializedPetRecord);
+          this.petRecord = petRecord;
+
+          this.initForm(this.petRecord);
+        })
+      ).subscribe();
     }
   }
 
   private loadPetRecord() {
-    this.petRecord = new PetRecord();
+    this.apiService.get<ISerializedPetRecord>(`/pet-record/${ this.authService.selectedPetRecordValue.id }`).pipe(
+      tap(async (serializedPetRecord: ISerializedPetRecord) => {
+        let petRecord = new PetRecord();
+        petRecord.deserilizeFromSave(serializedPetRecord);
+        this.petRecord = petRecord;
 
-    if (this.localStorageService.isItemExist(this.APP_STORAGE_KEY)) {
-      let petRecordJSON = this.localStorageService.getItem(this.APP_STORAGE_KEY);
-      this.petRecord.deserilizeFromSave(petRecordJSON);
-    } else {
-      const serializedPetRecord = this.petRecord.serializeForSave();
-      this.localStorageService.setItem(this.APP_STORAGE_KEY, { petRecord: serializedPetRecord });
-    }
-
-    this.initForm(this.petRecord);
+        this.initForm(this.petRecord);
+      })
+    ).subscribe();
   }
 
   private loadSpecies() {
