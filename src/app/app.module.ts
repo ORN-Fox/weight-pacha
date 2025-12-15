@@ -17,6 +17,7 @@ import { AppComponent } from './app.component';
 import { SettingsService } from './core/services/settings/settings.service';
 
 // Components
+import { NavbarComponent } from './core/components/navbar/navbar.component';
 import { NoVaccineRageAlertComponent } from './core/components/no-vaccine-rage-alert/no-vaccine-rage-alert.component';
 import { MeasureComponent } from './core/components/measure/measure.component';
 import { PageTitleComponent } from './core/components/page-title/page-title.component';
@@ -56,6 +57,7 @@ function initializeApp(translate: TranslateService, settings: SettingsService): 
         AppComponent,
 
         // Components
+        NavbarComponent,
         NoVaccineRageAlertComponent,
         MeasureComponent,
         PageTitleComponent,
