@@ -1,0 +1,8 @@
+.tabs-content li {
+    display: none;
+    list-style: none;
+
+    &.is-active {
+        display: block;
+    }
+}

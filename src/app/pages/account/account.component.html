@@ -1,5 +1,27 @@
 <app-page-title title="account"></app-page-title>
 
-<div class="box mb-5">
-    
+<div class="mb-5">
+    <div class="tabs-wrapper is-boxed mb-5">
+        <div class="tabs">
+            <ul>
+                @for (tab of tabs; track tab.id) {
+                    <li [ngClass]="{'is-active': selectedTab.id == tab.id}" (click)="selectTab(tab)">
+                        <a>
+                            <span class="icon is-small"><i class="fas fa-{{ tab.icon }}" aria-hidden="true"></i></span>
+                            <span>{{ tab.name | translate }}</span>
+                        </a>
+                    </li>
+                }
+            </ul>
+        </div>
+
+        <div class="box tabs-content">
+            <ul>
+                <li [ngClass]="{'is-active': selectedTab.id == tabs[0].id}">
+                </li>
+                <li [ngClass]="{'is-active': selectedTab.id == tabs[1].id}">
+                </li>
+            </ul>
+        </div>    
+    </div>
 </div>
