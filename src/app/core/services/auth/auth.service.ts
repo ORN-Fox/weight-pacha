@@ -2,11 +2,13 @@ import { HttpErrorResponse, HttpRequest, HttpStatusCode } from '@angular/common/
 import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgxAuthService } from 'ngx-auth';
+import { TranslateService } from '@ngx-translate/core';
 import { BehaviorSubject, of, throwError } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { jwtDecode } from "jwt-decode";
 
 import { ApiService } from '../api/api.service';
+import { ToastService } from '../toast/toast.service';
 import { TokenStorageService } from '../token-storage/token-storage.service';
 
 import { PetRecord } from '../../models/pet-record/pet-record.model';
@@ -31,7 +33,9 @@ export class AuthService implements NgxAuthService {
 
     private router = inject(Router);
     private apiService = inject(ApiService);
+    private toastService = inject(ToastService);
     private tokenStorageService = inject(TokenStorageService);
+    private translateService = inject(TranslateService);
 
     private userSubject = new BehaviorSubject<any>(null);
     public user$ = this.userSubject.asObservable();
@@ -89,7 +93,6 @@ export class AuthService implements NgxAuthService {
 
                 let user = new User();
                 user.deserilizeFromSave(accessData.user);
-                console.log('user', user);
                 this.saveUserAndPetRecordsData(user)
 
                 await this.router.navigateByUrl('/home');
@@ -144,6 +147,8 @@ export class AuthService implements NgxAuthService {
                 this.saveUserAndPetRecordsData(user);
             }),
             catchError(() => {
+                this.toastService.showToast('error', this.translateService.instant('commons.toast.error.load'));
+
                 this.clearUserandPetRecordsData();
                 return of(null);
             })
