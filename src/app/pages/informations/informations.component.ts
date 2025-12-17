@@ -89,13 +89,13 @@ export class InformationsComponent implements OnDestroy {
         tap(async () => {
           this.submitted = false;
 
-          this.toastService.showToast('success', this.translateService.instant('commons.toast.success.save'));
+          this.toastService.showToast('success', this.translateService.instant('commons.toast.success.update'));
           this.router.navigate(['/home']);
         }),
         catchError(err => {
           this.submitted = false;
           
-          this.toastService.showToast('error', this.translateService.instant('commons.toast.error.save'));
+          this.toastService.showToast('error', this.translateService.instant('commons.toast.error.update'));
           console.error('Unable to update pet record', err);
           return throwError(err);
         }),
