@@ -1,9 +1,9 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { catchError, tap } from 'rxjs/operators';
-import { throwError } from 'rxjs';
+import { Subscription, throwError } from 'rxjs';
 import flatpickr from 'flatpickr';
 import moment from 'moment';
 
@@ -36,7 +36,7 @@ enum FlatpickrInstances {
   styleUrl: './informations.component.scss',
   standalone: false
 })
-export class InformationsComponent {
+export class InformationsComponent implements OnDestroy {
 
   readonly apiService = inject(ApiService);
   readonly authService = inject(AuthService);
@@ -52,6 +52,10 @@ export class InformationsComponent {
 
   species: ISpecie[];
 
+  loadPetRecordSub: Subscription;
+  createPetRecordSub: Subscription; // TODO handle pet record creation
+  updatePetRecordSub: Subscription;
+
   submitted: boolean = false;
 
   constructor() {
@@ -65,6 +69,11 @@ export class InformationsComponent {
     });
   }
 
+  ngOnDestroy() {
+    this.loadPetRecordSub?.unsubscribe();
+    this.updatePetRecordSub?.unsubscribe();
+  }
+
   saveInformations() {
     this.submitted = true;
 
@@ -76,7 +85,7 @@ export class InformationsComponent {
       this.petRecord.updatedAt = moment();
 
       const serializedPetRecord = this.petRecord.serializeForSave();
-      this.apiService.put<ISerializedPetRecord>(`/pet-record/${ this.authService.selectedPetRecordValue.id }/update`, serializedPetRecord).pipe(
+      this.updatePetRecordSub = this.apiService.put<ISerializedPetRecord>(`/pet-record/${ this.authService.selectedPetRecordValue.id }/update`, serializedPetRecord).pipe(
         tap(async () => {
           this.submitted = false;
 
@@ -95,7 +104,7 @@ export class InformationsComponent {
   }
 
   private loadPetRecord() {
-    this.apiService.get<ISerializedPetRecord>(`/pet-record/${ this.authService.selectedPetRecordValue.id }`).pipe(
+    this.loadPetRecordSub = this.apiService.get<ISerializedPetRecord>(`/pet-record/${ this.authService.selectedPetRecordValue.id }`).pipe(
       tap(async (serializedPetRecord: ISerializedPetRecord) => {
         let petRecord = new PetRecord();
         petRecord.deserilizeFromSave(serializedPetRecord);
