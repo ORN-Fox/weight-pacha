@@ -54,11 +54,14 @@
     },
     "toast": {
       "error": {
+        "create": "Creation failed !",
+        "delete": "Deletion failed !",
         "load": "Loading failed !",
-        "save": "Saving failed !"
+        "update": "Update failed !"
       },
       "success": {
-        "save": "Saved successfully"
+        "create": "Created successfully",
+        "update": "Updated successfully"
       }
     },
     "yearOld": "year old",

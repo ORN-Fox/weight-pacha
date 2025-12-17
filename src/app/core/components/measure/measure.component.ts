@@ -175,7 +175,7 @@ export class MeasureComponent implements OnChanges {
   }
 
   private updateFlatpickrLocale() {
-    const dateInput = document.querySelector(`#measureDateInput_${this.measure.id}`) as IInputElementWithFlatpickr;
+    const dateInput = document.querySelector(`#measureDateInput_${this.measure?.id}`) as IInputElementWithFlatpickr;
     if (dateInput?._flatpickr) {
       dateInput._flatpickr.set('altFormat', this.translateService.instant('commons.dateFormats.flatpickr.dateTime'));
       dateInput._flatpickr.set('locale', this.settingsService.currentSettings.locale);

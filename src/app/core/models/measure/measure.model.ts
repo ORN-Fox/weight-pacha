@@ -7,24 +7,28 @@ import { ISerializeModel, SerializeModel } from '../serialize.model';
 export interface ISerializedMeasure extends ISerializeModel {
     date: string,
     weight: number;
+    petRecordId: string;
 }
 
 export class Measure extends SerializeModel {
 
     date: moment.Moment;
     weight: number;
+    petRecordId: string;
 
-    constructor(date: moment.Moment = moment(), weigth: number = 1) {
+    constructor(date: moment.Moment = moment(), weigth: number = 1, petRecordId: string = '') {
         super();
 
         this.date = date;
         this.weight = weigth;
+        this.petRecordId = petRecordId;
     }
 
     override serializeForSave(): ISerializedMeasure {
         let serializeFields = {
             date: DateService.getStringDateFromMoment(this.date) as string,
-            weight: this.weight
+            weight: this.weight,
+            petRecordId: this.petRecordId 
         };
 
         let serializeMeasure: ISerializedMeasure = Object.assign(serializeFields, super.serializeForSave());
@@ -38,6 +42,7 @@ export class Measure extends SerializeModel {
             
             this.date = DateService.getMomentFromStringDate(serializeMeasure.date) as moment.Moment;
             this.weight = serializeMeasure.weight;
+            this.petRecordId = serializeMeasure.petRecordId;
         } catch (exception) {
             console.error('Exception on deserialize measure model', exception);
         }

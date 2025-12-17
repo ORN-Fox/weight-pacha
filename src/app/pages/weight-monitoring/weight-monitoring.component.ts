@@ -1,14 +1,18 @@
-import { Component, inject } from '@angular/core';
+import { AfterViewInit, Component, inject, OnDestroy } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
+import { catchError, tap } from 'rxjs/operators';
+import { Subscription, throwError } from 'rxjs';
+import { cloneDeep } from 'lodash';
 import Chart from 'chart.js/auto';
 import annotationPlugin from 'chartjs-plugin-annotation';
 import 'chartjs-adapter-moment';
 import flatpickr from 'flatpickr';
 import { Instance } from 'flatpickr/dist/types/instance';
 import moment from 'moment';
-import { cloneDeep } from 'lodash';
 
+import { ApiService } from 'src/app/core/services/api/api.service';
+import { AuthService } from 'src/app/core/services/auth/auth.service';
 import { DateService } from 'src/app/core/services/date/date.service';
 import { LocalStorageService } from 'src/app/core/services/local-storage/local-storage.service';
 import { ToastService } from 'src/app/core/services/toast/toast.service';
@@ -33,8 +37,10 @@ interface IWeightChartDataSetPoint extends IChartDataSetPoint {
   styleUrls: ['./weight-monitoring.component.scss'],
   standalone: false
 })
-export class WeightMonitoringComponent {
+export class WeightMonitoringComponent implements AfterViewInit, OnDestroy {
 
+  readonly apiService = inject(ApiService);
+  readonly authService = inject(AuthService);
   readonly formBuilder = inject(FormBuilder);
   readonly localStorageService = inject(LocalStorageService);
   readonly toastService = inject(ToastService);
@@ -44,8 +50,12 @@ export class WeightMonitoringComponent {
 
   private readonly APP_STORAGE_KEY: string = 'weight-pacha-data-measures';
 
+  loadMeasuresSub: Subscription;
+  addMeasureSub: Subscription;
+  updateMeasureSub: Subscription;
+  deleteMeasureSub: Subscription;
+
   chart: any;
-  data: any;
 
   sourceMeasures: Measure[] = [];
   measures: Measure[] = [];
@@ -73,6 +83,8 @@ export class WeightMonitoringComponent {
   }
 
   ngAfterViewInit() {
+    this.initChart();
+    
     this.rangeDateInputInstance = flatpickr('#rangeDatesInput', {
       mode: "range",
       altInput: true,
@@ -91,8 +103,13 @@ export class WeightMonitoringComponent {
       altFormat: this.translateService.instant('commons.dateFormats.flatpickr.date'),
       position: 'below'
     });
+  }
 
-    this.initChart();
+  ngOnDestroy() {
+    this.loadMeasuresSub?.unsubscribe();
+    this.addMeasureSub?.unsubscribe();
+    this.updateMeasureSub?.unsubscribe();
+    this.deleteMeasureSub?.unsubscribe();
   }
 
   onChangeRangeDates(selectedDates: Date[]) {
@@ -181,46 +198,80 @@ export class WeightMonitoringComponent {
       let measure = new Measure();
       Object.assign(measure, this.measureForm.value);
       measure.date = moment(measure.date);
+      measure.petRecordId = this.authService.selectedPetRecordValue.id;
 
-      this.sourceMeasures.push(measure);
-      this.sourceMeasures = this.sortMeasuresByDate(this.sourceMeasures);
-      this.measures = this.filterMeasuresInRangeDates();
-      this.saveMeasures();
+      const serializedMeasure = measure.serializeForSave();
+      this.addMeasureSub = this.apiService.post<ISerializedMeasure>(`/pet-record/${this.authService.selectedPetRecordValue.id}/measure`, serializedMeasure).pipe(
+        tap(async (serializedMeasure: ISerializedMeasure) => {
+          this.submitted = false;
+          this.initForm();
 
-      this.submitted = false;
+          measure.deserilizeFromSave(serializedMeasure);
+          this.sourceMeasures.push(measure);
+          this.sourceMeasures = this.sortMeasuresByDate(this.sourceMeasures);
+          this.measures = this.filterMeasuresInRangeDates();
 
-      let dataPoint: IWeightChartDataSetPoint = {
-        x: measure.date,
-        y: measure.weight
-      };
+          let dataPoint: IWeightChartDataSetPoint = {
+            x: measure.date,
+            y: measure.weight
+          };
 
-      this.chart.data.datasets[0].data.push(dataPoint);
-      this.updateRangeDates();
+          this.chart.data.datasets[0].data.push(dataPoint);
+          this.updateRangeDates();
+        }),
+        catchError(err => {
+          this.submitted = false;
+          this.initForm();
+
+          this.toastService.showToast('error', this.translateService.instant('commons.toast.error.create'));
+          console.error('Unable to create measure', err);
+          return throwError(err);
+        }),
+      ).subscribe();
     }
   }
 
   onUpdateMeasure(event: { measure: Measure }) {
-    const index = this.sourceMeasures.findIndex(measure => measure.id === event.measure.id);
-    if (index !== -1) {
-      this.sourceMeasures[index] = event.measure;
-      this.sourceMeasures = this.sortMeasuresByDate(this.sourceMeasures);
-    }
+    const serializedMeasure = event.measure.serializeForSave();
+    this.updateMeasureSub = this.apiService.put<ISerializedMeasure>(`/pet-record/${this.authService.selectedPetRecordValue.id}/measure/${ serializedMeasure.id }`, serializedMeasure).pipe(
+      tap(async (serializedMeasure: ISerializedMeasure) => {
+        let updatedMeasure = new Measure();
+        updatedMeasure.deserilizeFromSave(serializedMeasure);
 
-    this.measures = this.filterMeasuresInRangeDates();
-    this.saveMeasures();
+        const index = this.sourceMeasures.findIndex(measure => measure.id === updatedMeasure.id);
+        if (index !== -1) {
+          this.sourceMeasures[index] = updatedMeasure;
+          this.sourceMeasures = this.sortMeasuresByDate(this.sourceMeasures);
+        }
 
-    this.updateRangeDates();
+        this.measures = this.filterMeasuresInRangeDates();
+        this.updateRangeDates();
+      }),
+      catchError(err => {
+        this.toastService.showToast('error', this.translateService.instant('commons.toast.error.update'));
+        console.error('Unable to update measure', err);
+        return throwError(err);
+      }),
+    ).subscribe();
   }
 
   onDeleteMeasure(event: { measure: Measure }) {
     this.toastService.showConfirm().then((result: { isConfirmed: boolean; }) => {
       if (result.isConfirmed) {
-        this.sourceMeasures = this.sourceMeasures.filter(measure => !measure.date.isSame(event.measure.date, 'day'));
-        this.measures = this.filterMeasuresInRangeDates();
-        this.saveMeasures();
+        this.deleteMeasureSub = this.apiService.delete(`/pet-record/${this.authService.selectedPetRecordValue.id}/measure/${ event.measure.id }`).pipe(
+          tap(async () => {
+            this.sourceMeasures = this.sourceMeasures.filter(measure => !measure.date.isSame(event.measure.date, 'day'));
+            this.measures = this.filterMeasuresInRangeDates();
 
-        this.chart.data.datasets[0].data = this.chart.data.datasets[0].data.filter((dataPoint: IWeightChartDataSetPoint) => !moment(dataPoint.x).isSame(event.measure.date, 'day'));
-        this.updateRangeDates();
+            this.chart.data.datasets[0].data = this.chart.data.datasets[0].data.filter((dataPoint: IWeightChartDataSetPoint) => !moment(dataPoint.x).isSame(event.measure.date, 'day'));
+            this.updateRangeDates();
+          }),
+          catchError(err => {
+            this.toastService.showToast('error', this.translateService.instant('commons.toast.error.delete'));
+            console.error('Unable to delete measure', err);
+            return throwError(err);
+          }),
+        ).subscribe();
       }
     });
   }
@@ -232,7 +283,6 @@ export class WeightMonitoringComponent {
     let weightUnit = this.measureUnit;
     this.settingsService.updateSettings({ weightUnit });
 
-    this.saveMeasures();
     this.updateChart();
   }
 
@@ -252,7 +302,6 @@ export class WeightMonitoringComponent {
     const healthWeightLabel = this.chart.options.plugins.annotation.annotations.label;
     healthWeightLabel.content = this.computeWeightHealthLabel();
 
-    this.saveMeasures();
     this.updateChart();
   }
 
@@ -268,24 +317,30 @@ export class WeightMonitoringComponent {
   }
 
   private loadMeasures() {
-    if (this.localStorageService.isItemExist(this.APP_STORAGE_KEY)) {
-      let measures: Measure[] = [];
-      const measuresJSON = this.localStorageService.getItem(this.APP_STORAGE_KEY);
+    let measures: Measure[] = [];
 
-      this.healthWeight = measuresJSON.healthWeight;
+    this.loadMeasuresSub = this.apiService.get<ISerializedMeasure[]>(`/pet-record/${ this.authService.selectedPetRecordValue.id }/measures`).pipe(
+      tap(async (measuresJSON: ISerializedMeasure[]) => {
+        measuresJSON.forEach((measureJSON) => {
+          let measure = new Measure();
+          measure.deserilizeFromSave(measureJSON);
+          measures.push(measure);
+        });
 
-      measuresJSON.measures.forEach((measureJSON: ISerializedMeasure) => {
-        let measure = new Measure();
-        measure.deserilizeFromSave(measureJSON);
-        measures.push(measure);
-      });
-      this.sourceMeasures = measures;
-      this.measures = cloneDeep(this.sourceMeasures);
-    } else {
-      this.localStorageService.setItem(this.APP_STORAGE_KEY, { healthWeight: this.healthWeight, measureUnit: this.measureUnit, measures: this.sourceMeasures });
-    }
+        this.sourceMeasures = measures;
+        this.measures = cloneDeep(this.sourceMeasures);
 
-    this.initChartData();
+        // TODO how store data ?
+        this.healthWeight = 5; // measuresJSON.healthWeight;
+
+        this.updateChart();
+      }),
+      catchError(err => {        
+        this.toastService.showToast('error', this.translateService.instant('commons.toast.error.load'));
+        console.error('Unable to load measures', err);
+        return throwError(err);
+      }),
+    ).subscribe();
   }
 
   private filterMeasuresInRangeDates(): Measure[] {
@@ -295,11 +350,6 @@ export class WeightMonitoringComponent {
   
   private sortMeasuresByDate(measures: Measure[]) {
     return measures.sort((firstMeasure, secondMeasure) => firstMeasure.date.isAfter(secondMeasure.date) ? 1 : -1);
-  }
-
-  private saveMeasures() {
-    const serializedMeasures = this.serializerService.serializeList(this.sourceMeasures);
-    this.localStorageService.setItem(this.APP_STORAGE_KEY, { healthWeight: this.healthWeight, measureUnit: this.measureUnit, measures: serializedMeasures });
   }
 
   private updateFlatpickrLocales() {
@@ -326,8 +376,8 @@ export class WeightMonitoringComponent {
     );
   }
 
-  private initChartData() {
-    this.data = {
+  private getChartData(): any {
+    return {
       datasets: [
         {
           label: this.translateService.instant('pages.weight.weight'),
@@ -378,10 +428,12 @@ export class WeightMonitoringComponent {
   };
 
   private getSuggestedMin(): number {
+    let chartData = this.getChartData();
     let min = 999999;
-    if (this.data) {
+
+    if (chartData) {
       let suggestedMinGap = .25;
-      this.data.datasets[0].data.forEach((dataPoint: IWeightChartDataSetPoint) => {
+      chartData.datasets[0].data.forEach((dataPoint: IWeightChartDataSetPoint) => {
         if (dataPoint.y < min) {
           min = dataPoint.y;
         }
@@ -392,10 +444,12 @@ export class WeightMonitoringComponent {
   }
 
   private getSuggestedMax(): number {
+    let chartData = this.getChartData();
     let max = 0;
-    if (this.data) {
+
+    if (chartData) {
       let suggestedMaxGap = .25;
-      this.data.datasets[0].data.forEach((dataPoint: IWeightChartDataSetPoint) => {
+      chartData.datasets[0].data.forEach((dataPoint: IWeightChartDataSetPoint) => {
         if (dataPoint.y > max) {
           max = dataPoint.y;
         }
@@ -408,7 +462,7 @@ export class WeightMonitoringComponent {
   private getChartConfig(): any {
     const config = {
       type: 'line',
-      data: this.data,
+      data: this.getChartData(),
       locale: this.translateService.currentLang,
       options: {
         scales: {

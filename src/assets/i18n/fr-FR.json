@@ -54,11 +54,14 @@
     },
     "toast": {
       "error": {
-        "load": "Erreur de chargement",
-        "save": "Erreur de sauvegarde"
+        "create": "Erreur de création !",
+        "delete": "Erreur de suppression !",
+        "load": "Erreur de chargement !",
+        "update": "Erreur de modification !"
       },
       "success": {
-        "save": "Sauvegarde réussie"
+        "create": "Création réussie",
+        "update": "Modification réussie"
       }
     },
     "yearOld": "ans",
