@@ -4,6 +4,8 @@ import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 
+import { AuthService } from 'src/app/core/services/auth/auth.service';
+
 import { PageTitleComponent } from 'src/app/core/components/page-title/page-title.component';
 
 import { NotesComponent } from './notes.component';
@@ -25,7 +27,13 @@ describe('NotesComponent', () => {
       ],
       providers: [
         provideHttpClient(),
-        provideHttpClientTesting()
+        provideHttpClientTesting(),
+        {
+          provide: AuthService,
+          useValue: {
+            selectedPetRecordValue: { id: 1 }
+          }
+        }
       ]
     })
     .compileComponents();
