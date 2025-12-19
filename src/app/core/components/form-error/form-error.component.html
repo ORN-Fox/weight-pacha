@@ -1,0 +1,3 @@
+@if (form.get(fieldName)?.errors?.[errorRuleName] && (isSubmitted || form.get(fieldName)?.touched)) {
+    <p class="help {{customClass}}">{{ errorMessage | translate }}</p>
+}

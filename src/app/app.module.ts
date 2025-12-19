@@ -19,6 +19,7 @@ import { SettingsService } from './core/services/settings/settings.service';
 
 // Components
 import { ActionButtonComponent } from './core/components/action-button/action-button.component';
+import { FormErrorComponent } from './core/components/form-error/form-error.component';
 import { NavbarComponent } from './core/components/navbar/navbar.component';
 import { NoVaccineRageAlertComponent } from './core/components/no-vaccine-rage-alert/no-vaccine-rage-alert.component';
 import { MeasureComponent } from './core/components/measure/measure.component';
@@ -62,6 +63,7 @@ function initializeApp(translate: TranslateService, settings: SettingsService): 
 
         // Components
         ActionButtonComponent,
+        FormErrorComponent,
         NavbarComponent,
         NoVaccineRageAlertComponent,
         MeasureComponent,
