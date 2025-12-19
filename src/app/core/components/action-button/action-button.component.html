@@ -1,0 +1,6 @@
+<button [type]="type" class="button {{ customClass }}" [ngClass]="{'is-loading': isLoading, 'is-disabled': isDisabled}">
+    @if (icon) {
+        <i [class]="icon" aria-hidden="true"></i>
+    }
+    {{ title | translate }}
+</button>
