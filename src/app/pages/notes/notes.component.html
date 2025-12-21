@@ -21,8 +21,8 @@
                             <i class="far fa-book" aria-hidden="true"></i>
                         </span>
                         <div>
-                            @if (note.title) {
-                                <p>{{ note.title }}</p>
+                            @if (note.name) {
+                                <p>{{ note.name }}</p>
                                 <p class="subtitle has-text-grey-light">{{ note.updatedAt ? note.updatedAt.format(dateTimeFormat) : note.createdAt.format(dateTimeFormat) }}</p>
                             } @else {
                                 <p class="has-text-grey-light">{{ "commons.fields.title" | translate }}</p>
@@ -50,11 +50,11 @@
                 <div class="field">
                     <div class="label-with-length-counter">
                         <label class="label">{{ "commons.fields.title" | translate }}</label>
-                        <p>{{ noteForm.get('title')?.value?.length ?? 0 }} / 100</p>
+                        <p>{{ noteForm.get('name')?.value?.length ?? 0 }} / 100</p>
                     </div>
                     <div class="control is-expanded has-icons-left">
-                        <input class="input" type="text" formControlName="title" placeholder="{{ 'commons.fields.title' | translate }}" maxlength="100"
-                            [ngClass]="{'is-danger': noteForm.get('title')?.errors?.['required'] && (submitted || noteForm.get('title')?.touched)}">
+                        <input class="input" type="text" formControlName="name" placeholder="{{ 'commons.fields.title' | translate }}" maxlength="100"
+                            [ngClass]="{'is-danger': noteForm.get('name')?.errors?.['required'] && (isSubmitted || noteForm.get('name')?.touched)}">
                         <span class="icon is-small is-left">
                             <i class="far fa-book"></i>
                         </span>

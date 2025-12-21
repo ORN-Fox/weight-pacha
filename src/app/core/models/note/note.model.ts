@@ -4,14 +4,14 @@ import { v4 as uuidv4 } from 'uuid';
 import { ISerializeModel, SerializeModel } from '../serialize.model';
 
 export interface ISerializedNote extends ISerializeModel {
-    title: string;
+    name: string;
     description: string;
     petRecordId: string;
 }
 
 export class Note extends SerializeModel {
 
-    title: string;
+    name: string;
     description: string;
     petRecordId: string;
 
@@ -21,7 +21,7 @@ export class Note extends SerializeModel {
 
     override serializeForSave(): ISerializedNote {
         let serializeFields = {
-            title: this.title,
+            name: this.name,
             description: this.description,
             petRecordId: this.petRecordId
         };
@@ -35,7 +35,7 @@ export class Note extends SerializeModel {
         try {
             super.deserilizeFromSave(serializeNote);
 
-            this.title = serializeNote.title;
+            this.name = serializeNote.name;
             this.description = serializeNote.description;
             this.petRecordId = serializeNote.petRecordId;
         } catch (exception) {
@@ -46,7 +46,7 @@ export class Note extends SerializeModel {
     duplicate(): Note {
         let duplicatedNote = clone(this);
         duplicatedNote.id = uuidv4();
-        duplicatedNote.title += " Copy";
+        duplicatedNote.name += " Copy";
         return duplicatedNote;
     }
 
