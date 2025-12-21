@@ -1,9 +1,14 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { cloneDeep } from 'lodash';
+import { catchError, tap } from 'rxjs/operators';
+import { Subscription, throwError } from 'rxjs';
 import moment from 'moment';
 
+import { ApiService } from 'src/app/core/services/api/api.service';
+import { AuthService } from 'src/app/core/services/auth/auth.service';
 import { LocalStorageService } from 'src/app/core/services/local-storage/local-storage.service';
 import { SerializerService } from 'src/app/core/services/serializer/serializer.service';
 import { ToastService } from 'src/app/core/services/toast/toast.service';
@@ -16,22 +21,31 @@ import { ISerializedNote, Note } from 'src/app/core/models/note/note.model';
   styleUrl: './notes.component.scss',
   standalone: false
 })
-export class NotesComponent {
+export class NotesComponent implements OnDestroy {
 
+  readonly apiService = inject(ApiService);
+  readonly authService = inject(AuthService);
   readonly formBuilder = inject(FormBuilder);
   readonly localStorageService = inject(LocalStorageService);
+  readonly router = inject(Router);
   readonly serializerService = inject(SerializerService);
   readonly toastService = inject(ToastService);
   readonly translateService = inject(TranslateService);
-
-  private readonly APP_STORAGE_KEY: string = 'weight-pacha-notes';
 
   sourceNotes: Note[];
   notes: Note[];
   selectedNote: Note | null;
   noteForm: FormGroup;
 
-  submitted: boolean = false;
+  createNoteSub: Subscription;
+  deleteNoteSub: Subscription;
+  loadNotesSub: Subscription;
+  updateNoteSub: Subscription;
+
+  editMode: boolean = false;
+  isDeleteLoading: boolean = false;
+  isLoading: boolean = false;
+  isSubmitted: boolean = false;
 
   dateTimeFormat: string;
   searchText: string;
@@ -41,17 +55,23 @@ export class NotesComponent {
 
     this.loadNotes();
   }
+  
+  ngOnDestroy() {
+    this.createNoteSub?.unsubscribe();
+    this.deleteNoteSub?.unsubscribe();
+    this.loadNotesSub?.unsubscribe();
+    this.updateNoteSub?.unsubscribe();
+  }
 
   addNote() {
     let note = new Note();
-    this.sourceNotes.push(note);
-    this.notes = cloneDeep(this.sourceNotes);
-    
-    this.selectNote(note);
+    note.petRecordId = this.authService.selectedPetRecordValue.id;
+    this.selectNote(note, false);
   }
 
-  selectNote(note: Note | null) {
+  selectNote(note: Note | null, editMode: boolean) {
     this.selectedNote = note;
+    this.editMode = editMode;
     
     if (note) {
       this.initNoteForm();
@@ -63,37 +83,81 @@ export class NotesComponent {
     this.sourceNotes.push(duplicatedNote);
     this.notes = cloneDeep(this.sourceNotes);
 
-    this.selectNote(duplicatedNote);
+    this.selectNote(duplicatedNote, false);
   }
 
   saveNote() {
-    this.submitted = true;
+    this.isLoading = true;
+    this.isSubmitted = true;
     if (this.noteForm.valid && this.selectedNote) {
       Object.assign(this.selectedNote, this.noteForm.value);
-      this.selectedNote.updatedAt = moment();
+      // this.selectedNote.updatedAt = moment();
       
-      const index = this.notes.findIndex(note => note.id === this.selectedNote?.id);
-      if (index !== -1) {
-        this.notes[index] = this.selectedNote;
+      if (this.editMode) {
+        this.updateNote();
+      } else {
+        this.createNote();
       }
-
-      this.submitted = false;
-
-      this.saveNotes();
     }
   }
 
-  deleteNote(event: Event, id: string) {
+  private createNote() {
+    const serializeNote = this.selectedNote?.serializeForSave();
+    this.createNoteSub = this.apiService.post(`/pet-record/${ this.authService.selectedPetRecordValue.id }/note`, serializeNote).pipe(
+      tap(() => {
+        this.isLoading = false;
+        this.isSubmitted = false;
+        this.loadNotes();
+      }),
+      catchError((error) => {
+        this.isLoading = false;
+
+        this.toastService.showToast('error', this.translateService.instant('commons.toast.error.create'));
+        console.error('Unable to create note', error);
+        return throwError(() => error);
+      }),
+    ).subscribe();
+  }
+
+  private updateNote() {
+    const serializeNote = this.selectedNote?.serializeForSave();
+    this.updateNoteSub = this.apiService.put(`/pet-record/${ this.authService.selectedPetRecordValue.id }/note/${ serializeNote?.id }`, serializeNote).pipe(
+      tap(() => {
+        this.isLoading = false;
+        this.isSubmitted = false;
+        this.loadNotes();
+      }),
+      catchError((error) => {
+        this.isLoading = false;
+
+        this.toastService.showToast('error', this.translateService.instant('commons.toast.error.update'));
+        console.error('Unable to update note', error);
+        return throwError(() => error);
+      }),
+    ).subscribe();
+  }
+
+  deleteNote(event: Event, nodeId: string) {
     event.stopImmediatePropagation();
 
     this.toastService.showConfirm().then((result: { isConfirmed: boolean; }) => {
-      if (result.isConfirmed) {
-        if (this.selectedNote?.id == id) {
-          this.selectNote(null);
-        }
+      if (result.isConfirmed && nodeId) {
+        this.deleteNoteSub = this.apiService.delete(`/pet-record/${this.authService.selectedPetRecordValue.id}/note/${nodeId}`).pipe(
+          tap(() => {
+            this.isSubmitted = false;
+            this.isDeleteLoading = false;
+            this.selectNote(null, false);
+            this.loadNotes();
+          }),
+          catchError((error) => {
+            this.isSubmitted = false;
+            this.isDeleteLoading = false;
 
-        this.notes = this.notes.filter((note) => note.id != id);
-        this.saveNotes();
+            this.toastService.showToast('error', this.translateService.instant('commons.toast.error.delete'));
+            console.error('Unable to delete note', error);
+            return throwError(() => error);
+          }),
+        ).subscribe();
       }
     });
   }
@@ -107,7 +171,7 @@ export class NotesComponent {
   }
 
   private initNoteForm() {
-    this.submitted = false;
+    this.isSubmitted = false;
 
     this.noteForm = this.formBuilder.group({
       name: [this.selectedNote?.name, [Validators.required]],
@@ -119,26 +183,25 @@ export class NotesComponent {
     this.sourceNotes = [];
     this.notes = [];
     
-    if (this.localStorageService.isItemExist(this.APP_STORAGE_KEY)) {
-      let notes: Note[] = [];
-      const notesJSON = this.localStorageService.getItem(this.APP_STORAGE_KEY);
+    this.loadNotesSub = this.apiService.get<ISerializedNote[]>(`/pet-record/${ this.authService.selectedPetRecordValue.id }/notes`).pipe(
+      tap(async (serializedNotes: ISerializedNote[]) => {
+        serializedNotes.forEach((serializedNote: ISerializedNote) => {
+          let note = new Note();
+          note.deserilizeFromSave(serializedNote);
+          this.sourceNotes.push(note);
+          this.notes = cloneDeep(this.sourceNotes);
 
-      notesJSON.notes.forEach((noteJSON: ISerializedNote) => {
-        let note = new Note();
-        note.deserilizeFromSave(noteJSON);
-        notes.push(note);
-      });
-
-      this.sourceNotes = notes;
-      this.notes = cloneDeep(this.sourceNotes);
-    } else {
-      this.localStorageService.setItem(this.APP_STORAGE_KEY, { notes: this.sourceNotes });
-    }
-  }
-  
-  private saveNotes() {
-    const serializedNotes = this.serializerService.serializeList(this.notes);
-    this.localStorageService.setItem(this.APP_STORAGE_KEY, { notes: serializedNotes });
+          if (this.selectedNote && this.selectedNote.id) {
+            this.selectNote(this.selectedNote, true);
+          }
+        });
+      }),
+      catchError((error) => {
+        this.toastService.showToast('error', this.translateService.instant('commons.toast.error.load'));
+        console.error('Unable to load notes', error);
+        return throwError(() => error);
+      }),
+    ).subscribe();
   }
 
 }

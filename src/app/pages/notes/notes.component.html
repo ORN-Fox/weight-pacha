@@ -5,7 +5,7 @@
         <nav class="panel is-primary">
             <div class="panel-block">
                 <p class="control has-icons-left">
-                    <input class="input" type="text" [(ngModel)]="searchText" (ngModelChange)="search(searchText)" placeholder="{{ 'commons.actions.search' | translate }}" />
+                    <input type="search" class="input" [(ngModel)]="searchText" (ngModelChange)="search(searchText)" placeholder="{{ 'commons.actions.search' | translate }}" />
                     <span class="icon is-left">
                         <i class="far fa-search" aria-hidden="true"></i>
                     </span>
@@ -16,7 +16,7 @@
             
             <div class="panel-scrollable">
                 @for (note of notes; track note) {
-                    <a class="panel-block" [ngClass]="{'is-active': selectedNote && selectedNote.id == note.id }" (click)="selectNote(note)">
+                    <a class="panel-block" [ngClass]="{'is-active': selectedNote && selectedNote.id == note.id }" (click)="selectNote(note, true)">
                         <span class="panel-icon">
                             <i class="far fa-book" aria-hidden="true"></i>
                         </span>
@@ -59,9 +59,7 @@
                             <i class="far fa-book"></i>
                         </span>
                     </div>
-                    @if (noteForm.get('title')?.errors?.['required'] && (submitted || noteForm.get('title')?.touched)) {
-                        <p class="help is-danger">{{ "commons.errors.titleRequired" | translate }}</p>
-                    }
+                    <app-form-error [form]="noteForm" fieldName="name" errorRuleName="required" errorMessage="commons.errors.titleRequired" customClass="is-danger" [isSubmitted]="isSubmitted"></app-form-error>
                 </div>
 
                 <div class="field">
@@ -70,9 +68,7 @@
                 </div>
             
                 <div class="field">
-                    <div class="control">
-                        <button type="submit" class="button is-primary"><i class="far fa-bookmark mr-2"></i> {{ "commons.actions.save" | translate }}</button>
-                    </div>
+                    <app-action-button type="submit" title="commons.actions.save" customClass="is-primary" icon="far fa-bookmark mr-2" [isLoading]="isLoading"></app-action-button>
                 </div>
             </form>
         }
