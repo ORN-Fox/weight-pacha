@@ -6,12 +6,14 @@ import { ISerializeModel, SerializeModel } from '../serialize.model';
 export interface ISerializedNote extends ISerializeModel {
     title: string;
     description: string;
+    petRecordId: string;
 }
 
 export class Note extends SerializeModel {
 
     title: string;
     description: string;
+    petRecordId: string;
 
     constructor() {
         super();
@@ -20,7 +22,8 @@ export class Note extends SerializeModel {
     override serializeForSave(): ISerializedNote {
         let serializeFields = {
             title: this.title,
-            description: this.description
+            description: this.description,
+            petRecordId: this.petRecordId
         };
         
         let serializeNote: ISerializedNote = Object.assign(serializeFields, super.serializeForSave());
@@ -34,6 +37,7 @@ export class Note extends SerializeModel {
 
             this.title = serializeNote.title;
             this.description = serializeNote.description;
+            this.petRecordId = serializeNote.petRecordId;
         } catch (exception) {
             console.error('Exception on deserialize note model', exception);
         }

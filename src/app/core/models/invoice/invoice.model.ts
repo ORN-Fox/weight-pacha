@@ -8,6 +8,7 @@ export interface ISerializedInvoice extends ISerializeModel {
     billingDate: string;
     amount: number | null;
     description: string | null;
+    petRecordId: string;
 }
 
 export class Invoice extends SerializeModel {
@@ -15,15 +16,17 @@ export class Invoice extends SerializeModel {
     billingDate: moment.Moment;
     amount: number | null;
     description: string | null;
+    petRecordId: string;
 
     // local data
     editMode: boolean;
 
-    constructor(billingDate: moment.Moment = moment(), amount: number | null = null) {
+    constructor(billingDate: moment.Moment = moment(), amount: number | null = null, petRecordId: string = '') {
         super();
         
         this.billingDate = billingDate;
         this.amount = amount;
+        this.petRecordId = petRecordId;
 
         // local data
         this.editMode = false;
@@ -33,7 +36,8 @@ export class Invoice extends SerializeModel {
         let serializeFields = {
             billingDate: DateService.getStringDateFromMoment(this.billingDate) as string,
             amount: this.amount,
-            description: this.description
+            description: this.description,
+            petRecordId: this.petRecordId
         };
         
         let serializeInvoice: ISerializedInvoice = Object.assign(serializeFields, super.serializeForSave());
@@ -48,6 +52,7 @@ export class Invoice extends SerializeModel {
             this.billingDate = DateService.getMomentFromStringDate(serializeInvoice.billingDate) as moment.Moment;
             this.amount = serializeInvoice.amount;
             this.description = serializeInvoice.description;
+            this.petRecordId = serializeInvoice.petRecordId;
         } catch (exception) {
             console.error('Exception on deserialize invoice model', exception);
         }

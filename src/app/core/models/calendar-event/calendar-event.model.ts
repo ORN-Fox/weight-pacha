@@ -14,6 +14,7 @@ export interface ISerializedCalendarEvent extends ISerializeModel {
     title: string;
     startDate: string | null;
     description: string | null;
+    petRecordId: string;
 }
 
 export interface IFullCalendarEventModel {
@@ -33,16 +34,17 @@ export class CalendarEvent extends SerializeModel {
     title: string;
     startDate: moment.Moment;
     description: string | null = null;
+    petRecordId: string;
 
     // local data
     eventSource: number;
 
-    constructor(title: string = '', startDate: moment.Moment = moment(), eventSource: number = CalendarEventSource.CALENDAR) {
+    constructor(title: string = '', startDate: moment.Moment = moment(), eventSource: number = CalendarEventSource.CALENDAR, petRecordId: string = '') {
         super();
 
         this.title = title;
         this.startDate = startDate;
-        
+        this.petRecordId = petRecordId;
 
         // local data
         this.eventSource = eventSource;
@@ -66,7 +68,8 @@ export class CalendarEvent extends SerializeModel {
         let serializeFields = {
             title: this.title,
             startDate: DateService.getStringDateFromMoment(this.startDate),
-            description: this.description
+            description: this.description,
+            petRecordId: this.petRecordId
         };
         
         let serializeCalendarEvent: ISerializedCalendarEvent = Object.assign(serializeFields, super.serializeForSave());
@@ -81,6 +84,7 @@ export class CalendarEvent extends SerializeModel {
             this.title = serializeCalendarEvent.title;
             this.startDate = DateService.getMomentFromStringDate(serializeCalendarEvent.startDate) as moment.Moment;
             this.description = serializeCalendarEvent.description;
+            this.petRecordId = serializeCalendarEvent.petRecordId;
         } catch (exception) {
             console.error('Exception on deserialize calendar event model', exception);
         }
@@ -103,14 +107,14 @@ export class CalendarEvent extends SerializeModel {
     private getIconWithEventSource(): string {
         switch (this.eventSource) {
             case CalendarEventSource.VACCINE:
-                return 'fa fa-syringe';
+                return 'far fa-syringe';
 
             case CalendarEventSource.WORMABLE:
-                return 'fa fa-shield-virus';
+                return 'far fa-shield-virus';
 
             case CalendarEventSource.CALENDAR:
             default:
-                return 'fa fa-calendar';
+                return 'far fa-calendar';
         }
     }
 
