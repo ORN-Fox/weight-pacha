@@ -1,10 +1,15 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
-import { SettingsService } from 'src/app/core/services/settings/settings.service';
+import { catchError, Subscription, tap, throwError } from 'rxjs';
 import flatpickr from 'flatpickr';
 import moment from 'moment';
+
+import { ApiService } from 'src/app/core/services/api/api.service';
+import { AuthService } from 'src/app/core/services/auth/auth.service';
+import { SettingsService } from 'src/app/core/services/settings/settings.service';
+import { ToastService } from 'src/app/core/services/toast/toast.service';
 
 import { DialogAction } from 'src/app/core/enums/dialog-action/dialog.action.enum';
 
@@ -28,21 +33,29 @@ enum WormableDatePickerInput {
   styleUrl: './wormable-dialog.component.scss',
   standalone: false
 })
-export class WormableDialogComponent {
+export class WormableDialogComponent implements OnInit, OnDestroy {
 
-  readonly formBuilder = inject(FormBuilder);
+  readonly apiService = inject(ApiService);
+  readonly authService = inject(AuthService);
   readonly dialogRef = inject(MatDialogRef<WormableDialogComponent>);
+  readonly formBuilder = inject(FormBuilder);
   readonly translateService = inject(TranslateService);
+  readonly toastService = inject(ToastService);
   readonly settingsService = inject(SettingsService);
+
   readonly data = inject<WormableDialogData>(MAT_DIALOG_DATA);
 
   wormableForm: FormGroup;
 
-  editMode: boolean;
-  submitted: boolean = false;
+  createWormableSub: Subscription;
+  updateWormableSub: Subscription;
+
+  addMode: boolean;
+  isLoading: boolean = false;
+  isSubmitted: boolean = false;
   
   constructor() {
-    this.editMode = this.data.action === DialogAction.UPDATE;
+    this.addMode = this.data.action === DialogAction.ADD;
     
     this.settingsService.settings$.subscribe(() => {
       this.updateFlatpickrLocales();
@@ -53,34 +66,39 @@ export class WormableDialogComponent {
     this.initForm(this.data.wormable);
   }
 
+  ngOnDestroy() {
+    this.createWormableSub?.unsubscribe();
+    this.updateWormableSub?.unsubscribe();
+  }
+
   reminderDateValidator(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: boolean } | null => {
       const reminderDate = moment(control.value);
-      if (reminderDate) {
-        if (reminderDate.isSameOrBefore(this.data.wormable.injectionDate, 'day')) {
-          return { 'sameOrBeforeReminderDateError': true };
-        }
+      if (reminderDate && reminderDate.isSameOrBefore(this.data.wormable.injectionDate, 'day')) {
+        return { 'sameOrBeforeReminderDateError': true };
       }
       return null;
     };
   }
 
   saveWormable() {
-    this.submitted = true;
+    this.isLoading = true;
+    this.isSubmitted = true;
 
     if (this.wormableForm.valid) {
       Object.assign(this.data.wormable, this.wormableForm.value);
       this.data.wormable.injectionDate = moment(this.data.wormable.injectionDate);
-      this.data.wormable.reminderDate = this.data.wormable.reminderDate ? moment(this.data.wormable.reminderDate) : null,
-      this.data.wormable.updatedAt = moment();
+      this.data.wormable.reminderDate = this.data.wormable.reminderDate ? moment(this.data.wormable.reminderDate) : null;
+      
+      if (this.data.action === DialogAction.ADD) {
+        this.createWormable();
+      }
 
-      this.submitted = false;
-
-      const dialogResult: WormableDialogData = {
-        action: this.data.action == DialogAction.ADD ? DialogAction.ADD : DialogAction.UPDATE,
-        wormable: this.data.wormable
-      };
-      this.dialogRef.close(dialogResult);
+      if (this.data.action === DialogAction.UPDATE) {
+        this.updateWormable();
+      }
+    } else {
+      setTimeout(() => this.isLoading = false, 500);
     }
   }
 
@@ -124,6 +142,42 @@ export class WormableDialogComponent {
         input._flatpickr.redraw();
       }
     });
+  }
+
+  private createWormable() {
+    const serializeWormable = this.data.wormable.serializeForSave();
+    this.createWormableSub = this.apiService.post(`/pet-record/${ this.authService.selectedPetRecordValue.id }/wormable`, serializeWormable).pipe(
+      tap(() => {
+        this.isLoading = false;
+        this.isSubmitted = false;
+        this.dialogRef.close(true);
+      }),
+      catchError((error) => {
+        this.isLoading = false;
+
+        this.toastService.showToast('error', this.translateService.instant('commons.toast.error.create'));
+        console.error('Unable to create wormable', error);
+        return throwError(() => error);
+      }),
+    ).subscribe();
+  }
+
+  private updateWormable() {
+    const serializeWormable = this.data.wormable.serializeForSave();
+    this.updateWormableSub = this.apiService.put(`/pet-record/${ this.authService.selectedPetRecordValue.id }/wormable/${ serializeWormable.id }`, serializeWormable).pipe(
+      tap(() => {
+        this.isLoading = false;
+        this.isSubmitted = false;
+        this.dialogRef.close(true);
+      }),
+      catchError((error) => {
+        this.isLoading = false;
+
+        this.toastService.showToast('error', this.translateService.instant('commons.toast.error.update'));
+        console.error('Unable to update wormable', error);
+        return throwError(() => error);
+      }),
+    ).subscribe();
   }
 
 }
