@@ -1,21 +1,25 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
+import { Subscription, throwError } from 'rxjs';
 import { cloneDeep } from 'lodash';
+import { catchError, tap } from 'rxjs/operators';
 import moment from 'moment';
 
-import { LocalStorageService } from 'src/app/core/services/local-storage/local-storage.service';
+import { ApiService } from 'src/app/core/services/api/api.service';
+import { AuthService } from 'src/app/core/services/auth/auth.service';
 import { ToastService } from 'src/app/core/services/toast/toast.service';
 import { SerializerService } from 'src/app/core/services/serializer/serializer.service';
+import { SettingsService } from 'src/app/core/services/settings/settings.service';
 
 import { DialogAction } from 'src/app/core/enums/dialog-action/dialog.action.enum';
 
 import { ITableHeader } from 'src/app/core/interfaces/ITableHeader';
 
-import { ISerializedVaccine, Vaccine } from 'src/app/core/models/vaccine/vaccine.model';
 import { PetRecord } from 'src/app/core/models/pet-record/pet-record.model';
+import { ISerializedVaccine, Vaccine } from 'src/app/core/models/vaccine/vaccine.model';
 
-import { VaccineDialogComponent, VaccineDialogData } from './vaccine-dialog/vaccine-dialog.component';
+import { VaccineDialogComponent } from './vaccine-dialog/vaccine-dialog.component';
 
 @Component({
   selector: 'app-vaccines',
@@ -23,20 +27,23 @@ import { VaccineDialogComponent, VaccineDialogData } from './vaccine-dialog/vacc
   styleUrl: './vaccines.component.scss',
   standalone: false
 })
-export class VaccinesComponent {
+export class VaccinesComponent implements OnDestroy {
 
+  readonly apiService = inject(ApiService);
+  readonly authService = inject(AuthService);
   readonly dialog = inject(MatDialog);
-  readonly localStorageService = inject(LocalStorageService);
   readonly toastService = inject(ToastService);
   readonly translateService = inject(TranslateService);
-  readonly serializerService = inject(SerializerService); 
-
-  private readonly APP_STORAGE_KEY: string = 'weight-pacha-vaccines';
+  readonly serializerService = inject(SerializerService);
+  readonly settingsService = inject(SettingsService);
 
   tableHeaders: ITableHeader[];
   vaccines: Vaccine[];
 
   petRecord: PetRecord;
+
+  deleteVaccineSub: Subscription;
+  loadVaccinesSub: Subscription;
 
   dateFormat: string;
 
@@ -44,11 +51,18 @@ export class VaccinesComponent {
   itemsPerPage: number;
 
   constructor() {
-    this.dateFormat = this.translateService.instant('commons.dateFormats.date');
+    this.settingsService.settings$.subscribe(() => {
+      this.dateFormat = this.translateService.instant('commons.dateFormats.date');
+    });
 
     this.setupTableHeaders();
     this.loadPetRecord();
     this.loadVaccines();
+  }
+
+  ngOnDestroy() {
+    this.deleteVaccineSub?.unsubscribe();
+    this.loadVaccinesSub?.unsubscribe();
   }
 
   private setupTableHeaders() {
@@ -64,6 +78,7 @@ export class VaccinesComponent {
 
   addVaccine() {
     let vaccine = new Vaccine();
+    vaccine.petRecordId = this.petRecord.id;
     this.openVaccineDialog(false, vaccine);
   }
 
@@ -74,8 +89,14 @@ export class VaccinesComponent {
   deleteVaccine(id: string) {
     this.toastService.showConfirm().then((result: { isConfirmed: boolean; }) => {
       if (result.isConfirmed) {
-        this.vaccines = this.vaccines.filter(vaccine => vaccine.id != id);
-        this.saveVaccines();
+        this.deleteVaccineSub = this.apiService.delete(`/pet-record/${ this.petRecord.id }/vaccine/${ id }`).pipe(
+          tap(() => this.loadVaccines()),
+          catchError((error) => {
+            this.toastService.showToast('error', this.translateService.instant('commons.toast.error.delete'));
+            console.error('Unable to delete vaccine', error);
+            return throwError(() => error);
+          }),
+        ).subscribe();
       }
     });
   }
@@ -89,38 +110,29 @@ export class VaccinesComponent {
     return null;
   }
 
+  private loadPetRecord() {
+    this.petRecord = this.authService.selectedPetRecordValue;
+  }
+
   private loadVaccines() {
     this.vaccines = [];
-    
-    if (this.localStorageService.isItemExist(this.APP_STORAGE_KEY)) {
-      let vaccines: Vaccine[] = [];
-      const vaccinesJSON = this.localStorageService.getItem(this.APP_STORAGE_KEY);
-
-      vaccinesJSON.vaccines.forEach((vaccineJSON: ISerializedVaccine) => {
-        let vaccine = new Vaccine();
-        vaccine.deserilizeFromSave(vaccineJSON);
-        vaccine.age = this.getAgeFromVaccineDate(vaccine);
-        vaccines.push(vaccine);
-      });
-      this.vaccines = this.sortVaccinesByInjectionDate(vaccines);
-    } else {
-      this.localStorageService.setItem(this.APP_STORAGE_KEY, { vaccines: this.vaccines });
-    }
-  }
-
-  private loadPetRecord() {
-    const APP_PET_RECORD_STORAGE_KEY = 'weight-pacha-data-pet-record';
-
-    this.petRecord = new PetRecord();
-
-    if (this.localStorageService.isItemExist(APP_PET_RECORD_STORAGE_KEY)) {
-      let petRecordJSON = this.localStorageService.getItem(APP_PET_RECORD_STORAGE_KEY);
-      this.petRecord.deserilizeFromSave(petRecordJSON);
-    }
-  }
-
-  private sortVaccinesByInjectionDate(vaccines: Vaccine[]) {
-    return vaccines.sort((firstVaccine, secondVaccine) => firstVaccine.injectionDate.isAfter(secondVaccine.injectionDate, 'day') ? 1 : -1);
+    this.loadVaccinesSub = this.apiService.get<ISerializedVaccine[]>(`/pet-record/${ this.petRecord.id }/vaccines`).pipe(
+      tap((vaccinesJSON: ISerializedVaccine[]) => {
+        let vaccines: Vaccine[] = [];
+        vaccinesJSON.forEach((vaccineJSON: ISerializedVaccine) => {
+          let vaccine = new Vaccine();
+          vaccine.deserilizeFromSave(vaccineJSON);
+          vaccine.age = this.getAgeFromVaccineDate(vaccine);
+          vaccines.push(vaccine);
+        });
+        this.vaccines = vaccines;
+      }),
+      catchError((error) => {
+        this.toastService.showToast('error', this.translateService.instant('commons.toast.error.load'));
+        console.error('Unable to load vaccines', error);
+        return throwError(() => error);
+      })
+    ).subscribe();
   }
 
   private openVaccineDialog(editMode: boolean = false, vaccine: Vaccine) {
@@ -132,32 +144,11 @@ export class VaccinesComponent {
       width: '40rem'
     });
 
-    dialogRef.afterClosed().subscribe((result: VaccineDialogData) => {
+    dialogRef.afterClosed().subscribe((result: boolean) => {
       if (result) {
-        result.vaccine.age = this.getAgeFromVaccineDate(result.vaccine);
-
-        switch (result.action) {
-          case DialogAction.ADD:
-            this.vaccines.push(result.vaccine);
-            break;
-            
-          case DialogAction.UPDATE:
-            const index = this.vaccines.findIndex(vaccine => vaccine.id === result.vaccine.id);
-            if (index !== -1) {
-              this.vaccines[index] = result.vaccine;
-            }
-            break;
-        }
-        
-        this.saveVaccines();
+        this.loadVaccines();
       }
     });
-  }
-  
-  private saveVaccines() {
-    this.vaccines = this.sortVaccinesByInjectionDate(this.vaccines);
-    const serializedVaccines = this.serializerService.serializeList(this.vaccines);
-    this.localStorageService.setItem(this.APP_STORAGE_KEY, { vaccines: serializedVaccines });
   }
 
 }

@@ -1,6 +1,6 @@
 <form [formGroup]="vaccineForm" (ngSubmit)="saveVaccine()">
     <div class="modal-header">
-        <h2 class="modal-title">{{ ("pages.vaccines." + (editMode ? "editTitle" : "addTitle")) | translate }}</h2>
+        <h2 class="modal-title">{{ ("pages.vaccines." + (addMode ? "addTitle" : "editTitle")) | translate }}</h2>
     </div>
 
     <mat-dialog-content>
@@ -8,35 +8,31 @@
             <label class="label">{{ "commons.fields.date" | translate }}</label>
             <div class="control has-icons-left">
                 <input type="text" id="injectionDateInput" class="input" formControlName="injectionDate" placeholder="{{ 'commons.dateFormats.date' | translate}}"
-                    [ngClass]="{'is-danger': vaccineForm.get('injectionDate')?.errors?.['required'] && (submitted || vaccineForm.get('injectionDate')?.value === '')}">
+                    [ngClass]="{'is-danger': vaccineForm.get('injectionDate')?.errors?.['required'] && (isSubmitted || vaccineForm.get('injectionDate')?.value === '')}">
                 <span class="icon is-small is-left">
                     <i class="far fa-calendar"></i>
                 </span>
             </div>
-            @if (vaccineForm.get('injectionDate')?.errors?.['required'] && (submitted || vaccineForm.get('injectionDate')?.value === '')) {
-                <p class="help is-danger">{{ "commons.errors.dateRequired" | translate }}</p>
-            }
+            <app-form-error [form]="vaccineForm" fieldName="injectionDate" errorRuleName="required" errorMessage="commons.errors.dateRequired" customClass="is-danger" [isDate]="true" [isSubmitted]="isSubmitted"></app-form-error>
         </div>
 
         <div class="field">
             <label class="label">{{ "commons.fields.title" | translate }}</label>
             <div class="control has-icons-left">
                 <input type="text" class="input" name="name" formControlName="name" placeholder="{{ 'commons.fields.title' | translate}}"
-                    [ngClass]="{'is-danger': vaccineForm.get('name')?.errors?.['required'] && (submitted || vaccineForm.get('name')?.touched)}">
+                    [ngClass]="{'is-danger': vaccineForm.get('name')?.errors?.['required'] && (isSubmitted || vaccineForm.get('name')?.touched)}">
                 <span class="icon is-small is-left">
                     <i class="far fa-tag"></i>
                 </span>
             </div>
-            @if (vaccineForm.get('name')?.errors?.['required'] && (submitted || vaccineForm.get('name')?.touched)) {
-                <p class="help is-danger">{{ "commons.errors.titleRequired" | translate }}</p>
-            }
+            <app-form-error [form]="vaccineForm" fieldName="name" errorRuleName="required" errorMessage="commons.errors.titleRequired" customClass="is-danger" [isSubmitted]="isSubmitted"></app-form-error>
         </div>
 
         <div class="field">
             <label class="label">{{ "commons.fields.reminderDate" | translate }}</label>
             <div class="control has-icons-left">
                 <input type="text" id="reminderDateInput" class="input" formControlName="reminderDate" placeholder="{{ 'commons.dateFormats.date' | translate}}"
-                    [ngClass]="{'is-danger': vaccineForm.get('reminderDate')?.invalid && vaccineForm.get('reminderDate')?.touched}">
+                    [ngClass]="{'is-danger': vaccineForm.get('reminderDate')?.errors?.['sameOrBeforeReminderDateError'] && vaccineForm.get('reminderDate')?.value}">
                 <span class="icon is-small is-left">
                     <i class="far fa-calendar"></i>
                 </span>
@@ -57,9 +53,8 @@
         <button type="button" class="button" mat-dialog-close>
             {{ "commons.actions.cancel" | translate }}
         </button>
-            
-        <button type="submit" class="button is-primary ml-2">
-            <i class="far fa-bookmark mr-2"></i> {{ "commons.actions.save" | translate }}
-        </button>
+
+        <app-action-button type="submit" title="commons.actions.save" customClass="is-primary ml-2" icon="far fa-bookmark mr-2"
+            [isLoading]="isLoading"></app-action-button>
     </mat-dialog-actions>
 </form>
