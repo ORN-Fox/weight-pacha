@@ -1,3 +1,9 @@
-@if (form.get(fieldName)?.errors?.[errorRuleName] && (isSubmitted || form.get(fieldName)?.touched)) {
+@if (isDate) {
+    @if (form.get(fieldName)?.errors?.[errorRuleName] && (isSubmitted || form.get(fieldName)?.value === '')) {
     <p class="help {{customClass}}">{{ errorMessage | translate }}</p>
+    }
+} @else {
+    @if (form.get(fieldName)?.errors?.[errorRuleName] && (isSubmitted || form.get(fieldName)?.touched)) {
+        <p class="help {{customClass}}">{{ errorMessage | translate }}</p>
+    }
 }

@@ -14,6 +14,7 @@ export class FormErrorComponent {
   @Input() errorRuleName: string;
   @Input() errorMessage: string;
   @Input() customClass: string;
+  @Input() isDate: boolean = false;
   @Input() isSubmitted: boolean = false;
 
   constructor() {}
