@@ -1,13 +1,18 @@
-import { AfterViewInit, Component, inject } from '@angular/core';
+import { AfterViewInit, Component, inject, OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { cloneDeep } from 'lodash';
+import { catchError, Subscription, tap, throwError } from 'rxjs';
 import Chart from 'chart.js/auto';
 
+import { ApiService } from 'src/app/core/services/api/api.service';
+import { AuthService } from 'src/app/core/services/auth/auth.service';
 import { LocalStorageService } from 'src/app/core/services/local-storage/local-storage.service';
 import { ToastService } from 'src/app/core/services/toast/toast.service';
 import { SerializerService } from 'src/app/core/services/serializer/serializer.service';
 import { SettingsService } from 'src/app/core/services/settings/settings.service';
+
+import { DialogAction } from 'src/app/core/enums/dialog-action/dialog.action.enum';
 
 import { IChartDataSetPoint } from 'src/app/core/interfaces/IChartDataSetPoint';
 import { ITableHeader } from 'src/app/core/interfaces/ITableHeader';
@@ -15,7 +20,6 @@ import { ITableHeader } from 'src/app/core/interfaces/ITableHeader';
 import { ISerializedInvoice, Invoice } from 'src/app/core/models/invoice/invoice.model';
 
 import { InvoiceDialogComponent, InvoiceDialogData } from './invoice-dialog/invoice-dialog.component';
-import { DialogAction } from 'src/app/core/enums/dialog-action/dialog.action.enum';
 
 interface IInvoiceChartDataSetPoint extends IChartDataSetPoint {
   x: number;
@@ -33,22 +37,24 @@ export interface ITotalInvoicedPerYear {
   styleUrl: './invoices.component.scss',
   standalone: false
 })
-export class InvoicesComponent implements AfterViewInit {
+export class InvoicesComponent implements AfterViewInit, OnDestroy {
 
   readonly dialog = inject(MatDialog);
+  readonly apiService = inject(ApiService);
+  readonly authService = inject(AuthService);
   readonly localStorageService = inject(LocalStorageService);
   readonly toastService = inject(ToastService);
   readonly translateService = inject(TranslateService);
   readonly serializerService = inject(SerializerService);
   readonly settingsService = inject(SettingsService);
-  
-  private readonly APP_STORAGE_KEY: string = 'weight-pacha-invoices';
 
   chart: any;
-  data: any;
 
   tableHeaders: ITableHeader[];
   invoices: Invoice[];
+
+  deleteInvoiceSub: Subscription;
+  loadInvoicesSub: Subscription;
 
   page: number;
   itemsPerPage: number;
@@ -74,6 +80,11 @@ export class InvoicesComponent implements AfterViewInit {
     this.initChart();
   }
 
+  ngOnDestroy() {
+    this.deleteInvoiceSub?.unsubscribe();
+    this.loadInvoicesSub?.unsubscribe();
+  }
+
   private setupTableHeaders() {
     this.tableHeaders = [
       { title: 'date', align: 'center', width: '12%' },
@@ -85,6 +96,7 @@ export class InvoicesComponent implements AfterViewInit {
 
   addInvoice() {
     let invoice = new Invoice();
+    invoice.petRecordId = this.authService.selectedPetRecordValue.id;
     this.openInvoiceDialog(false, invoice);
   }
 
@@ -95,12 +107,14 @@ export class InvoicesComponent implements AfterViewInit {
   deleteInvoice(id: string) {
     this.toastService.showConfirm().then((result: { isConfirmed: boolean; }) => {
       if (result.isConfirmed) {
-        this.invoices = this.invoices.filter(invoice => invoice.id != id);
-        
-        this.computeTotalInvoicedPerYears();
-        this.updateChart();
-
-        this.saveInvoices();
+        this.deleteInvoiceSub = this.apiService.delete(`/pet-record/${ this.authService.selectedPetRecordValue.id }/invoice/${ id }`).pipe(
+          tap(() => this.loadInvoices()),
+          catchError((error) => {
+            this.toastService.showToast('error', this.translateService.instant('commons.toast.error.delete'));
+            console.error('Unable to delete invoice', error);
+            return throwError(() => error);
+          })
+        ).subscribe();
       }
     });
   }
@@ -121,37 +135,35 @@ export class InvoicesComponent implements AfterViewInit {
       }
     });
 
-    this.totalInvoicedPerYears = invoiceYears;
+    this.totalInvoicedPerYears = invoiceYears.reverse();
   }
 
   private computeYearsLabelFromTotalInvoicedPerYears() {
     return this.totalInvoicedPerYears.map(totalInvoicedPerYear => totalInvoicedPerYear.year);
   }
 
-  private sortInvoicesByBillingDate(invoices: Invoice[]) {
-    return invoices.sort((firstInvoice, secondInvoice) => firstInvoice.billingDate.isAfter(secondInvoice.billingDate, 'day') ? 1 : -1);
-  }
-
   private loadInvoices() {
     this.invoices = [];
 
-    if (this.localStorageService.isItemExist(this.APP_STORAGE_KEY)) {
-      let invoices: Invoice[] = [];
-      const invoicesJSON = this.localStorageService.getItem(this.APP_STORAGE_KEY);
+    this.loadInvoicesSub = this.apiService.get<ISerializedInvoice[]>(`/pet-record/${ this.authService.selectedPetRecordValue.id }/invoices`).pipe(
+      tap((serializedInvoices: ISerializedInvoice[]) => {
+        let invoices: Invoice[] = [];
+        serializedInvoices.forEach((serializedInvoice: ISerializedInvoice) => {
+          let invoice = new Invoice();
+          invoice.deserilizeFromSave(serializedInvoice);
+          invoices.push(invoice);
+        });
+        this.invoices = invoices;
 
-      invoicesJSON.invoices.forEach((invoiceJSON: ISerializedInvoice) => {
-        let invoice = new Invoice();
-        invoice.deserilizeFromSave(invoiceJSON);
-        invoices.push(invoice);
-      });
-
-      this.invoices = this.sortInvoicesByBillingDate(invoices);
-    } else {
-      this.localStorageService.setItem(this.APP_STORAGE_KEY, { invoices: this.invoices });
-    }
-
-    this.computeTotalInvoicedPerYears();
-    this.initChartData();
+        this.computeTotalInvoicedPerYears();
+        this.updateChart();
+      }),
+      catchError((error) => {
+        this.toastService.showToast('error', this.translateService.instant('commons.toast.error.load'));
+        console.error('Unable to load invoices', error);
+        return throwError(() => error);
+      })
+    ).subscribe();
   }
 
   private openInvoiceDialog(editMode: boolean = false, invoice: Invoice) {
@@ -165,31 +177,9 @@ export class InvoicesComponent implements AfterViewInit {
 
     dialogRef.afterClosed().subscribe((result: InvoiceDialogData) => {
       if (result) {
-        switch (result.action) {
-          case DialogAction.ADD:
-            this.invoices.push(result.invoice);
-            break;
-            
-          case DialogAction.UPDATE:
-            const index = this.invoices.findIndex(invoice => invoice.id === result.invoice.id);
-            if (index !== -1) {
-              this.invoices[index] = result.invoice;
-            }
-            break;
-        }
-
-        this.computeTotalInvoicedPerYears();
-        this.updateChart();
-
-        this.saveInvoices();
+        this.loadInvoices();
       }
     });
-  }
-
-  private saveInvoices() {
-    this.invoices = this.sortInvoicesByBillingDate(this.invoices);
-    const serializedInvoices = this.serializerService.serializeList(this.invoices);
-    this.localStorageService.setItem(this.APP_STORAGE_KEY, { invoices: serializedInvoices });
   }
 
   //#region Chart related
@@ -201,7 +191,7 @@ export class InvoicesComponent implements AfterViewInit {
     );
   }
   
-  private initChartData() {
+  private getChartData() {
     let data = [];
     let years: number[] = [];
     
@@ -210,7 +200,7 @@ export class InvoicesComponent implements AfterViewInit {
       years = this.computeYearsLabelFromTotalInvoicedPerYears();
     }
 
-    this.data = {
+    return {
       labels: years,
       datasets: [
         {
@@ -261,7 +251,7 @@ export class InvoicesComponent implements AfterViewInit {
   private getChartConfig(): any {
     const config = {
       type: 'bar',
-      data: this.data,
+      data: this.getChartData(),
       locale: this.translateService.currentLang,
       options: {
         scales: {

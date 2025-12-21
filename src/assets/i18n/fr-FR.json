@@ -106,6 +106,8 @@
       "title": "Informations"
     },
     "invoices": {
+      "addTitle": "Ajouter une facture",
+      "editTitle": "Modifier une facture",
       "errors": {
         "amountRequired": "Le montant est requis",
         "minAmountError": "Le montant minimum doit être positif"

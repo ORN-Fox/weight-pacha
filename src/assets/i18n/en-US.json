@@ -106,6 +106,8 @@
       "title": "Informations"
     },
     "invoices": {
+      "addTitle": "Add invoice",
+      "editTitle": "Edit invoice",
       "errors": {
         "amountRequired": "Amount is required",
         "minAmountError": "Minimum amount must be positive"
