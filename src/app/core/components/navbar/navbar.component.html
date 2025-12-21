@@ -27,19 +27,17 @@
                     <div class="navbar-item has-dropdown is-hoverable">
                         <a class="navbar-link">
                             @if (selectedPetRecord) {
-                            <img [src]="'/assets/images/animals/' + getPetRecordIcon(selectedPetRecord.specie) + '.png'" alt="">
-                            {{ selectedPetRecord.firstName }}
-                            } @else {
-                            Add petRecord (TODO)
+                                <img [src]="'/assets/images/animals/' + getPetRecordIcon(selectedPetRecord.specie) + '.png'" alt="">
+                                {{ selectedPetRecord.firstName }}
                             }
                         </a>
                         <div class="navbar-dropdown is-right">
                             @for (petRecord of petRecords; track petRecord.id) {
-                            <a class="navbar-item" [ngClass]="{'is-active': petRecord.id == selectedPetRecord.id}"
-                                (click)="selectPetRecord(petRecord)">
-                                <img [src]="'/assets/images/animals/' + getPetRecordIcon(petRecord.specie) + '.png'" alt="">
-                                {{ petRecord.firstName }}
-                            </a>
+                                <a class="navbar-item" [ngClass]="{'is-active': petRecord.id == selectedPetRecord.id}"
+                                    (click)="selectPetRecord(petRecord)">
+                                    <img [src]="'/assets/images/animals/' + getPetRecordIcon(petRecord.specie) + '.png'" alt="">
+                                    {{ petRecord.firstName }}
+                                </a>
                             }
                         </div>
                     </div>
