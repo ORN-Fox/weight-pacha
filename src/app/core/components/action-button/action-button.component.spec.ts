@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { ActionButtonComponent } from './action-button.component';
 
@@ -8,7 +9,10 @@ describe('ActionButtonComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ActionButtonComponent]
+      declarations: [ActionButtonComponent],
+      imports: [
+        TranslateModule.forRoot()
+      ]
     })
     .compileComponents();
 

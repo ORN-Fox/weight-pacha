@@ -4,8 +4,11 @@ import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { TranslateModule } from '@ngx-translate/core';
 
-import { CalendarComponent } from './calendar.component';
+import { AuthService } from 'src/app/core/services/auth/auth.service';
+
 import { PageTitleComponent } from 'src/app/core/components/page-title/page-title.component';
+
+import { CalendarComponent } from './calendar.component';
 
 describe('CalendarComponent', () => {
   let component: CalendarComponent;
@@ -23,7 +26,13 @@ describe('CalendarComponent', () => {
       ],
       providers: [
         provideHttpClient(),
-        provideHttpClientTesting()
+        provideHttpClientTesting(),
+        {
+          provide: AuthService,
+          useValue: {
+            selectedPetRecordValue: { id: 1 }
+          }
+        }
       ]
     })
     .compileComponents();

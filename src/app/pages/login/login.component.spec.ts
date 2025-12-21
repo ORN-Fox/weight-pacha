@@ -4,6 +4,9 @@ import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 
+import { ActionButtonComponent } from 'src/app/core/components/action-button/action-button.component';
+import { FormErrorComponent } from 'src/app/core/components/form-error/form-error.component';
+
 import { LoginComponent } from './login.component';
 
 describe('LoginComponent', () => {
@@ -12,7 +15,11 @@ describe('LoginComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [LoginComponent],
+      declarations: [
+        ActionButtonComponent,
+        FormErrorComponent,
+        LoginComponent
+      ],
       imports: [
         ReactiveFormsModule,
         FormsModule,

@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
-import { LocalStorageService } from 'src/app/core/services/local-storage/local-storage.service';
+import { AuthService } from 'src/app/core/services/auth/auth.service';
 import { ToastService } from 'src/app/core/services/toast/toast.service';
 import { SerializerService } from 'src/app/core/services/serializer/serializer.service';
 import { SettingsService } from 'src/app/core/services/settings/settings.service';
@@ -32,13 +32,19 @@ describe('InvoicesComponent', () => {
         TranslateModule.forRoot({})
       ],
       providers: [
-        LocalStorageService,
+        AuthService,
         ToastService,
         SerializerService,
         SettingsService,
         TranslateService,
         provideHttpClient(),
-        provideHttpClientTesting()
+        provideHttpClientTesting(),
+        {
+          provide: AuthService,
+          useValue: {
+            selectedPetRecordValue: { id: 1 }
+          }
+        }
       ],
     })
     .compileComponents();

@@ -4,6 +4,8 @@ import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 
+import { ActionButtonComponent } from 'src/app/core/components/action-button/action-button.component';
+
 import { AccountTabSecurityComponent } from './account-tab-security.component';
 
 describe('AccountTabSecurityComponent', () => {
@@ -12,7 +14,10 @@ describe('AccountTabSecurityComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [AccountTabSecurityComponent],
+      declarations: [
+        ActionButtonComponent,
+        AccountTabSecurityComponent
+      ],
       imports: [
         ReactiveFormsModule,
         FormsModule,

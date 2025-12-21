@@ -7,6 +7,8 @@ import { TranslateModule } from '@ngx-translate/core';
 
 import { AuthService } from 'src/app/core/services/auth/auth.service';
 
+import { ActionButtonComponent } from 'src/app/core/components/action-button/action-button.component';
+import { FormErrorComponent } from 'src/app/core/components/form-error/form-error.component';
 import { NoVaccineRageAlertComponent } from 'src/app/core/components/no-vaccine-rage-alert/no-vaccine-rage-alert.component';
 import { PageTitleComponent } from 'src/app/core/components/page-title/page-title.component';
 import { PaginationComponent } from 'src/app/core/components/pagination/pagination.component';
@@ -20,6 +22,8 @@ describe('InformationsComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [
+        ActionButtonComponent,
+        FormErrorComponent,
         NoVaccineRageAlertComponent,
         PageTitleComponent,
         PaginationComponent,

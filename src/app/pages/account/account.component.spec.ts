@@ -4,10 +4,12 @@ import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { TranslateModule } from '@ngx-translate/core';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
+import { ActionButtonComponent } from 'src/app/core/components/action-button/action-button.component';
+import { PageTitleComponent } from 'src/app/core/components/page-title/page-title.component';
+
 import { AccountComponent } from './account.component';
 import { AccountTabInformationsComponent } from './tabs/account-tab-informations/account-tab-informations.component';
 import { AccountTabSecurityComponent } from './tabs/account-tab-security/account-tab-security.component';
-import { PageTitleComponent } from 'src/app/core/components/page-title/page-title.component';
 
 describe('AccountComponent', () => {
   let component: AccountComponent;
@@ -16,10 +18,11 @@ describe('AccountComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [
+        ActionButtonComponent,
+        PageTitleComponent,
         AccountComponent,
         AccountTabInformationsComponent,
-        AccountTabSecurityComponent,
-        PageTitleComponent
+        AccountTabSecurityComponent
       ],
       imports: [
         ReactiveFormsModule,

@@ -11,6 +11,8 @@ import { ToastService } from 'src/app/core/services/toast/toast.service';
 import { SerializerService } from 'src/app/core/services/serializer/serializer.service';
 import { SettingsService } from 'src/app/core/services/settings/settings.service';
 
+import { ActionButtonComponent } from 'src/app/core/components/action-button/action-button.component';
+import { FormErrorComponent } from 'src/app/core/components/form-error/form-error.component';
 import { PageTitleComponent } from 'src/app/core/components/page-title/page-title.component';
 import { MeasureComponent } from 'src/app/core/components/measure/measure.component';
 
@@ -23,6 +25,8 @@ describe('WeightMonitoringComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [
+        ActionButtonComponent,
+        FormErrorComponent,
         PageTitleComponent,
         MeasureComponent,
         WeightMonitoringComponent

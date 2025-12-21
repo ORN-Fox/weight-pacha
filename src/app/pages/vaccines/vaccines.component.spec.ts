@@ -5,6 +5,8 @@ import { FormsModule } from '@angular/forms';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { TranslateModule } from '@ngx-translate/core';
 
+import { AuthService } from 'src/app/core/services/auth/auth.service';
+
 import { NoVaccineRageAlertComponent } from 'src/app/core/components/no-vaccine-rage-alert/no-vaccine-rage-alert.component';
 import { PaginationComponent } from 'src/app/core/components/pagination/pagination.component';
 import { PageTitleComponent } from 'src/app/core/components/page-title/page-title.component';
@@ -30,7 +32,13 @@ describe('VaccinesComponent', () => {
       ],
       providers: [
         provideHttpClient(),
-        provideHttpClientTesting()
+        provideHttpClientTesting(),
+        {
+          provide: AuthService,
+          useValue: {
+            selectedPetRecordValue: { id: 1 }
+          }
+        }
       ]
     })
     .compileComponents();
