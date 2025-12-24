@@ -96,6 +96,10 @@ export class AuthService implements NgxAuthService {
                 this.saveUserAndPetRecordsData(user)
 
                 await this.router.navigateByUrl('/home');
+            }),
+            catchError((error) => {
+                console.error('Unable to login', error);
+                return throwError(() => error);
             })
         );
     }
