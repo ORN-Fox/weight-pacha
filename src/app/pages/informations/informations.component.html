@@ -206,9 +206,7 @@
         <div class="field-body">
             <div class="field">
                 <div class="control">
-                    <button type="submit" class="button is-primary">
-                        <i class="far fa-bookmark mr-2"></i> {{ "commons.actions.save" | translate }}
-                    </button>
+                    <app-action-button type="submit" title="commons.actions.save" customClass="is-primary" icon="far fa-bookmark mr-2" [isLoading]="isLoading"></app-action-button>
                 </div>
             </div>
         </div>

@@ -80,9 +80,8 @@
 
       <div class="field has-text-centered">
         <div class="control">
-          <button type="submit" class="button is-primary btn-add-measure">
-            <i class="far fa-bookmark mr-2"></i> {{ "pages.weight.add" | translate }}
-          </button>
+          <app-action-button type="submit" title="pages.weight.add" customClass="is-primary btn-add-measure" icon="far fa-bookmark mr-2"
+            [isLoading]="isLoading"></app-action-button>
         </div>
       </div>
     </form>

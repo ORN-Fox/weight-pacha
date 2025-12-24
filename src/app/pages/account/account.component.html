@@ -7,7 +7,7 @@
                 @for (tab of tabs; track tab.id) {
                     <li [ngClass]="{'is-active': selectedTab.id == tab.id}" (click)="selectTab(tab)">
                         <a>
-                            <span class="icon is-small"><i class="fas fa-{{ tab.icon }}" aria-hidden="true"></i></span>
+                            <span class="icon is-small"><i class="far fa-{{ tab.icon }}" aria-hidden="true"></i></span>
                             <span>{{ tab.name | translate }}</span>
                         </a>
                     </li>
@@ -28,6 +28,6 @@
     </div>
 
     <button type="button" class="button is-danger" (click)="logout()">
-        <i class="fas fa-sign-out-alt mr-2"></i> Deconnexion
+        <i class="far fa-sign-out-alt mr-2"></i> Deconnexion
     </button>
 </div>

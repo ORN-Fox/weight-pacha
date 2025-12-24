@@ -53,9 +53,7 @@
                 {{ "commons.actions.cancel" | translate }}
             </button>
             
-            <button type="submit" class="button is-primary ml-2">
-                <i class="far fa-bookmark mr-2"></i> {{ "commons.actions.save" | translate }}
-            </button>
+            <app-action-button type="submit" title="commons.actions.save" customClass="is-primary ml-2" icon="far fa-bookmark mr-2" [isLoading]="isLoading"></app-action-button>
         </div>
     </mat-dialog-actions>
 </form>
