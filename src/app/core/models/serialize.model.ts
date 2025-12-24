@@ -16,7 +16,7 @@ export abstract class SerializeModel {
     updatedAt: moment.Moment | null;
 
     constructor() {
-        this.id = this.id = uuidv4();
+        this.id = uuidv4();
         this.createdAt = moment();
     }
 
