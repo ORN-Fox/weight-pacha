@@ -38,6 +38,7 @@ export class MeasureComponent implements OnChanges {
   @Output() deleteMeasureEvent: EventEmitter<{ measure: Measure }> = new EventEmitter();
 
   editMode: boolean = false;
+  isLoading: boolean = false;
 
   measureForm: FormGroup;
   measureDiff: IMeasureDiff;
