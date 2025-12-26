@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
@@ -13,6 +13,9 @@ import { DialogAction } from 'src/app/core/enums/dialog-action/dialog.action.enu
 import { IInputElementWithFlatpickr } from 'src/app/core/interfaces/IInputElementWithFlatpickr';
 
 import { CalendarEvent } from 'src/app/core/models/calendar-event/calendar-event.model';
+import { catchError, Subscription, tap, throwError } from 'rxjs';
+import { ApiService } from 'src/app/core/services/api/api.service';
+import { AuthService } from 'src/app/core/services/auth/auth.service';
 
 export interface CalendarEventDialogData {
   action: DialogAction;
@@ -29,22 +32,31 @@ enum CalendarEventDatePickerInput {
   styleUrl: './calendar-event-dialog.component.scss',
   standalone: false
 })
-export class CalendarEventDialogComponent {
+export class CalendarEventDialogComponent implements OnInit, OnDestroy {
 
-  readonly formBuilder = inject(FormBuilder);
+  readonly apiService = inject(ApiService);
+  readonly authService = inject(AuthService);
   readonly dialogRef = inject(MatDialogRef<CalendarEventDialogComponent>);
-  readonly translateService = inject(TranslateService);
+  readonly formBuilder = inject(FormBuilder);
   readonly settingsService = inject(SettingsService);
   readonly toastService = inject(ToastService);
+  readonly translateService = inject(TranslateService);
+
   readonly data = inject<CalendarEventDialogData>(MAT_DIALOG_DATA);
 
   calendarEventForm: FormGroup;
 
-  editMode: boolean;
-  submitted: boolean = false;
+  createCalendarEventSub: Subscription;
+  deleteCalendarEventSub: Subscription;
+  updateCalendarEventSub: Subscription;
+
+  addMode: boolean;
+  isDeleteLoading: boolean = false;
+  isLoading: boolean = false;
+  isSubmitted: boolean = false;
   
   constructor() {
-    this.editMode = this.data.action === DialogAction.UPDATE;
+    this.addMode = this.data.action === DialogAction.ADD;
 
     this.settingsService.settings$.subscribe(() => {
       this.updateFlatpickrLocales();
@@ -53,6 +65,12 @@ export class CalendarEventDialogComponent {
   
   ngOnInit() {
     this.initForm(this.data.calendarEvent);
+  }
+
+  ngOnDestroy() {
+    this.createCalendarEventSub?.unsubscribe();
+    this.deleteCalendarEventSub?.unsubscribe();
+    this.updateCalendarEventSub?.unsubscribe();
   }
 
   deleteCalendarEvent() {
@@ -64,20 +82,21 @@ export class CalendarEventDialogComponent {
   }
 
   saveCalendarEvent() {
-    this.submitted = true;
+    this.isLoading = true;
+    this.isSubmitted = true;
 
     if (this.calendarEventForm.valid) {
       Object.assign(this.data.calendarEvent, this.calendarEventForm.value);
       this.data.calendarEvent.startDate = moment(this.data.calendarEvent.startDate);
       this.data.calendarEvent.updatedAt = moment();
 
-      this.submitted = false;
-
-      const dialogResult: CalendarEventDialogData = {
-        action: this.data.action == DialogAction.ADD ? DialogAction.ADD : DialogAction.UPDATE,
-        calendarEvent: this.data.calendarEvent
-      };
-      this.dialogRef.close(dialogResult);
+      if (this.addMode) {
+        this.createCalendarEvent();
+      } else {
+        this.updateCalendarEvent();
+      }
+    } else {
+      setTimeout(() => this.isLoading = false, 500);
     }
   }
 
@@ -116,12 +135,56 @@ export class CalendarEventDialogComponent {
     });
   }
 
-  private onDeleteCalendarEvent() {
-    const dialogResult: CalendarEventDialogData = {
-      action: DialogAction.DELETE,
-      calendarEvent: this.data.calendarEvent
+  private createCalendarEvent() {
+      const serializeCalendarEvent = this.data.calendarEvent.serializeForSave();
+      this.createCalendarEventSub = this.apiService.post(`/pet-record/${ this.authService.selectedPetRecordValue.id }/calendar-event`, serializeCalendarEvent).pipe(
+        tap(() => {
+          this.isLoading = false;
+          this.isSubmitted = false;
+          this.dialogRef.close(true);
+        }),
+        catchError((error) => {
+          this.isLoading = false;
+  
+          this.toastService.showToast('error', this.translateService.instant('commons.toast.error.create'));
+          console.error('Unable to create calendar event', error);
+          return throwError(() => error);
+        }),
+      ).subscribe();
     }
-    this.dialogRef.close(dialogResult);
+  
+    private updateCalendarEvent() {
+      const serializeCalendarEvent = this.data.calendarEvent.serializeForSave();
+      this.updateCalendarEventSub = this.apiService.put(`/pet-record/${this.authService.selectedPetRecordValue.id}/calendar-event/${serializeCalendarEvent.id}`, serializeCalendarEvent).pipe(
+        tap(() => {
+          this.isSubmitted = false;
+          this.dialogRef.close(true);
+        }),
+        catchError((error) => {
+          this.isLoading = false;
+  
+          this.toastService.showToast('error', this.translateService.instant('commons.toast.error.update'));
+          console.error('Unable to update calendar event', error);
+          return throwError(() => error);
+        }),
+      ).subscribe();
+    }
+
+  private onDeleteCalendarEvent() {
+    this.isDeleteLoading = true;
+    this.deleteCalendarEventSub = this.apiService.delete(`/pet-record/${this.authService.selectedPetRecordValue.id}/calendar-event/${ this.data.calendarEvent.id }`).pipe(
+      tap(() => {
+        this.isDeleteLoading = false;
+        this.dialogRef.close(true);
+      }),
+      catchError((error) => {
+        this.isDeleteLoading = false;
+
+        this.toastService.showToast('error', this.translateService.instant('commons.toast.error.delete'));
+        console.error('Unable to delete calendar event', error);
+        return throwError(() => error);
+      }),
+    ).subscribe();
   }
 
 }

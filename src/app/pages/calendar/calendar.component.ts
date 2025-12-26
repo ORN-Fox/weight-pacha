@@ -1,7 +1,8 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { CalendarOptions, EventClickArg, ViewMountArg } from '@fullcalendar/core';
 import { TranslateService } from '@ngx-translate/core';
+import { catchError, Subscription, tap, throwError } from 'rxjs';
 import { cloneDeep } from 'lodash';
 import frLocale from '@fullcalendar/core/locales/fr';
 import frCaLocale from '@fullcalendar/core/locales/fr-ca';
@@ -10,15 +11,16 @@ import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
 import listPlugin from '@fullcalendar/list';
 import moment from 'moment';
 
+import { ApiService } from 'src/app/core/services/api/api.service';
+import { AuthService } from 'src/app/core/services/auth/auth.service';
 import { LocalStorageService } from 'src/app/core/services/local-storage/local-storage.service';
 import { SerializerService } from 'src/app/core/services/serializer/serializer.service';
 import { SettingsService } from 'src/app/core/services/settings/settings.service';
+import { ToastService } from 'src/app/core/services/toast/toast.service';
 
 import { DialogAction } from 'src/app/core/enums/dialog-action/dialog.action.enum';
 
 import { CalendarEvent, CalendarEventSource, IFullCalendarEventModel, ISerializedCalendarEvent } from 'src/app/core/models/calendar-event/calendar-event.model';
-import { ISerializedVaccine, Vaccine } from 'src/app/core/models/vaccine/vaccine.model';
-import { ISerializedWormable, Wormable } from 'src/app/core/models/wormable/wormable.model';
 
 import { CalendarEventDialogComponent, CalendarEventDialogData } from './calendar-event-dialog/calendar-event-dialog.component';
 
@@ -28,21 +30,22 @@ import { CalendarEventDialogComponent, CalendarEventDialogData } from './calenda
   styleUrl: './calendar.component.scss',
   standalone: false
 })
-export class CalendarComponent {
+export class CalendarComponent implements OnDestroy {
 
+  readonly apiService = inject(ApiService);
+  readonly authService = inject(AuthService);
   readonly dialog = inject(MatDialog);
   readonly localStorageService = inject(LocalStorageService);
   readonly serializerService = inject(SerializerService);
   readonly settingsService = inject(SettingsService);
+  readonly toastService = inject(ToastService);
   readonly translateService = inject(TranslateService);
-
-  APP_STORAGE_KEY: string = 'weight-pacha-calendar';
-  APP_VACCINES_STORAGE_KEY: string = 'weight-pacha-vaccines';
-  APP_WORMABLES_STORAGE_KEY: string = 'weight-pacha-wormables';
 
   calendarOptions: CalendarOptions;
 
   calendarEvents: CalendarEvent[] = [];
+
+  loadCalendarEventsSub: Subscription;
 
   timeFormat: string;
 
@@ -56,8 +59,13 @@ export class CalendarComponent {
     });
   }
 
+  ngOnDestroy() {
+    this.loadCalendarEventsSub?.unsubscribe();
+  }
+
   addCalendarEvent() {
     const calendarEvent = new CalendarEvent();
+    calendarEvent.petRecordId = this.authService.selectedPetRecordValue.id;
     this.openCalendarEventDialog(false, calendarEvent);
   }
 
@@ -72,63 +80,31 @@ export class CalendarComponent {
   // #region loading data
 
   private loadCalendarEvents() {
-    if (this.localStorageService.isItemExist(this.APP_STORAGE_KEY)) {
-      let calendarEvents: CalendarEvent[] = [];
-      const calendarEventsJSON = this.localStorageService.getItem(this.APP_STORAGE_KEY);
+    this.calendarEvents = [];
+    this.initCalendarOptions();
 
-      calendarEventsJSON.calendarEvents.forEach((calendarEventJSON: ISerializedCalendarEvent) => {
-        let calendarEvent = new CalendarEvent();
-        calendarEvent.deserilizeFromSave(calendarEventJSON);
-        calendarEvents.push(calendarEvent);
-      });
-      this.calendarEvents = calendarEvents;
-    } else {
-      this.localStorageService.setItem(this.APP_STORAGE_KEY, { calendarEvents: this.calendarEvents });
-    }
+    this.loadCalendarEventsSub = this.apiService.get<ISerializedCalendarEvent[]>(`/pet-record/${ this.authService.selectedPetRecordValue.id }/calendar-events`).pipe(
+      tap((serializedCalendarEvents: ISerializedCalendarEvent[]) => {
+        let calendarEvents: CalendarEvent[] = [];
+        serializedCalendarEvents.forEach((calendarEventJSON: ISerializedCalendarEvent) => {
+          let calendarEvent = new CalendarEvent();
+          calendarEvent.deserilizeFromSave(calendarEventJSON);
+          calendarEvents.push(calendarEvent);
+        });
+        this.calendarEvents = calendarEvents;
+        this.refreshCalendarEventsInCalendarOptions();
+      }),
+      catchError((error) => {
+        this.toastService.showToast('error', this.translateService.instant('commons.toast.error.load'));
+        console.error('Unable to create calendar event', error);
+        return throwError(() => error);
+      }),
+    ).subscribe();
 
-    let vaccinesEvents = this.loadVaccinesEvents();
-    let wormablesEvents = this.loadWormablesEvents();
-    this.calendarEvents = this.calendarEvents.concat(vaccinesEvents, wormablesEvents);
-
-    this.initCalendarOptions(this.calendarEvents);
-  }
-
-  private loadVaccinesEvents(): CalendarEvent[] {
-    let vaccineEvents: CalendarEvent[] = [];
-
-    if (this.localStorageService.isItemExist(this.APP_VACCINES_STORAGE_KEY)) {
-      const vaccinesJSON = this.localStorageService.getItem(this.APP_VACCINES_STORAGE_KEY);
-
-      vaccinesJSON.vaccines.forEach((vaccineJSON: ISerializedVaccine) => {
-        let vaccine = new Vaccine();
-        vaccine.deserilizeFromSave(vaccineJSON);
-
-        let vaccineEvent = new CalendarEvent(vaccine.name, vaccine.injectionDate, CalendarEventSource.VACCINE);
-        vaccineEvent.id = vaccine.id;
-        vaccineEvents.push(vaccineEvent);
-      });
-    }
-
-    return vaccineEvents;
-  }
-
-  private loadWormablesEvents(): CalendarEvent[] {
-    let wormableEvents: CalendarEvent[] = [];
-
-    if (this.localStorageService.isItemExist(this.APP_WORMABLES_STORAGE_KEY)) {
-      const wormablesJSON = this.localStorageService.getItem(this.APP_WORMABLES_STORAGE_KEY);
-
-      wormablesJSON.wormables.forEach((wormableJSON: ISerializedWormable) => {
-        let wormable = new Wormable();
-        wormable.deserilizeFromSave(wormableJSON);
-
-        let wormableEvent = new CalendarEvent(wormable.name, wormable.injectionDate, CalendarEventSource.WORMABLE);
-        wormableEvent.id = wormableEvent.id;
-        wormableEvents.push(wormableEvent);
-      });
-    }
-
-    return wormableEvents;
+    // TODO refac for get all events with one api call
+    // let vaccinesEvents = this.loadVaccinesEvents();
+    // let wormablesEvents = this.loadWormablesEvents();
+    // this.calendarEvents = this.calendarEvents.concat(vaccinesEvents, wormablesEvents);
   }
 
   // #endregion 
@@ -176,7 +152,7 @@ export class CalendarComponent {
   }
 
   private handleDateClick(arg: DateClickArg) {
-    const calendarEvent = new CalendarEvent('', moment(arg.date));
+    const calendarEvent = new CalendarEvent('', moment(arg.date), CalendarEventSource.CALENDAR, this.authService.selectedPetRecordValue.id);
     this.openCalendarEventDialog(false, calendarEvent);
   }
 
@@ -202,38 +178,11 @@ export class CalendarComponent {
 
     dialogRef.afterClosed().subscribe((result: CalendarEventDialogData) => {
       if (result) {
-        switch (result.action) {
-          case DialogAction.ADD:
-            this.calendarEvents.push(result.calendarEvent);
-            break;
-
-          case DialogAction.UPDATE:
-            const indexToUpdate = this.calendarEvents.findIndex(calendarEvent => calendarEvent.id === result.calendarEvent.id);
-            if (indexToUpdate !== -1) {
-              this.calendarEvents[indexToUpdate] = result.calendarEvent;
-            }
-            break;
-
-          case DialogAction.DELETE:
-            this.calendarEvents = this.calendarEvents.filter((calendarEvent) => calendarEvent.id !== result.calendarEvent.id);
-            break;
-        }
-
-        this.saveCalendarEvents();
-        this.refreshCalendarEventsInCalendarOptions();
+        this.loadCalendarEvents();
       }
     });
   }
 
   // #endregion
-
-  private saveCalendarEvents() {
-    const calendarEvents = this.calendarEvents.filter((calendarEvent) => calendarEvent.eventSource === CalendarEventSource.CALENDAR);
-
-    // TODO: enable vaccine and wormable crud event (comming soon 0.3.0 or api version)
-
-    const serializedCalendarEvents = this.serializerService.serializeList(calendarEvents);
-    this.localStorageService.setItem(this.APP_STORAGE_KEY, { calendarEvents: serializedCalendarEvents });
-  }
 
 }

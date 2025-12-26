@@ -1,6 +1,6 @@
 <form [formGroup]="calendarEventForm" (ngSubmit)="saveCalendarEvent()">
     <div class="modal-header">
-        <h2 class="modal-title">{{ ("pages.calendar." + (editMode ? "editTitle" : "addTitle")) | translate }}</h2>
+        <h2 class="modal-title">{{ ("pages.calendar." + (addMode ? "addTitle" : "editTitle")) | translate }}</h2>
     </div>
 
     <mat-dialog-content>
@@ -8,28 +8,24 @@
             <label class="label">{{ "commons.fields.date" | translate }}</label>
             <div class="control has-icons-left">
                 <input type="text" id="startDateInput" class="input" formControlName="startDate" placeholder="{{ 'commons.dateFormats.dateTime' | translate}}"
-                    [ngClass]="{'is-danger': calendarEventForm.get('startDate')?.errors?.['required'] && (submitted || calendarEventForm.get('startDate')?.value === '')}">
+                    [ngClass]="{'is-danger': calendarEventForm.get('startDate')?.errors?.['required'] && (isSubmitted || calendarEventForm.get('startDate')?.value === '')}">
                 <span class="icon is-small is-left">
                     <i class="far fa-calendar"></i>
                 </span>
             </div>
-            @if (calendarEventForm.get('startDate')?.errors?.['required'] && (submitted || calendarEventForm.get('startDate')?.value === '')) {
-                <p class="help is-danger">{{ "commons.errors.dateRequired" | translate }}</p>
-            }
+            <app-form-error [form]="calendarEventForm" fieldName="startDate" errorRuleName="required" errorMessage="commons.errors.dateRequired" customClass="is-danger" [isDate]="true" [isSubmitted]="isSubmitted"></app-form-error>
         </div>
 
         <div class="field">
             <label class="label">{{ "commons.fields.title" | translate }}</label>
             <div class="control has-icons-left">
                 <input type="text" class="input" name="title" formControlName="title" placeholder="{{ 'commons.fields.title' | translate}}"
-                    [ngClass]="{'is-danger': calendarEventForm.get('title')?.errors?.['required'] && (submitted || calendarEventForm.get('title')?.touched)}">
+                    [ngClass]="{'is-danger': calendarEventForm.get('title')?.errors?.['required'] && (isSubmitted || calendarEventForm.get('title')?.touched)}">
                 <span class="icon is-small is-left">
                     <i class="far fa-tag"></i>
                 </span>
             </div>
-            @if (calendarEventForm.get('title')?.errors?.['required'] && (submitted || calendarEventForm.get('title')?.touched)) {
-                <p class="help is-danger">{{ "commons.errors.titleRequired" | translate }}</p>
-            }
+            <app-form-error [form]="calendarEventForm" fieldName="title" errorRuleName="required" errorMessage="commons.errors.titleRequired" customClass="is-danger" [isSubmitted]="isSubmitted"></app-form-error>
         </div>
 
         <div class="field">
@@ -41,10 +37,8 @@
     
     <mat-dialog-actions class="is-justify-content-space-between">
         <div>
-            @if (editMode) {
-                <button type="button" class="button is-danger" (click)="deleteCalendarEvent()">
-                    <i class="far fa-trash mr-2"></i> {{ "commons.actions.delete" | translate }}
-                </button>
+            @if (!addMode) {
+                <app-action-button type="button" title="commons.actions.delete" customClass="is-danger" icon="far fa-trash mr-2" [isLoading]="isDeleteLoading" (click)="deleteCalendarEvent()"></app-action-button>
             }
         </div>
 
