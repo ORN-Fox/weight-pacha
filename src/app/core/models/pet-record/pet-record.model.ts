@@ -89,4 +89,11 @@ export class PetRecord extends SerializeModel {
         }
     }
 
+    getAge(date: moment.Moment = moment()): number {
+        if (this.birthDate) {
+            return date.diff(this.birthDate, 'years', false);
+        }
+        return -1;
+    }
+
 }

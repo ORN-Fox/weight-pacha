@@ -105,7 +105,7 @@ export class VaccinesComponent implements OnDestroy {
     // TODO: compute days, weeks, months value for handle babies
     if (vaccine.injectionDate && this.petRecord.birthDate) {
       vaccine.injectionDate = moment(vaccine.injectionDate);
-      return vaccine.injectionDate?.diff(this.petRecord.birthDate, 'years', false);
+      return this.petRecord.getAge(vaccine.injectionDate);
     }
     return null;
   }
