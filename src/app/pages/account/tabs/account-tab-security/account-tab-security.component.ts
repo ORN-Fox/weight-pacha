@@ -15,18 +15,21 @@ export class AccountTabSecurityComponent {
 
   passwordForm: FormGroup;
 
-  submitted: boolean = false;
+  isLoading: boolean = false;
+  isSubmitted: boolean = false;
 
   constructor() {
     this.initPasswordForm();
   }
 
   savePassword() {
-    this.submitted = true;
+    this.isLoading = true;
+    this.isSubmitted = true;
     // TODO
 
     setTimeout(() => {
-      this.submitted = false;
+      this.isLoading = false;
+      this.isSubmitted = false;
     }, 1000);
   }
 
