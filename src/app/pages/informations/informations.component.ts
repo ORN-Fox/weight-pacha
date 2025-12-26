@@ -53,10 +53,11 @@ export class InformationsComponent implements OnDestroy {
   species: ISpecie[];
 
   loadPetRecordSub: Subscription;
-  createPetRecordSub: Subscription; // TODO handle pet record creation
+  createPetRecordSub: Subscription;
   updatePetRecordSub: Subscription;
 
-  submitted: boolean = false;
+  isLoading: boolean = false;
+  isSubmitted: boolean = false;
 
   constructor() {
     this.initForm(new PetRecord());
@@ -75,47 +76,47 @@ export class InformationsComponent implements OnDestroy {
   }
 
   saveInformations() {
-    this.submitted = true;
+    this.isLoading = true;
+    this.isSubmitted = true;
 
     if (this.petForm.valid) {
       Object.assign(this.petRecord, this.petForm.value);
       this.petRecord.birthDate = moment(this.petRecord.birthDate);
-      this.petRecord.adoptedDate = this.petRecord.adoptedDate ? moment(this.petRecord.adoptedDate) : null,
-      this.petRecord.sterilizeDate = this.petRecord.sterilizeDate ? moment(this.petRecord.sterilizeDate) : null,
-      this.petRecord.updatedAt = moment();
+      this.petRecord.adoptedDate = this.petRecord.adoptedDate ? moment(this.petRecord.adoptedDate) : null;
+      this.petRecord.sterilizeDate = this.petRecord.sterilizeDate ? moment(this.petRecord.sterilizeDate) : null;
 
-      const serializedPetRecord = this.petRecord.serializeForSave();
-      this.updatePetRecordSub = this.apiService.put<ISerializedPetRecord>(`/pet-record/${ this.authService.selectedPetRecordValue.id }/update`, serializedPetRecord).pipe(
-        tap(async () => {
-          this.submitted = false;
-
-          this.toastService.showToast('success', this.translateService.instant('commons.toast.success.update'));
-          this.router.navigate(['/home']);
-        }),
-        catchError(err => {
-          this.submitted = false;
-          
-          this.toastService.showToast('error', this.translateService.instant('commons.toast.error.update'));
-          console.error('Unable to update pet record', err);
-          return throwError(err);
-        }),
-      ).subscribe();
+      if (this.petRecord.isNewPetRecord) {
+        this.createPetRecord();
+      } else {
+        this.updatePetRecord();
+      }
+    } else {
+      setTimeout(() => this.isLoading = false, 500);
     }
   }
 
   private loadPetRecord() {
+    if (this.authService.selectedPetRecordValue.isNewPetRecord) {
+      this.petRecord = this.authService.selectedPetRecordValue;
+      return;
+    }
+
+    this.isLoading = true;
+
     this.loadPetRecordSub = this.apiService.get<ISerializedPetRecord>(`/pet-record/${ this.authService.selectedPetRecordValue.id }`).pipe(
       tap(async (serializedPetRecord: ISerializedPetRecord) => {
+        this.isLoading = false;
         let petRecord = new PetRecord();
         petRecord.deserilizeFromSave(serializedPetRecord);
         this.petRecord = petRecord;
 
         this.initForm(this.petRecord);
       }),
-      catchError(err => {
+      catchError((error) => {
+        this.isLoading = false;
         this.toastService.showToast('error', this.translateService.instant('commons.toast.error.load'));
-        console.error('Unable to load pet record', err);
-        return throwError(err);
+        console.error('Unable to load pet record', error);
+        return throwError(() => error);
       }),
     ).subscribe();
   }
@@ -187,6 +188,51 @@ export class InformationsComponent implements OnDestroy {
         input._flatpickr.redraw();
       }
     });
+  }
+
+  private createPetRecord() {
+    const serializedPetRecord = this.petRecord.serializeForSave();
+    this.updatePetRecordSub = this.apiService.post<ISerializedPetRecord>(`/pet-record`, serializedPetRecord).pipe(
+      tap(async (serializedPetRecord: ISerializedPetRecord) => {
+        this.isLoading = false;
+        this.isSubmitted = false;
+
+        let petRecord = new PetRecord();
+        petRecord.deserilizeFromSave(serializedPetRecord);
+
+        this.authService.selectedPetRecordValue = petRecord;
+
+        this.toastService.showToast('success', this.translateService.instant('commons.toast.success.create'));
+        this.router.navigate(['/home']);
+      }),
+      catchError((error) => {
+        this.isLoading = false;
+
+        this.toastService.showToast('error', this.translateService.instant('commons.toast.error.create'));
+        console.error('Unable to update pet record', error);
+        return throwError(() => error);
+      }),
+    ).subscribe();
+  }
+
+  private updatePetRecord() {
+    const serializedPetRecord = this.petRecord.serializeForSave();
+    this.updatePetRecordSub = this.apiService.put<ISerializedPetRecord>(`/pet-record/${this.authService.selectedPetRecordValue.id}`, serializedPetRecord).pipe(
+      tap(async () => {
+        this.isLoading = false;
+        this.isSubmitted = false;
+
+        this.toastService.showToast('success', this.translateService.instant('commons.toast.success.update'));
+        this.router.navigate(['/home']);
+      }),
+      catchError((error) => {
+        this.isLoading = false;
+
+        this.toastService.showToast('error', this.translateService.instant('commons.toast.error.update'));
+        console.error('Unable to update pet record', error);
+        return throwError(() => error);
+      }),
+    ).subscribe();
   }
 
 }

@@ -27,20 +27,32 @@
                     <div class="navbar-item has-dropdown is-hoverable">
                         <a class="navbar-link">
                             @if (selectedPetRecord) {
-                                <img [src]="'/assets/images/animals/' + getPetRecordIcon(selectedPetRecord.specie) + '.png'" alt="">
-                                {{ selectedPetRecord.firstName }}
+                                @if (selectedPetRecord.isNewPetRecord) {
+                                    <img src="/assets/images/animals/unknown.png" alt="">
+                                    ?
+                                } @else {
+                                    <img [src]="'/assets/images/animals/' + selectedPetRecord.getSpecieIcon() + '.png'" alt="">
+                                    {{ selectedPetRecord.firstName }}
+                                }
                             }
                         </a>
                         <div class="navbar-dropdown is-right">
                             @for (petRecord of petRecords; track petRecord.id) {
                                 <a class="navbar-item" [ngClass]="{'is-active': petRecord.id == selectedPetRecord.id}"
                                     (click)="selectPetRecord(petRecord)">
-                                    <img [src]="'/assets/images/animals/' + getPetRecordIcon(petRecord.specie) + '.png'" alt="">
+                                    <img [src]="'/assets/images/animals/' + petRecord.getSpecieIcon() + '.png'" alt="">
                                     {{ petRecord.firstName }}
                                 </a>
                             }
+                            <a class="navbar-item" (click)="createPetRecord()">
+                                <i class="far fa-plus mr-2"></i> Ajouter un animal
+                            </a>
                         </div>
                     </div>
+                } @else {
+                    <a class="navbar-item" (click)="createPetRecord()">
+                        <i class="far fa-plus mr-2"></i> Ajouter un animal
+                    </a>
                 }
             }
 

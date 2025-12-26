@@ -9,10 +9,11 @@ import { French } from "flatpickr/dist/l10n/fr.js";
 import { AuthService } from '../../services/auth/auth.service';
 import { SettingsService } from '../../services/settings/settings.service';
 
+import { PetType } from '../../enums/pet-type/pet-type.enum';
+
 import { PetRecord } from '../../models/pet-record/pet-record.model';
 import { Settings } from '../../models/settings/settings.model';
 import { User } from '../../models/user/user.model';
-import { PetType } from '../../enums/pet-type/pet-type.enum';
 
 @Component({
   selector: 'app-navbar',
@@ -84,25 +85,23 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.isOpenSidebar = !this.isOpenSidebar;
   }
 
-  getPetRecordIcon(specie: number): string {
-    switch (specie) {
-      case PetType.Dog:
-        return 'dog';
-      case PetType.Cat:
-        return 'cat';
-      case PetType.Rabbit:
-        return 'rabbit';
-      case PetType.Others:
-      default:
-        return 'others';
-    }
-  }
+  // #region Pet Record 
 
   selectPetRecord(petRecord: PetRecord) {
     if (this.authService.selectedPetRecordValue.id != petRecord.id) {
       this.authService.selectedPetRecordValue = petRecord;
-      this.router.navigate(['/home']);
+
+      let routeName = petRecord.isNewPetRecord ? '/informations' : '/home';
+      this.router.navigate([routeName]);
     }
   }
+
+  createPetRecord() {
+    let petRecord = new PetRecord();
+    petRecord.isNewPetRecord = true;
+    this.selectPetRecord(petRecord);
+  }
+
+  // #endregion
 
 }

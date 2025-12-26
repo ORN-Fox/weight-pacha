@@ -11,14 +11,12 @@
             <div class="field">
                 <div class="control is-expanded has-icons-left">
                     <input class="input" type="text" formControlName="firstName" placeholder="{{ 'pages.informations.placeholders.firstName' | translate}}"
-                           [ngClass]="{'is-danger': petForm.get('firstName')?.errors?.['required'] && (submitted || petForm.get('firstName')?.touched)}">
+                           [ngClass]="{'is-danger': petForm.get('firstName')?.errors?.['required'] && (isSubmitted || petForm.get('firstName')?.touched)}">
                     <span class="icon is-small is-left">
                         <i class="far fa-heart"></i>
                     </span>
                 </div>
-                @if (petForm.get('firstName')?.errors?.['required'] && (submitted || petForm.get('firstName')?.touched)) {
-                    <p class="help is-danger">{{ "pages.informations.errors.firstNameRequired" | translate }}</p>
-                }
+                <app-form-error [form]="petForm" fieldName="firstName" errorRuleName="required" errorMessage="pages.informations.errors.firstNameRequired" customClass="is-danger" [isSubmitted]="isSubmitted"></app-form-error>
             </div>
         </div>
     </div>
@@ -31,15 +29,13 @@
             <div class="field">
                 <div class="control radios">
                     @for (specie of species; track specie) {
-                        <label class="radio custom-radio-with-icon has-text-centered" [ngClass]="{'active': petForm.get('specie')?.value == specie.value, 'is-danger': submitted && !petForm.get('specie')?.value}">
+                        <label class="radio custom-radio-with-icon has-text-centered" [ngClass]="{'active': petForm.get('specie')?.value == specie.value, 'is-danger': isSubmitted && !petForm.get('specie')?.value}">
                             <input type="radio" formControlName="specie" value="{{ specie.value }}" />
                             <img [src]="'/assets/images/animals/' + specie.key + '.png'" alt=""> {{ ("pages.informations." + specie.key) | translate }}
                         </label>
                     }
                 </div>
-                @if (petForm.get('specie')?.errors?.['required'] && (submitted || petForm.get('specie')?.touched)) {
-                    <p class="help is-danger">{{ "pages.informations.errors.specieRequired" | translate }}</p>
-                }
+                <app-form-error [form]="petForm" fieldName="specie" errorRuleName="required" errorMessage="pages.informations.errors.specieRequired" customClass="is-danger" [isSubmitted]="isSubmitted"></app-form-error>
             </div>
         </div>
     </div>

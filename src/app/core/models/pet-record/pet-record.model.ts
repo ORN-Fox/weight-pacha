@@ -39,10 +39,16 @@ export class PetRecord extends SerializeModel {
     tagRageNumber: string;
     description: string;
 
+    // local data
+    isNewPetRecord: boolean;
+
     constructor() {
         super();
 
         this.sterilize = false;
+
+        // local data
+        this.isNewPetRecord = false;
     }
     
     override serializeForSave(): ISerializedPetRecord {
@@ -94,6 +100,20 @@ export class PetRecord extends SerializeModel {
             return date.diff(this.birthDate, 'years', false);
         }
         return -1;
+    }
+
+    getSpecieIcon(): string {
+        switch (this.specie) {
+            case PetType.Dog:
+                return 'dog';
+            case PetType.Cat:
+                return 'cat';
+            case PetType.Rabbit:
+                return 'rabbit';
+            case PetType.Others:
+            default:
+                return 'others';
+        }
     }
 
 }
