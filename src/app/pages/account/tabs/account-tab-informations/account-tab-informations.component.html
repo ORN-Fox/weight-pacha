@@ -1,8 +1,53 @@
 @if (user) {
-    <p><img src="https://cdn-icons-png.flaticon.com/64/145/145848.png" alt=""></p>
-    <p>{{ user.username }}</p>
-    <p>{{ user.email }}</p>
-    <p>Statut <span class="tag is-primary">Actif</span></p>
-    <p>Vérifié <span class="tag is-primary">Oui</span></p>
-    <p>2FA <span class="tag is-light">A venir</span></p>
+    <div class="box" style="max-width: 400px; margin: auto;">
+        <article class="media">
+            <figure class="media-left">
+                <p class="image is-64x64">
+                    <img src="https://cdn-icons-png.flaticon.com/64/145/145848.png" alt="Avatar utilisateur">
+                </p>
+            </figure>
+            <div class="media-content">
+                <div class="content">
+                    <p><strong>{{ user.username }}</strong></p>
+                    <p>
+                        <span class="icon-text">
+                            <span class="icon">
+                                <i class="fas fa-envelope"></i>
+                            </span>
+                            <span>{{ user.email }}</span>
+                        </span>
+                    </p>
+                    <div class="tags">
+                        <span class="tag is-primary">Statut : Actif</span>
+                        <span class="tag is-success">Vérifié : Oui</span>
+                        <span class="tag is-light">2FA : À venir</span>
+                    </div>
+                </div>
+            </div>
+        </article>
+    </div>
+
+    <hr>
+
+    <div class="grid is-gap-6">
+        @for (petRecord of user.petRecords; track petRecord) {
+            <div class="box cell">
+                <article class="media">
+                    <figure class="media-left">
+                        <p class="image is-64x64">
+                            <img [src]="'/assets/images/animals/' + petRecord.getSpecieIcon() + '.png'" alt="">
+                        </p>
+                    </figure>
+                    <div class="media-content">
+                        <div class="content">
+                            <p><strong>{{ petRecord.firstName }}</strong></p>
+                            @if (petRecord.birthDate) {
+                                <p>{{ petRecord.getAge() }} {{ 'commons.yearOld' | translate}}</p>
+                            }
+                        </div>
+                    </div>
+                </article>
+            </div>
+        }
+    </div>
 }
