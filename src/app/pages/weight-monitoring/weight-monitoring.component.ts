@@ -48,8 +48,6 @@ export class WeightMonitoringComponent implements AfterViewInit, OnDestroy {
   readonly serializerService = inject(SerializerService);
   readonly settingsService = inject(SettingsService);
 
-  private readonly APP_STORAGE_KEY: string = 'weight-pacha-data-measures';
-
   loadMeasuresSub: Subscription;
   addMeasureSub: Subscription;
   updateMeasureSub: Subscription;
@@ -64,7 +62,9 @@ export class WeightMonitoringComponent implements AfterViewInit, OnDestroy {
   healthWeightOffset: number = .5;
 
   measureForm: FormGroup;
-  submitted: boolean = false;
+  
+  isLoading: boolean = false;
+  isSubmitted: boolean = false;
 
   rangeDateInputInstance: Instance;
 
@@ -106,10 +106,10 @@ export class WeightMonitoringComponent implements AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.loadMeasuresSub?.unsubscribe();
     this.addMeasureSub?.unsubscribe();
-    this.updateMeasureSub?.unsubscribe();
     this.deleteMeasureSub?.unsubscribe();
+    this.loadMeasuresSub?.unsubscribe();
+    this.updateMeasureSub?.unsubscribe();
   }
 
   onChangeRangeDates(selectedDates: Date[]) {
@@ -192,43 +192,48 @@ export class WeightMonitoringComponent implements AfterViewInit, OnDestroy {
   }
 
   addMeasure() {
-    this.submitted = true;
+    this.isLoading = true;
+    this.isSubmitted = true;
 
-    if (this.measureForm.valid) {
-      let measure = new Measure();
-      Object.assign(measure, this.measureForm.value);
-      measure.date = moment(measure.date);
-      measure.petRecordId = this.authService.selectedPetRecordValue.id;
-
-      const serializedMeasure = measure.serializeForSave();
-      this.addMeasureSub = this.apiService.post<ISerializedMeasure>(`/pet-record/${this.authService.selectedPetRecordValue.id}/measure`, serializedMeasure).pipe(
-        tap(async (serializedMeasure: ISerializedMeasure) => {
-          this.submitted = false;
-          this.initForm();
-
-          measure.deserilizeFromSave(serializedMeasure);
-          this.sourceMeasures.push(measure);
-          this.sourceMeasures = this.sortMeasuresByDate(this.sourceMeasures);
-          this.measures = this.filterMeasuresInRangeDates();
-
-          let dataPoint: IWeightChartDataSetPoint = {
-            x: measure.date,
-            y: measure.weight
-          };
-
-          this.chart.data.datasets[0].data.push(dataPoint);
-          this.updateRangeDates();
-        }),
-        catchError(err => {
-          this.submitted = false;
-          this.initForm();
-
-          this.toastService.showToast('error', this.translateService.instant('commons.toast.error.create'));
-          console.error('Unable to create measure', err);
-          return throwError(err);
-        }),
-      ).subscribe();
+    if (this.measureForm.invalid) {
+      setTimeout(() => this.isLoading = false, 500);
+      return
     }
+
+    let measure = new Measure();
+    Object.assign(measure, this.measureForm.value);
+    measure.date = moment(measure.date);
+    measure.petRecordId = this.authService.selectedPetRecordValue.id;
+
+    const serializedMeasure = measure.serializeForSave();
+    this.addMeasureSub = this.apiService.post<ISerializedMeasure>(`/pet-record/${this.authService.selectedPetRecordValue.id}/measure`, serializedMeasure).pipe(
+      tap(async (serializedMeasure: ISerializedMeasure) => {
+        this.isLoading = false;
+        this.isSubmitted = false;
+        this.initForm();
+
+        measure.deserilizeFromSave(serializedMeasure);
+        this.sourceMeasures.push(measure);
+        this.sourceMeasures = this.sortMeasuresByDate(this.sourceMeasures);
+        this.measures = this.filterMeasuresInRangeDates();
+
+        let dataPoint: IWeightChartDataSetPoint = {
+          x: measure.date,
+          y: measure.weight
+        };
+
+        this.chart.data.datasets[0].data.push(dataPoint);
+        this.updateRangeDates();
+      }),
+      catchError((error) => {
+        this.isLoading = false;
+        this.initForm();
+
+        this.toastService.showToast('error', this.translateService.instant('commons.toast.error.create'));
+        console.error('Unable to create measure', error);
+        return throwError(() => error);
+      }),
+    ).subscribe();
   }
 
   onUpdateMeasure(event: { measure: Measure }) {
@@ -247,10 +252,10 @@ export class WeightMonitoringComponent implements AfterViewInit, OnDestroy {
         this.measures = this.filterMeasuresInRangeDates();
         this.updateRangeDates();
       }),
-      catchError(err => {
+      catchError((error) => {
         this.toastService.showToast('error', this.translateService.instant('commons.toast.error.update'));
-        console.error('Unable to update measure', err);
-        return throwError(err);
+        console.error('Unable to update measure', error);
+        return throwError(() => error);
       }),
     ).subscribe();
   }
@@ -266,10 +271,10 @@ export class WeightMonitoringComponent implements AfterViewInit, OnDestroy {
             this.chart.data.datasets[0].data = this.chart.data.datasets[0].data.filter((dataPoint: IWeightChartDataSetPoint) => !moment(dataPoint.x).isSame(event.measure.date, 'day'));
             this.updateRangeDates();
           }),
-          catchError(err => {
+          catchError((error) => {
             this.toastService.showToast('error', this.translateService.instant('commons.toast.error.delete'));
-            console.error('Unable to delete measure', err);
-            return throwError(err);
+            console.error('Unable to delete measure', error);
+            return throwError(() => error);
           }),
         ).subscribe();
       }
@@ -335,10 +340,10 @@ export class WeightMonitoringComponent implements AfterViewInit, OnDestroy {
 
         this.updateChart();
       }),
-      catchError(err => {        
+      catchError((error) => {        
         this.toastService.showToast('error', this.translateService.instant('commons.toast.error.load'));
-        console.error('Unable to load measures', err);
-        return throwError(err);
+        console.error('Unable to load measures', error);
+        return throwError(() => error);
       }),
     ).subscribe();
   }

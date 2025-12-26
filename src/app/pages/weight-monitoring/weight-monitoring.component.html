@@ -41,11 +41,11 @@
         <label class="label">{{ "commons.fields.date" | translate }}</label>
         <div class="control has-icons-left">
           <input type="text" formControlName="date" id="measureDateInput" class="input" placeholder="{{ 'commons.dateFormats.dateTime' | translate }}"
-              [ngClass]="{'is-danger': measureForm.get('date')?.touched && (submitted || measureForm.get('date')?.value === '')}">
+              [ngClass]="{'is-danger': measureForm.get('date')?.touched && (isSubmitted || measureForm.get('date')?.value === '')}">
           <span class="icon is-small is-left">
             <i class="far fa-calendar"></i>
           </span>
-          @if (submitted || measureForm.get('date')?.value === '') {
+          @if (isSubmitted || measureForm.get('date')?.value === '') {
             @if (measureForm.get('date')?.errors?.['required']) {
               <p class="help is-danger">{{ "commons.errors.dateRequired" | translate }}</p>
             }
@@ -62,19 +62,13 @@
       <div class="field">
         <label class="label">{{"pages.weight.weight" | translate}}</label>
         <div class="control has-icons-left has-icons-right">
-          <input type="number" formControlName="weight" class="input" [ngClass]="{'is-danger': measureForm.get('weight')?.invalid && (submitted || measureForm.get('weight')?.touched)}"  step="any" min="0" placeholder="2">
+          <input type="number" formControlName="weight" class="input" [ngClass]="{'is-danger': measureForm.get('weight')?.invalid && (isSubmitted || measureForm.get('weight')?.touched)}"  step="any" min="0" placeholder="2">
           <span class="icon is-small is-left">
             <i class="far fa-weight-hanging"></i>
           </span>
           <span class="icon is-small is-right">{{ getMeasureUnitLabel() }}</span>
-          @if (submitted || measureForm.get('weight')?.touched) {
-            @if (measureForm.get('weight')?.errors?.['required']) {
-              <p class="help is-danger">{{ "pages.weight.errors.weightRequired" | translate }}</p>
-            }
-            @if (measureForm.get('weight')?.errors?.['min']) {
-              <p class="help is-danger">{{ "pages.weight.errors.weightMustBePositive" | translate }}</p>
-            }
-          }
+          <app-form-error [form]="measureForm" fieldName="weight" errorRuleName="required" errorMessage="pages.weight.errors.weightRequired" customClass="is-danger" [isSubmitted]="isSubmitted"></app-form-error>
+          <app-form-error [form]="measureForm" fieldName="weight" errorRuleName="min" errorMessage="pages.weight.errors.weightMustBePositive" customClass="is-danger" [isSubmitted]="isSubmitted"></app-form-error>
         </div>
       </div>
 
