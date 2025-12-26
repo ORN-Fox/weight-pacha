@@ -129,7 +129,7 @@
       <label class="label">{{ "pages.weight.healthyWeight" | translate }}</label>
       <div class="control has-icons-left has-icons-right">
         <input type="number" name="healthWeight" class="input" [ngClass]="{'is-danger': !healthWeight || healthWeight < 0}"
-         [(ngModel)]="healthWeight" (ngModelChange)="updateHealthWeight()" step="any" min="1" max="20" placeholder="4">
+         [(ngModel)]="healthWeight" (ngModelChange)="updateHealthWeight()" step="any" min="0.01" max="100" placeholder="4">
         <span class="icon is-small is-left">
           <i class="far fa-weight-hanging"></i>
         </span>
