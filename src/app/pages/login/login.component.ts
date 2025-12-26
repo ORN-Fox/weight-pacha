@@ -18,7 +18,8 @@ export class LoginComponent implements OnDestroy {
   loginForm: FormGroup;
   loginSub: Subscription;
 
-  submitted: boolean = false;
+  isLoading: boolean = false;
+  isSubmitted: boolean = false;
 
   constructor() {
     this.initForm();
@@ -29,10 +30,11 @@ export class LoginComponent implements OnDestroy {
   }
 
   protected login() {
-    this.submitted = true;
+    this.isSubmitted = true;
+    this.isLoading = true;
 
     if (this.loginForm.invalid) {
-      this.submitted = false;
+      setTimeout(() => this.isLoading = false, 500);
       return;
     }
 
@@ -42,7 +44,14 @@ export class LoginComponent implements OnDestroy {
       rememberMe: this.loginForm.get('rememberMe')?.value
     };
 
-    this.loginSub = this.authService.login(userAccessData).subscribe();
+    this.loginSub = this.authService.login(userAccessData).subscribe({
+      next: () => {
+        this.isSubmitted = false;
+      },
+      error: () => {
+        this.isLoading = false;
+      }
+    });
   }
 
   private initForm() {
