@@ -172,7 +172,7 @@ export class CalendarEventDialogComponent implements OnInit, OnDestroy {
 
   private onDeleteCalendarEvent() {
     this.isDeleteLoading = true;
-    this.deleteCalendarEventSub = this.apiService.delete(`/pet-record/${this.authService.selectedPetRecordValue.id}/calendar-event/${ this.data.calendarEvent.id }`).pipe(
+    this.deleteCalendarEventSub = this.apiService.delete(`/pet-record/${this.authService.selectedPetRecordValue.id}/calendar-event/${ this.data.calendarEvent.id }/event-source/${ this.data.calendarEvent.eventSource }`).pipe(
       tap(() => {
         this.isDeleteLoading = false;
         this.dialogRef.close(true);
