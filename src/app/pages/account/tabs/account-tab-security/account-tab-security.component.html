@@ -5,7 +5,7 @@
         <label class="label">{{ "commons.fields.oldPassword" | translate }}</label>
         <div class="control has-icons-left">
             <input type="type" id="oldPassword" class="input" formControlName="oldPassword"
-                placeholder="{{ 'commons.oldPassword' | translate}}"
+                placeholder="{{ 'commons.fields.oldPassword' | translate}}"
                 [ngClass]="{'is-danger': passwordForm.get('oldPassword')?.errors?.['required'] && (isSubmitted || passwordForm.get('oldPassword')?.touched)}">
             <span class="icon is-small is-left">
                 <i class="far fa-key"></i>
@@ -20,7 +20,7 @@
         <label class="label">{{ "commons.fields.newPassword" | translate }}</label>
         <div class="control has-icons-left">
             <input type="type" id="newPassword" class="input" formControlName="newPassword"
-                placeholder="{{ 'commons.newPassword' | translate}}"
+                placeholder="{{ 'commons.fields.newPassword' | translate}}"
                 [ngClass]="{'is-danger': passwordForm.get('newPassword')?.errors?.['required'] && (isSubmitted || passwordForm.get('newPassword')?.touched)}">
             <span class="icon is-small is-left">
                 <i class="far fa-key"></i>
@@ -35,7 +35,7 @@
         <label class="label">{{ "commons.fields.newPasswordConfirmation" | translate }}</label>
         <div class="control has-icons-left">
             <input type="type" id="newPasswordConfirmation" class="input" formControlName="newPasswordConfirmation"
-                placeholder="{{ 'commons.newPasswordConfirmation' | translate}}"
+                placeholder="{{ 'commons.fields.newPasswordConfirmation' | translate}}"
                 [ngClass]="{'is-danger': passwordForm.get('newPasswordConfirmation')?.errors?.['required'] && (isSubmitted || passwordForm.get('newPasswordConfirmation')?.touched)}">
             <span class="icon is-small is-left">
                 <i class="far fa-key"></i>
