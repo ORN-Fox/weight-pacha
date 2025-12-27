@@ -100,11 +100,6 @@ export class CalendarComponent implements OnDestroy {
         return throwError(() => error);
       }),
     ).subscribe();
-
-    // TODO refac for get all events with one api call
-    // let vaccinesEvents = this.loadVaccinesEvents();
-    // let wormablesEvents = this.loadWormablesEvents();
-    // this.calendarEvents = this.calendarEvents.concat(vaccinesEvents, wormablesEvents);
   }
 
   // #endregion 
