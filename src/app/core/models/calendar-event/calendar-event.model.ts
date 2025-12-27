@@ -14,6 +14,7 @@ export interface ISerializedCalendarEvent extends ISerializeModel {
     title: string;
     startDate: string | null;
     description: string | null;
+    eventSource: number;
     petRecordId: string;
 }
 
@@ -34,20 +35,16 @@ export class CalendarEvent extends SerializeModel {
     title: string;
     startDate: moment.Moment;
     description: string | null = null;
-    petRecordId: string;
-
-    // local data
     eventSource: number;
+    petRecordId: string;
 
     constructor(title: string = '', startDate: moment.Moment = moment(), eventSource: number = CalendarEventSource.CALENDAR, petRecordId: string = '') {
         super();
 
         this.title = title;
         this.startDate = startDate;
-        this.petRecordId = petRecordId;
-
-        // local data
         this.eventSource = eventSource;
+        this.petRecordId = petRecordId;
     }
 
     convertToFullCalendarModel(): IFullCalendarEventModel {
@@ -69,6 +66,7 @@ export class CalendarEvent extends SerializeModel {
             title: this.title,
             startDate: DateService.getStringDateFromMoment(this.startDate),
             description: this.description,
+            eventSource: this.eventSource,
             petRecordId: this.petRecordId
         };
         
@@ -84,6 +82,7 @@ export class CalendarEvent extends SerializeModel {
             this.title = serializeCalendarEvent.title;
             this.startDate = DateService.getMomentFromStringDate(serializeCalendarEvent.startDate) as moment.Moment;
             this.description = serializeCalendarEvent.description;
+            this.eventSource = serializeCalendarEvent.eventSource;
             this.petRecordId = serializeCalendarEvent.petRecordId;
         } catch (exception) {
             console.error('Exception on deserialize calendar event model', exception);
