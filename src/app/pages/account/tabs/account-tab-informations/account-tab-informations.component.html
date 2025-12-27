@@ -29,6 +29,8 @@
 
     <hr>
 
+    <p class="title has-text-black">Mes animaux</p>
+
     <div class="grid is-gap-6">
         @for (petRecord of user.petRecords; track petRecord) {
             <div class="box cell">
@@ -45,6 +47,11 @@
                                 <p>{{ petRecord.getAge() }} {{ 'commons.yearOld' | translate}}</p>
                             }
                         </div>
+                        @if (petRecord.archivedAt) {
+                            <div class="tags">
+                                <span class="tag is-warning"><i class="far fa-box mr-2"></i> Archivé</span>
+                            </div>
+                        }
                     </div>
                 </article>
             </div>
