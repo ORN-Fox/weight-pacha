@@ -92,9 +92,12 @@ $fc-primary-hover: #00b89f;
         cursor: pointer;
         padding: .25em .5em;
         font-size: .75rem;
+        overflow: hidden;
     }
 
     .fc-dayGridMonth-view .fc-event:hover {
+        overflow: visible;
+        white-space: normal;
         transform: scale(1.15);
     }
 
