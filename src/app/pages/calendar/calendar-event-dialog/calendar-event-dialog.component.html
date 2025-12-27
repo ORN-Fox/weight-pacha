@@ -5,6 +5,23 @@
 
     <mat-dialog-content>
         <div class="field">
+            <label class="label">{{ "commons.fields.type" | translate }}</label>
+            <div class="control">
+                <button class="button is-fullwidth is-disabled" disabled>
+                    @if (data.calendarEvent.eventSource == 0) {
+                        <i class="far fa-calendar mr-2"></i> CalendarEvent
+                    }
+                    @if (data.calendarEvent.eventSource == 1) {
+                        <i class="far fa-syringe mr-2"></i> Vaccin
+                    }
+                    @if (data.calendarEvent.eventSource == 2) {
+                        <i class="far fa-shield-virus mr-2"></i> Vermifuge
+                    }
+                </button>
+            </div>
+        </div>
+
+        <div class="field">
             <label class="label">{{ "commons.fields.date" | translate }}</label>
             <div class="control has-icons-left">
                 <input type="text" id="startDateInput" class="input" formControlName="startDate" placeholder="{{ 'commons.dateFormats.dateTime' | translate}}"
