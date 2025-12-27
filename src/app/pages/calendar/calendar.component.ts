@@ -153,13 +153,8 @@ export class CalendarComponent implements OnDestroy {
 
   private handleEventClick(arg: EventClickArg) {
     const calendarEventId: string = arg.event?._def?.publicId;
-    const calendarEventSource: number = arg.event?.extendedProps['eventSource'];
-
-    // TODO: enable vaccine and wormable crud event (comming soon 0.3.0 or api version)
-    if (calendarEventId && calendarEventSource === CalendarEventSource.CALENDAR) {
-      const calendarEvent = this.calendarEvents.filter(calendarEvent => calendarEvent.id == calendarEventId)[0];
-      this.openCalendarEventDialog(true, calendarEvent);
-    }
+    const calendarEvent = this.calendarEvents.filter(calendarEvent => calendarEvent.id == calendarEventId)[0];
+    this.openCalendarEventDialog(true, calendarEvent);
   }
 
   private openCalendarEventDialog(editMode: boolean = false, calendarEvent: CalendarEvent) {
