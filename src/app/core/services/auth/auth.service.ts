@@ -87,7 +87,7 @@ export class AuthService implements NgxAuthService {
     }
 
     login(user: LoginFormData) {
-        return this.apiService.post<AuthUserAccessData>('/login', { email: user.email, password: user.password }).pipe(
+        return this.apiService.post<AuthUserAccessData>('/login', { email: user.email, password: user.password, rememberMe: user.rememberMe }).pipe(
             tap(async (accessData: AuthUserAccessData) => {
                 this.saveAccessTokens(accessData);
 
