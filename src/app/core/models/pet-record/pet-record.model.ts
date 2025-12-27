@@ -21,6 +21,7 @@ export interface ISerializedPetRecord extends ISerializeModel {
     tagNumber: string;
     tagRageNumber: string;
     description: string;
+    archivedAt: string | null
 }
 
 export class PetRecord extends SerializeModel {
@@ -38,6 +39,7 @@ export class PetRecord extends SerializeModel {
     tagNumber: string;
     tagRageNumber: string;
     description: string;
+    archivedAt: moment.Moment | null;
 
     // local data
     isNewPetRecord: boolean;
@@ -65,7 +67,8 @@ export class PetRecord extends SerializeModel {
             sterilizeDate: DateService.getStringDateFromMoment(this.sterilizeDate),
             tagNumber: this.tagNumber,
             tagRageNumber: this.tagRageNumber,
-            description: this.description
+            description: this.description,
+            archivedAt: DateService.getStringDateFromMoment(this.archivedAt)
         };
 
         let serializePetRecord: ISerializedPetRecord = Object.assign(serializeFields, super.serializeForSave());
@@ -90,6 +93,7 @@ export class PetRecord extends SerializeModel {
             this.tagNumber = serializePetRecord.tagNumber;
             this.tagRageNumber = serializePetRecord.tagRageNumber;
             this.description = serializePetRecord.description;
+            this.archivedAt = DateService.getMomentFromStringDate(serializePetRecord.archivedAt);
         } catch (exception) {
             console.error('Exception on deserialize pet record model', exception);
         }
