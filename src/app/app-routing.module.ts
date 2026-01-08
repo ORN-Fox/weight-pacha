@@ -2,17 +2,17 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ngxProtectedGuard, ngxPublicGuard } from 'ngx-auth';
 
-import { LoginComponent } from './pages/login/login.component';
-import { HomeComponent } from './pages/home/home.component';
 import { AccountComponent } from './pages/account/account.component';
 import { CalendarComponent } from './pages/calendar/calendar.component';
+import { HomeComponent } from './pages/home/home.component';
 import { InformationsComponent } from './pages/informations/informations.component';
+import { InvoicesComponent } from './pages/invoices/invoices.component';
+import { LoginComponent } from './pages/login/login.component';
 import { NotesComponent } from './pages/notes/notes.component';
+import { SettingsComponent } from './pages/settings/settings.component';
 import { VaccinesComponent } from './pages/vaccines/vaccines.component';
 import { WeightMonitoringComponent } from './pages/weight-monitoring/weight-monitoring.component';
 import { WormablesComponent } from './pages/wormables/wormables.component';
-import { InvoicesComponent } from './pages/invoices/invoices.component';
-import { SettingsComponent } from './pages/settings/settings.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent, canActivate: [ngxPublicGuard] },
