@@ -5,7 +5,8 @@
 @use "../node_modules/bulma-switch-control";
 
 @use "assets/styles/fullcalendar-bulma-theme";
-@use "assets/styles/swal-override.scss";
+@use "assets/styles/ngx-pagination-override";
+@use "assets/styles/swal-override";
 
 @import url('https://cdn.jsdelivr.net/gh/hung1001/font-awesome-pro@4cac1a6/css/all.css');
 
@@ -38,57 +39,7 @@ a.navbar-item.is-active {
     border-radius: .75rem !important;
 }
 
-.ngx-pagination {
-    li {
-        &, &.current {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid #d6d9e0;
-            border-radius: .375rem !important;
-            margin: 0 .25rem !important;
-            padding: .25rem .5rem !important;
-            height: 2.5rem;
-            min-width: 2.5rem;
-        }
-
-        &.current {
-            background-color: #00d1b2;
-        }
-
-        &:not(.current):hover {
-            border-color: #b9bfca;
-            box-shadow: rgba(51, 51, 51, .05) 0 1px 2px 0, rgba(51, 51, 51, .05) 0 2px 4px 0;
-        }
-    }
-
-    a, button {
-        color: #2e333d !important;
-        padding: unset;
-
-        &:hover {
-            background: none !important;
-        }
-    }
-}
-
-.pagination-previous, .pagination-next {
-    &.disabled {
-        display: inline-flex;
-    }
-}
-
 .label-with-length-counter {
     display: flex;
     justify-content: space-between;
-}
-
-.swal2-actions {
-    flex-direction: row-reverse; /* For use same actions order with crud modal */
-}
-
-@media screen and (max-width: 601px) {
-    .ngx-pagination.responsive .small-screen {
-        display: inline-flex !important;
-    }
 }
