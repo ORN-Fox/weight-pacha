@@ -15,6 +15,8 @@ import { DialogAction } from 'src/app/core/enums/dialog-action/dialog.action.enu
 
 import { IInputElementWithFlatpickr } from 'src/app/core/interfaces/IInputElementWithFlatpickr';
 
+import { reminderDateValidator } from 'src/app/core/validators/same-or-before-reminder-date-error.validator';
+
 import { Vaccine } from 'src/app/core/models/vaccine/vaccine.model';
 
 export interface VaccineDialogData {
@@ -71,16 +73,6 @@ export class VaccineDialogComponent implements OnInit, OnDestroy {
     this.updateVaccineSub?.unsubscribe();
   }
 
-  reminderDateValidator(): ValidatorFn {
-    return (control: AbstractControl): { [key: string]: boolean } | null => {
-      const reminderDate = moment(control.value);
-      if (reminderDate && reminderDate.isSameOrBefore(this.data.vaccine.injectionDate, 'day')) {
-        return { 'sameOrBeforeReminderDateError': true };
-      }
-      return null;
-    };
-  }
-
   saveVaccine() {
     this.isLoading = true;
     this.isSubmitted = true;
@@ -105,7 +97,7 @@ export class VaccineDialogComponent implements OnInit, OnDestroy {
     this.vaccineForm = this.formBuilder.group({
       injectionDate: [vaccine.injectionDate, [Validators.required]],
       name: [vaccine.name, [Validators.required]],
-      reminderDate: [vaccine.reminderDate, [this.reminderDateValidator()]],
+      reminderDate: [vaccine.reminderDate, [reminderDateValidator(vaccine.injectionDate)]],
       description: [vaccine.description]
     })
 

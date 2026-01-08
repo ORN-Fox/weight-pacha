@@ -15,6 +15,8 @@ import { DialogAction } from 'src/app/core/enums/dialog-action/dialog.action.enu
 
 import { IInputElementWithFlatpickr } from 'src/app/core/interfaces/IInputElementWithFlatpickr';
 
+import { reminderDateValidator } from 'src/app/core/validators/same-or-before-reminder-date-error.validator';
+
 import { Wormable } from 'src/app/core/models/wormable/wormable.model';
 
 export interface WormableDialogData {
@@ -71,16 +73,6 @@ export class WormableDialogComponent implements OnInit, OnDestroy {
     this.updateWormableSub?.unsubscribe();
   }
 
-  reminderDateValidator(): ValidatorFn {
-    return (control: AbstractControl): { [key: string]: boolean } | null => {
-      const reminderDate = moment(control.value);
-      if (reminderDate && reminderDate.isSameOrBefore(this.data.wormable.injectionDate, 'day')) {
-        return { 'sameOrBeforeReminderDateError': true };
-      }
-      return null;
-    };
-  }
-
   saveWormable() {
     this.isLoading = true;
     this.isSubmitted = true;
@@ -106,7 +98,7 @@ export class WormableDialogComponent implements OnInit, OnDestroy {
     this.wormableForm = this.formBuilder.group({
       injectionDate: [wormable.injectionDate, [Validators.required]],
       name: [wormable.name, [Validators.required]],
-      reminderDate: [wormable.reminderDate, [this.reminderDateValidator()]],
+      reminderDate: [wormable.reminderDate, [reminderDateValidator(wormable.injectionDate)]],
       description: [wormable.description]
     })
 
