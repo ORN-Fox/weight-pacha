@@ -11,6 +11,13 @@
                         <img src="favicon.ico">
                     </figure>
 
+                    @if (isError) {
+                        <div class="notification is-danger is-light">
+                            <button class="delete" (click)="clearError()"></button>
+                            {{ "pages.login.errors.credentialsInvalid" | translate }}
+                        </div>
+                    }
+
                     <form [formGroup]="loginForm" (ngSubmit)="login()">
                         <div class="field">
                             <div class="control">

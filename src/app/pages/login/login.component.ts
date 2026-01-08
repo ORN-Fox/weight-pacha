@@ -18,6 +18,7 @@ export class LoginComponent implements OnDestroy {
   loginForm: FormGroup;
   loginSub: Subscription;
 
+  isError: boolean = false;
   isLoading: boolean = false;
   isSubmitted: boolean = false;
 
@@ -29,9 +30,14 @@ export class LoginComponent implements OnDestroy {
     this.loginSub?.unsubscribe();
   }
 
+  clearError() {
+    this.isError = false;
+  }
+
   protected login() {
-    this.isSubmitted = true;
+    this.isError = false;
     this.isLoading = true;
+    this.isSubmitted = true;
 
     if (this.loginForm.invalid) {
       setTimeout(() => this.isLoading = false, 500);
@@ -49,6 +55,7 @@ export class LoginComponent implements OnDestroy {
         this.isSubmitted = false;
       },
       error: () => {
+        this.isError = true;
         this.isLoading = false;
       }
     });
