@@ -20,9 +20,6 @@ export class Wormable extends SerializeModel {
     reminderDate?: moment.Moment | null;
     petRecordId: string;
 
-    // local data
-    editMode: boolean;
-
     constructor(name: string = '', injectionDate: moment.Moment = moment(), reminderDate?: moment.Moment | null, petRecordId: string = '') {
         super();
         
@@ -30,9 +27,6 @@ export class Wormable extends SerializeModel {
         this.injectionDate = injectionDate;
         this.reminderDate = reminderDate;
         this.petRecordId = petRecordId;
-
-        // local data
-        this.editMode = false;
     }
 
     override serializeForSave(): ISerializedWormable {

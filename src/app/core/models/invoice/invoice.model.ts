@@ -18,18 +18,12 @@ export class Invoice extends SerializeModel {
     description: string | null;
     petRecordId: string;
 
-    // local data
-    editMode: boolean;
-
     constructor(billingDate: moment.Moment = moment(), amount: number | null = null, petRecordId: string = '') {
         super();
         
         this.billingDate = billingDate;
         this.amount = amount;
         this.petRecordId = petRecordId;
-
-        // local data
-        this.editMode = false;
     }
 
     override serializeForSave(): ISerializedInvoice {

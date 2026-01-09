@@ -21,7 +21,6 @@ export class Vaccine extends SerializeModel {
     petRecordId: string;
 
     // local data
-    editMode: boolean;
     age: number | null;
 
     constructor(name: string = '', injectionDate: moment.Moment = moment(), reminderDate?: moment.Moment | null, petRecordId: string = '') {
@@ -31,9 +30,6 @@ export class Vaccine extends SerializeModel {
         this.injectionDate = injectionDate;
         this.reminderDate = reminderDate;
         this.petRecordId = petRecordId;
-
-        // local data
-        this.editMode = false;
     }
 
     override serializeForSave(): ISerializedVaccine {
