@@ -40,9 +40,7 @@
                             </button>
                         </td>
                     </tr>
-                }
-
-                @if (vaccines.length == 0) {
+                } @empty {
                     <tr>
                         <td colspan="7" class="has-text-centered">{{ "pages.vaccines.noVaccineAddNewForStartTracking" | translate }}</td>
                     </tr>

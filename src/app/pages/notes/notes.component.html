@@ -33,9 +33,7 @@
                             <i class="far fa-trash"></i>
                         </button>
                     </a>
-                }
-
-                @if (notes.length == 0) {
+                } @empty {
                     <div class="panel-block">
                         {{ (searchText ? 'pages.notes.noResults' : 'pages.notes.noNoteAddNewNoteForStart') | translate }}
                     </div>

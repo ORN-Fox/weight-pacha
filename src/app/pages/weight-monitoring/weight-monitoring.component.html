@@ -19,9 +19,7 @@
           (updateMeasureEvent)="onUpdateMeasure($event)"
           (deleteMeasureEvent)="onDeleteMeasure($event)"
         />
-      }
-
-      @if (measures.length == 0) {
+      } @empty  {
         <div class="box measure-content has-text-centered">
           <small>{{ "pages.weight.addMeasureToStartWeightTracking" | translate }}</small>
         </div>

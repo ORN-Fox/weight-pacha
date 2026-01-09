@@ -30,10 +30,10 @@
         <div class="subtitle">
             <div class="buttons has-addons">
                 @for (calendarViewFormat of calendarViewFormats; track calendarViewFormat) {
-                <button class="button" [ngClass]="{'is-primary is-selected': settings.calendarViewFormat == calendarViewFormat}"
-                    (click)="updateCalendarViewFormat(calendarViewFormat)">
-                    {{ 'commons.calendarViewFormats.' + calendarViewFormat | translate }}
-                </button>
+                    <button class="button" [ngClass]="{'is-primary is-selected': settings.calendarViewFormat == calendarViewFormat}"
+                        (click)="updateCalendarViewFormat(calendarViewFormat)">
+                        {{ 'commons.calendarViewFormats.' + calendarViewFormat | translate }}
+                    </button>
                 }
             </div>
         </div>
