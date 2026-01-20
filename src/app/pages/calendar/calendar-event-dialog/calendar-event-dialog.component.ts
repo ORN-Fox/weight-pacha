@@ -12,10 +12,10 @@ import { DialogAction } from 'src/app/core/enums/dialog-action/dialog.action.enu
 
 import { IInputElementWithFlatpickr } from 'src/app/core/interfaces/IInputElementWithFlatpickr';
 
-import { CalendarEvent } from 'src/app/core/models/calendar-event/calendar-event.model';
 import { catchError, Subscription, tap, throwError } from 'rxjs';
 import { ApiService } from 'src/app/core/services/api/api.service';
 import { AuthService } from 'src/app/core/services/auth/auth.service';
+import { CalendarEvent, CalendarEventSource } from 'src/app/core/models/calendar-event/calendar-event.model';
 
 export interface CalendarEventDialogData {
   action: DialogAction;
@@ -49,6 +49,13 @@ export class CalendarEventDialogComponent implements OnInit, OnDestroy {
   createCalendarEventSub: Subscription;
   deleteCalendarEventSub: Subscription;
   updateCalendarEventSub: Subscription;
+
+  calendarEventSource = CalendarEventSource;
+  calendarEventSources = [
+    CalendarEventSource.CALENDAR,
+    CalendarEventSource.VACCINE,
+    CalendarEventSource.WORMABLE
+  ];
 
   addMode: boolean;
   isDeleteLoading: boolean = false;
@@ -104,8 +111,9 @@ export class CalendarEventDialogComponent implements OnInit, OnDestroy {
     this.calendarEventForm = this.formBuilder.group({
       startDate: [calendarEvent.startDate, [Validators.required]],
       title: [calendarEvent.title, [Validators.required]],
-      description: [calendarEvent.description]
-    })
+      description: [calendarEvent.description],
+      eventSource: [calendarEvent.eventSource, [Validators.required]]
+    });
 
     this.initDatePickers(this.data.calendarEvent);
   }
