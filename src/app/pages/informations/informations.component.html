@@ -1,6 +1,6 @@
 <app-page-title title="informations"></app-page-title>
 
-@if (!petRecord.isNewPetRecord) {
+@if (petRecord && !petRecord.isNewPetRecord) {
     <app-no-vaccine-rage-alert [petRecord]="petRecord"></app-no-vaccine-rage-alert>
 }
 
