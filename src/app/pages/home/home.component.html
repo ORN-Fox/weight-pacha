@@ -1,6 +1,6 @@
 <div class="home">
     <div class="grid is-gap-6 is-col-min-12">
-        @for (page of pages; track page) {
+        @for (page of pages; track page.path) {
             <div class="cell">                
                 <a routerLink="/{{ page.enabled ? page.path : '#' }}" class="card {{ page.title }}" [ngClass]="{'disabled': !page.enabled}">
                     <div class="overlay"></div>
