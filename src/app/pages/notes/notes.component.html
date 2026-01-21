@@ -23,7 +23,7 @@
                         <div>
                             @if (note.name) {
                                 <p>{{ note.name }}</p>
-                                <p class="subtitle has-text-grey-light">{{ note.updatedAt ? note.updatedAt.format(dateTimeFormat) : note.createdAt.format(dateTimeFormat) }}</p>
+                                <p class="subtitle has-text-grey-light">{{ note.updatedAt ? note.updatedAt.format(dateTimeFormat) : note.createdAt?.format(dateTimeFormat) }}</p>
                             } @else {
                                 <p class="has-text-grey-light">{{ "commons.fields.title" | translate }}</p>
                             }
