@@ -8,7 +8,7 @@
             <label class="label">{{ "commons.fields.type" | translate }}</label>
             <div class="control has-icons-left">
                 <div class="select is-fullwidth">
-                    <select formControlName="eventSource" [disabled]="!addMode">
+                    <select formControlName="eventSource">
                         @for (calendarEventSource of calendarEventSources; track calendarEventSource) {
                             <option [ngValue]="calendarEventSource">{{ ('pages.calendar.eventSources.' + calendarEventSource) | translate }}</option>
                         }

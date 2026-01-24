@@ -112,7 +112,7 @@ export class CalendarEventDialogComponent implements OnInit, OnDestroy {
       startDate: [calendarEvent.startDate, [Validators.required]],
       title: [calendarEvent.title, [Validators.required]],
       description: [calendarEvent.description],
-      eventSource: [calendarEvent.eventSource, [Validators.required]]
+      eventSource: [{ value: calendarEvent.eventSource, disabled: !this.addMode }, [Validators.required]]
     });
 
     this.initDatePickers(this.data.calendarEvent);
