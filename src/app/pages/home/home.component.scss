@@ -17,66 +17,9 @@
         }
     }
 
-    .calendar {
-        --bg-color: #ee9797;
-        --bg-color-light: #c67575;
-        --text-color-hover: #fff;
-        --box-shadow-color: rgba(252, 205, 170, .48);
-    }
-
-    .informations {
-        --bg-color: #ffd861;
-        --bg-color-light: #ffeeba;
-        --text-color-hover: #4C5656;
-        --box-shadow-color: rgba(255, 215, 97, .48);
-    }
-
-    .notes {
-        --bg-color: #B8F9D3;
-        --bg-color-light: #e2fced;
-        --text-color-hover: #4C5656;
-        --box-shadow-color: rgba(184, 249, 211, .48);
-    }
-
-    .weight {
-        --bg-color: #CEB2FC;
-        --bg-color-light: #F0E7FF;
-        --text-color-hover: #fff;
-        --box-shadow-color: rgba(206, 178, 252, .48);
-    }
-
-    .invoices {
-        --bg-color: #DCE9FF;
-        --bg-color-light: #f1f7ff;
-        --text-color-hover: #4C5656;
-        --box-shadow-color: rgba(220, 233, 255, .48);
-    }
-
-    .vaccines {
-        --bg-color: #628bdd;
-        --bg-color-light: #95b6f8;
-        --text-color-hover: #fff;
-        --box-shadow-color: rgba(149, 182, 248, .48);
-    }
-
-    .wormables {
-        --bg-color: #f29d5c;
-        --bg-color-light: #fccdaa;
-        --text-color-hover: #fff;
-        --box-shadow-color: rgba(252, 205, 170, .48);
-    }
-
-    .settings {
-        --bg-color: #bdc0c6;
-        --bg-color-light: #dedede;
-        --text-color-hover: #4C5656;
-        --box-shadow-color: rgba(227, 227, 227, .48);
-    }
-
     .card {
         width: 100%;
         height: 321px;
-        background: #fff;
         overflow: hidden;
         display: flex;
         flex-direction: column;
@@ -169,5 +112,61 @@
         right: 0;
         z-index: 0;
         transition: transform .3s ease-out;
+    }
+
+    .calendar {
+        --bg-color: #ee9797;
+        --bg-color-light: #c67575;
+        --text-color-hover: #fff;
+        --box-shadow-color: rgba(252, 205, 170, .48);
+    }
+
+    .informations {
+        --bg-color: #ffd861;
+        --bg-color-light: #ffeeba;
+        --text-color-hover: #4C5656;
+        --box-shadow-color: rgba(255, 215, 97, .48);
+    }
+
+    .notes {
+        --bg-color: #B8F9D3;
+        --bg-color-light: #e2fced;
+        --text-color-hover: #4C5656;
+        --box-shadow-color: rgba(184, 249, 211, .48);
+    }
+
+    .weight {
+        --bg-color: #CEB2FC;
+        --bg-color-light: #F0E7FF;
+        --text-color-hover: #fff;
+        --box-shadow-color: rgba(206, 178, 252, .48);
+    }
+
+    .invoices {
+        --bg-color: #DCE9FF;
+        --bg-color-light: #f1f7ff;
+        --text-color-hover: #4C5656;
+        --box-shadow-color: rgba(220, 233, 255, .48);
+    }
+
+    .vaccines {
+        --bg-color: #628bdd;
+        --bg-color-light: #95b6f8;
+        --text-color-hover: #fff;
+        --box-shadow-color: rgba(149, 182, 248, .48);
+    }
+
+    .wormables {
+        --bg-color: #f29d5c;
+        --bg-color-light: #fccdaa;
+        --text-color-hover: #fff;
+        --box-shadow-color: rgba(252, 205, 170, .48);
+    }
+
+    .settings {
+        --bg-color: #bdc0c6;
+        --bg-color-light: #dedede;
+        --text-color-hover: #4C5656;
+        --box-shadow-color: rgba(227, 227, 227, .48);
     }
 }
