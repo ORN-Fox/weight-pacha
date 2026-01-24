@@ -1,3 +1,21 @@
 p {
     margin-bottom: .5rem;
 }
+
+.cell {
+    .button {
+        display: none;
+    }
+
+    &:hover .button {
+        display: block;
+    }
+}
+
+.btn-archive:hover {
+    color: #ffbb00;
+}
+
+.btn-restore:hover {
+    color: #1fcd0f;
+}

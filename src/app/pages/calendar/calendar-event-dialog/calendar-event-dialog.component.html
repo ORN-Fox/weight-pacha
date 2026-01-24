@@ -54,6 +54,22 @@
             <app-form-error [form]="calendarEventForm" fieldName="title" errorRuleName="required" errorMessage="commons.errors.titleRequired" customClass="is-danger" [isSubmitted]="isSubmitted"></app-form-error>
         </div>
 
+        <div class="field" [hidden]="!isVaccineOrWormableSource()">
+            <label class="label">{{ "commons.fields.reminderDate" | translate }}</label>
+            <div class="control has-icons-left">
+                <input type="text" id="reminderDateInput" class="input" formControlName="reminderDate"
+                    placeholder="{{ 'commons.dateFormats.date' | translate}}"
+                    [ngClass]="{'is-danger': calendarEventForm.get('reminderDate')?.errors?.['sameOrBeforeReminderDateError'] && (isSubmitted || calendarEventForm.get('reminderDate')?.value === '')}">
+                <span class="icon is-small is-left">
+                    <i class="far fa-calendar"></i>
+                </span>
+            </div>
+            @if (calendarEventForm.get('reminderDate')?.errors?.['sameOrBeforeReminderDateError'] &&
+                calendarEventForm.get('reminderDate')?.value) {
+                <p class="help is-danger">{{ "pages.vaccines.errors.sameOrBeforeReminderDateError" | translate }}</p>
+            }
+        </div>
+
         <div class="field">
             <label class="label">{{ "commons.fields.description" | translate }}</label>
             <textarea class="textarea" name="description" rows="5" formControlName="description" placeholder="{{ 'commons.fields.description' | translate}}"
