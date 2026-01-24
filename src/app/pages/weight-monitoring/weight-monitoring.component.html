@@ -103,17 +103,13 @@
     <div class="field">
       <label class="label">{{ "pages.weight.weightUnit" | translate }}</label>
       <div class="radios">
-        <label class="b-radio radio">
-          <input type="radio" name="measureUnit" [(ngModel)]="measureUnit" (ngModelChange)="updateMeasureUnit()" [value]="0">
-          <span class="check"></span>
-          <span class="control-label">Kg</span>
-        </label>
-        
-        <label class="b-radio radio">
-          <input type="radio" name="measureUnit" [(ngModel)]="measureUnit" (ngModelChange)="updateMeasureUnit()" [value]="1">
-          <span class="check"></span>
-          <span class="control-label">Lbs</span>
-        </label>
+        @for (weightUnit of weightUnits; track weightUnit) {
+          <label class="b-radio radio">
+            <input type="radio" name="weightUnit" [(ngModel)]="selectedWeightUnit" (ngModelChange)="updateWeightUnit(weightUnit)" [value]="weightUnit">
+            <span class="check"></span>
+            <span class="control-label">{{ weightUnitsLabels[weightUnit] }}</span>
+          </label>
+        }
       </div>
     </div>
 

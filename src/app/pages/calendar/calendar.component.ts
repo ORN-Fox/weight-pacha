@@ -142,7 +142,7 @@ export class CalendarComponent implements OnDestroy {
   private handViewFormatChange(arg: ViewMountArg) {
     const newCalendarViewFormat = arg.view.type;
     if (newCalendarViewFormat && newCalendarViewFormat != this.settingsService.currentSettings.calendarViewFormat) {
-      this.settingsService.updateSettings({ calendarViewFormat: newCalendarViewFormat });
+      this.settingsService.updateSettings(this.authService.userValue.id, { calendarViewFormat: newCalendarViewFormat });
     }
   }
 

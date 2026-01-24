@@ -8,11 +8,13 @@ import { catchError, map, tap } from 'rxjs/operators';
 import { jwtDecode } from "jwt-decode";
 
 import { ApiService } from '../api/api.service';
+import { SettingsService } from '../settings/settings.service';
 import { ToastService } from '../toast/toast.service';
 import { TokenStorageService } from '../token-storage/token-storage.service';
 
 import { PetRecord } from '../../models/pet-record/pet-record.model';
 import { ISerializedUser, User } from '../../models/user/user.model';
+import { UserSettings } from '../../models/user-settings/user-settings.model';
 
 interface AuthUserAccessData {
     accessToken: string;
@@ -33,6 +35,7 @@ export class AuthService implements NgxAuthService {
 
     private router = inject(Router);
     private apiService = inject(ApiService);
+    private settingsService = inject(SettingsService);
     private toastService = inject(ToastService);
     private tokenStorageService = inject(TokenStorageService);
     private translateService = inject(TranslateService);
@@ -45,7 +48,6 @@ export class AuthService implements NgxAuthService {
 
     private selectedPetRecordSubject = new BehaviorSubject<any>(null);
     public selectedPetRecord$ = this.selectedPetRecordSubject.asObservable();
-
 
     get userValue(): User {
         return this.userSubject.value;
@@ -167,6 +169,7 @@ export class AuthService implements NgxAuthService {
     private saveUserAndPetRecordsData(user: User)
     {
         this.userSubject.next(user);
+        this.settingsService.currentSettings = user.settings;
         this.petRecordsSubject.next(user.petRecords);
 
         if (this.petRecordsValue.length > 0) {
@@ -178,5 +181,8 @@ export class AuthService implements NgxAuthService {
         this.userSubject.next(null);
         this.petRecordsSubject.next([]);
         this.selectedPetRecordSubject.next(null);
+        
+        let keepLocale = this.settingsService.currentSettings.locale;
+        this.settingsService.currentSettings = { ...new UserSettings(), locale: keepLocale } as UserSettings;
     }
 }

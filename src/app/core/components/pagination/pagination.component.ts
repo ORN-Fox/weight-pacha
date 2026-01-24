@@ -2,8 +2,6 @@ import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular
 
 import { SettingsService } from '../../services/settings/settings.service';
 
-import { Settings } from '../../models/settings/settings.model';
-
 @Component({
   selector: 'app-pagination',
   templateUrl: './pagination.component.html',
@@ -19,15 +17,11 @@ export class PaginationComponent implements OnInit {
   @Output() pageChange: EventEmitter<number> = new EventEmitter<number>();
   @Output() itemsPerPageChange: EventEmitter<number> = new EventEmitter<number>();
 
-  settings!: Settings;
-
   itemsPerPages: number[] = [10, 25, 50];
   itemsPerPage: number;
 
-  constructor() {
-    this.settings = this.settingsService.currentSettings;
-    
-    this.itemsPerPage = this.settings.itemsPerPage || this.itemsPerPages[0];
+  constructor() {    
+    this.itemsPerPage = this.settingsService.currentSettings.itemsPerPage || this.itemsPerPages[0];
   }
 
   ngOnInit() {

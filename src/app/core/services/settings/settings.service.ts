@@ -1,54 +1,53 @@
 import { inject, Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, catchError, tap, throwError } from 'rxjs';
+import { TranslateService } from '@ngx-translate/core';
 
-import { LocalStorageService } from '../local-storage/local-storage.service';
+import { ApiService } from '../api/api.service';
+import { ToastService } from '../toast/toast.service';
 
-import { Settings, ISettings } from '../../models/settings/settings.model';
+import { UserSettings } from '../../models/user-settings/user-settings.model';
 
 @Injectable({
     providedIn: 'root'
 })
 export class SettingsService {
 
-    readonly localStorageService = inject(LocalStorageService);
+    readonly apiService = inject(ApiService);
+    readonly toastService = inject(ToastService);
+    readonly translateService = inject(TranslateService);
 
-    private readonly STORAGE_KEY = 'weight-pacha-settings';
-    private settings: Settings;
-    private settingsSubject: BehaviorSubject<Settings>;
+    private settingsSubject = new BehaviorSubject<UserSettings>(new UserSettings());
+    public settings$ = this.settingsSubject.asObservable();
 
-    constructor() {
-        this.settings = new Settings();
-        this.settingsSubject = new BehaviorSubject<Settings>(this.settings);
-        this.loadSettings();
+    get currentSettings(): UserSettings {
+        return this.settingsSubject.value;
     }
 
-    get currentSettings(): Settings {
-        return this.settings;
+    set currentSettings(userSettings: UserSettings) {
+        this.settingsSubject.next(userSettings);
     }
 
-    get settings$(): Observable<Settings> {
-        return this.settingsSubject.asObservable();
+    updateSettings(userId: string, settings: Partial<UserSettings>) {
+        let settingsToUpdate = Object.assign(this.settingsSubject.value, settings);
+        this.saveSettings(userId, settingsToUpdate);
     }
 
-    updateSettings(settings: Partial<ISettings>) {
-        this.settings = { ...this.settings, ...settings } as Settings; 
-        this.saveSettings();
-        this.settingsSubject.next(this.settings);
-    }
-
-    private loadSettings() {
-        if (this.localStorageService.isItemExist(this.STORAGE_KEY)) {
-            const savedSettings = this.localStorageService.getItem(this.STORAGE_KEY);
-            this.settings = new Settings();
-            this.settings.deserilizeFromSave(savedSettings);
-            this.settingsSubject.next(this.settings);
+    private saveSettings(userId: string, settingsToUpdate: UserSettings) {
+        if (userId) {
+            this.apiService.put<UserSettings>(`/user/${ userId }/settings`, settingsToUpdate.serializeForSave()).pipe(
+                tap((updatedSettings: UserSettings) => {
+                    this.settingsSubject.next(updatedSettings);
+                }),
+                catchError((error) => {
+                    this.toastService.showToast('error', this.translateService.instant('commons.toast.error.load'));
+                    console.error('Unable to update user settings', error);
+                    return throwError(() => error);
+                }),
+            ).subscribe();
         } else {
-            this.saveSettings();
+        // Not logged flow
+            this.settingsSubject.next(settingsToUpdate);
         }
-    }
-
-    private saveSettings() {
-        this.localStorageService.setItem(this.STORAGE_KEY, this.settings);
     }
     
 }

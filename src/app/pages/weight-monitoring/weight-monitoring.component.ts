@@ -57,9 +57,12 @@ export class WeightMonitoringComponent implements AfterViewInit, OnDestroy {
 
   sourceMeasures: Measure[] = [];
   measures: Measure[] = [];
-  measureUnit: UnitType;
   healthWeight: number = 4;
   healthWeightOffset: number = .5;
+
+  weightUnits: number[] = [UnitType.KiloGram, UnitType.Pounds, UnitType.Gram, UnitType.Ounce];
+  weightUnitsLabels: string[] = ['Kg', 'Lbs', 'g', 'oz'];
+  selectedWeightUnit: number;
 
   measureForm: FormGroup;
   
@@ -74,7 +77,7 @@ export class WeightMonitoringComponent implements AfterViewInit, OnDestroy {
       this.updateChartLocale();
     });
     
-    this.measureUnit = this.settingsService.currentSettings.weightUnit || UnitType.Kg;
+    this.selectedWeightUnit = this.settingsService.currentSettings.weightUnit || UnitType.KiloGram;
 
     Chart.register(annotationPlugin);
 
@@ -120,11 +123,16 @@ export class WeightMonitoringComponent implements AfterViewInit, OnDestroy {
   }
 
   getMeasureUnitLabel(): string {
-    switch(this.measureUnit) {
-      case UnitType.Kg:
+    switch(this.selectedWeightUnit) {
+      default:
+      case UnitType.KiloGram:
         return "Kg";
-      case UnitType.Lbs:
+      case UnitType.Pounds:
         return "Lbs";
+      case UnitType.Gram:
+        return "g";
+      case UnitType.Ounce:
+        return "oz";
     }
   }
 
@@ -281,12 +289,12 @@ export class WeightMonitoringComponent implements AfterViewInit, OnDestroy {
     });
   }
 
-  updateMeasureUnit() {
+  updateWeightUnit(selectedWeightUnit: number) {
     const healthWeightLabel = this.chart.options.plugins.annotation.annotations.label;
     healthWeightLabel.content = this.computeWeightHealthLabel();
     
-    let weightUnit = this.measureUnit;
-    this.settingsService.updateSettings({ weightUnit });
+    let weightUnit = selectedWeightUnit;
+    this.settingsService.updateSettings(this.authService.userValue.id, { weightUnit });
 
     this.updateChart();
   }
