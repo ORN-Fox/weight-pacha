@@ -9,11 +9,9 @@ import { French } from "flatpickr/dist/l10n/fr.js";
 import { AuthService } from '../../services/auth/auth.service';
 import { SettingsService } from '../../services/settings/settings.service';
 
-import { PetType } from '../../enums/pet-type/pet-type.enum';
-
 import { PetRecord } from '../../models/pet-record/pet-record.model';
-import { Settings } from '../../models/settings/settings.model';
 import { User } from '../../models/user/user.model';
+import { UserSettings } from '../../models/user-settings/user-settings.model';
 
 @Component({
   selector: 'app-navbar',
@@ -28,8 +26,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
   readonly settingsService = inject(SettingsService);
   readonly translateService = inject(TranslateService);
 
-  settings: Settings;
-
   user: User;
   private userSub: Subscription;
 
@@ -40,6 +36,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   private selectedPetRecordSub: Subscription;
 
   locales: string[] = ['en-US', 'fr-CA', 'fr-FR'];
+  selectedLocale: string;
 
   isOpenSidebar: boolean = false;
 
@@ -59,12 +56,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
     });
 
     this.settingsService.settings$.subscribe(settings => {
-      this.settings = this.settingsService.currentSettings;
-
-      const locale = settings.locale || 'en-US';
-      this.translateService.use(locale);
-
-      flatpickr.localize(locale === 'en-US' ? english : French);
+      this.selectedLocale = settings.locale;
+      this.translateService.use(this.selectedLocale);
+      flatpickr.localize(this.selectedLocale === 'en-US' ? english : French);
 
       document.documentElement.setAttribute('data-theme', settings.theme || 'light');
     });
@@ -77,7 +71,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   updateLocale(locale: string) {
-    this.settingsService.updateSettings({ locale });
+    this.settingsService.updateSettings(this.authService?.userValue?.id, { locale });
     this.translateService.use(locale);
   }
 
