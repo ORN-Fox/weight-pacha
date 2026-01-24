@@ -21,7 +21,14 @@
     <section class="section">
         <h1 class="title mb-3">{{ 'pages.settings.theme' | translate }}</h1>
         <div class="subtitle">
-            {{ 'commons.commingSoon' | translate }}
+            <div class="buttons has-addons">
+                @for (theme of themes; track theme) {
+                    <button class="button" [ngClass]="{'is-primary is-selected': settings.theme == theme}"
+                        (click)="updateTheme(theme)">
+                        {{ 'commons.themes.' + theme | translate }}
+                    </button>
+                }
+            </div>
         </div>
     </section>
 
