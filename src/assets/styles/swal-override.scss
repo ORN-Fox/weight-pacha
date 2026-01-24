@@ -1,3 +1,8 @@
 body.swal2-toast-shown .swal2-container {
     margin-top: 4rem;
 }
+
+/* For use same actions order with crud modal */
+.swal2-actions {
+    flex-direction: row-reverse;
+}
