@@ -1,4 +1,6 @@
 export enum UnitType {
-    Kg = 0,
-    Lbs
+    KiloGram = 0,
+    Pounds,
+    Gram,
+    Ounce
 }
