@@ -2,9 +2,12 @@ import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
+import { catchError, Subscription, tap, throwError } from 'rxjs';
 import flatpickr from 'flatpickr';
 import moment from 'moment';
 
+import { ApiService } from 'src/app/core/services/api/api.service';
+import { AuthService } from 'src/app/core/services/auth/auth.service';
 import { SettingsService } from 'src/app/core/services/settings/settings.service';
 import { ToastService } from 'src/app/core/services/toast/toast.service';
 
@@ -12,9 +15,6 @@ import { DialogAction } from 'src/app/core/enums/dialog-action/dialog.action.enu
 
 import { IInputElementWithFlatpickr } from 'src/app/core/interfaces/IInputElementWithFlatpickr';
 
-import { catchError, Subscription, tap, throwError } from 'rxjs';
-import { ApiService } from 'src/app/core/services/api/api.service';
-import { AuthService } from 'src/app/core/services/auth/auth.service';
 import { CalendarEvent, CalendarEventSource } from 'src/app/core/models/calendar-event/calendar-event.model';
 
 export interface CalendarEventDialogData {
