@@ -15,6 +15,8 @@ import { DialogAction } from 'src/app/core/enums/dialog-action/dialog.action.enu
 
 import { IInputElementWithFlatpickr } from 'src/app/core/interfaces/IInputElementWithFlatpickr';
 
+import { reminderDateValidator } from 'src/app/core/validators/same-or-before-reminder-date-error.validator';
+
 import { CalendarEvent, CalendarEventSource } from 'src/app/core/models/calendar-event/calendar-event.model';
 
 export interface CalendarEventDialogData {
@@ -23,7 +25,8 @@ export interface CalendarEventDialogData {
 }
 
 enum CalendarEventDatePickerInput {
-  StartDateInput = '#startDateInput'
+  StartDateInput = '#startDateInput',
+  ReminderDateInput = '#reminderDateInput'
 }
 
 @Component({
@@ -80,6 +83,10 @@ export class CalendarEventDialogComponent implements OnInit, OnDestroy {
     this.updateCalendarEventSub?.unsubscribe();
   }
 
+  isVaccineOrWormableSource() {
+    return this.data.calendarEvent.eventSource == CalendarEventSource.VACCINE || this.data.calendarEvent.eventSource == CalendarEventSource.WORMABLE;
+  }
+
   deleteCalendarEvent() {
     this.toastService.showConfirm().then((result: { isConfirmed: boolean; }) => {
       if (result.isConfirmed) {
@@ -95,7 +102,10 @@ export class CalendarEventDialogComponent implements OnInit, OnDestroy {
     if (this.calendarEventForm.valid) {
       Object.assign(this.data.calendarEvent, this.calendarEventForm.value);
       this.data.calendarEvent.startDate = moment(this.data.calendarEvent.startDate);
-      this.data.calendarEvent.updatedAt = moment();
+      
+      if (this.isVaccineOrWormableSource() && this.data.calendarEvent.reminderDate) {
+        this.data.calendarEvent.reminderDate = moment(this.data.calendarEvent.reminderDate);
+      }
 
       if (this.addMode) {
         this.createCalendarEvent();
@@ -111,9 +121,12 @@ export class CalendarEventDialogComponent implements OnInit, OnDestroy {
     this.calendarEventForm = this.formBuilder.group({
       startDate: [calendarEvent.startDate, [Validators.required]],
       title: [calendarEvent.title, [Validators.required]],
+      reminderDate: [calendarEvent.reminderDate, [reminderDateValidator(calendarEvent.startDate)]],
       description: [calendarEvent.description],
       eventSource: [{ value: calendarEvent.eventSource, disabled: !this.addMode }, [Validators.required]]
     });
+
+    console.log(this.calendarEventForm)
 
     this.initDatePickers(this.data.calendarEvent);
   }
@@ -127,6 +140,14 @@ export class CalendarEventDialogComponent implements OnInit, OnDestroy {
         altInput: true,
         altFormat: this.translateService.instant('commons.dateFormats.flatpickr.dateTime'),
         defaultDate: calendarEvent.startDate.toDate(),
+        position: 'below'
+      });
+
+      flatpickr(CalendarEventDatePickerInput.ReminderDateInput, {
+        enableTime: true,
+        altInput: true,
+        altFormat: this.translateService.instant('commons.dateFormats.flatpickr.dateTime'),
+        defaultDate: calendarEvent.reminderDate ? calendarEvent.reminderDate.toDate() : undefined,
         position: 'below'
       });
     }, 100);
