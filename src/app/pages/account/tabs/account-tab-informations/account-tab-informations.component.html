@@ -19,8 +19,8 @@
                     </p>
                     <div class="tags">
                         <span class="tag is-primary">Statut : Actif</span>
-                        <span class="tag is-success">Vérifié : Oui</span>
-                        <span class="tag is-light">2FA : À venir</span>
+                        <span class="tag is-success">Vérifié : {{ (user.verified ? 'commons.actions.yes' : 'commons.actions.no') | translate }}</span>
+                        <span class="tag is-light">2FA : {{ 'commons.commingSoon' | translate}}</span>
                     </div>
                 </div>
             </div>

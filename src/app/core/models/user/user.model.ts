@@ -13,11 +13,14 @@ export class User extends SerializeModel {
 
     username: string;
     email: string;
+    verified: boolean;
     petRecords: PetRecord[];
     settings: UserSettings;
 
     constructor() {
         super();
+
+        this.verified = true;
     }
 
     override serializeForSave(): ISerializedUser {
