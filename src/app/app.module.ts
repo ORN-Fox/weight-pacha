@@ -1,6 +1,5 @@
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { HttpClient, provideHttpClient, withInterceptors, withInterceptorsFromDi } from '@angular/common/http';
-import { makeEnvironmentProviders } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -51,10 +50,13 @@ export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
 }
 
-function initializeApp(translate: TranslateService, settings: SettingsService): Promise<void> {
-    const locale = settings.currentSettings.locale || 'en-US';
-    translate.setDefaultLang(locale);
-    return translate.use(locale).toPromise();
+function initializeAppFactory(translate: TranslateService, settings: SettingsService) {
+    return () => {
+        console.log('Initialisation en cours...');
+        const locale = settings.currentSettings.locale || 'en-US';
+        translate.setDefaultLang(locale);
+        return translate.use(locale).toPromise();
+    };
 }
 
 @NgModule({ 
@@ -120,19 +122,14 @@ function initializeApp(translate: TranslateService, settings: SettingsService): 
             protectedRedirectUri: '/home',
             publicRedirectUri: '/login',
         }),
-        makeEnvironmentProviders([
-            {
-                provide: TranslateService,
-                useClass: TranslateService
-            },
-            {
-                provide: 'INITIALIZE_APP',
-                useFactory: (translate: TranslateService, settings: SettingsService) => {
-                    return initializeApp(translate, settings);
-                },
-                deps: [TranslateService, SettingsService]
-            }
-        ])
+        TranslateService,
+        SettingsService,
+        {
+            provide: APP_INITIALIZER,
+            useFactory: initializeAppFactory,
+            deps: [TranslateService, SettingsService],
+            multi: true
+        },
     ]
 })
 export class AppModule { }
