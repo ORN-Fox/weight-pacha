@@ -16,10 +16,10 @@ export class UserSettings extends SerializeModel {
     itemsPerPage?: number;
     weightUnit?: number;
 
-    constructor(locale: string = 'en-US') {
+    constructor() {
         super();
-        
-        this.locale = locale;
+
+        this.locale = this.getLocale();
     }
 
     override serializeForSave(): ISerializedUserSettings {
@@ -48,5 +48,13 @@ export class UserSettings extends SerializeModel {
         } catch (exception) {
             console.error('Exception on deserialize user settings model', exception);
         }
+    }
+
+    getLocale(): string {
+        if (navigator.languages && navigator.languages.length) {
+            const languages = navigator.languages.filter(language => language.length > 3);
+            return languages[0];
+        }
+        return navigator.language;
     }
 }
