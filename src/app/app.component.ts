@@ -22,8 +22,7 @@ export class AppComponent implements OnInit {
 
   private redirectToHomeIfAlreadyAuthenticaded() {
     if (this.authService.isAuthenticated()) {
-      this.authService.loadCurrentUser().subscribe();
-      this.router.navigate(['/home']);
+      this.authService.loadCurrentUser().subscribe(() => this.router.navigate(['/home']));
     }
   }
 
