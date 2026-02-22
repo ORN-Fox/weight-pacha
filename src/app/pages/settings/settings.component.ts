@@ -29,8 +29,6 @@ export class SettingsComponent {
   themes: string[] = ['light', 'dark'];
   calendarViewFormats: string[] = ['dayGridMonth', 'listMonth'];
   itemsPerPages: number[] = [10, 25, 50];
-  weightUnits: number[] = [UnitType.KiloGram, UnitType.Pounds, UnitType.Gram, UnitType.Ounce];
-  weightUnitsLabels: string[] = ['Kg', 'Lbs', 'g', 'oz'];
 
   constructor() {
     this.settingsService.settings$.subscribe((settings) => {
@@ -58,10 +56,6 @@ export class SettingsComponent {
 
   updateItemsPerPage(itemsPerPage: number) {
     this.settingsService.updateSettings(this.authService.userValue.id, { itemsPerPage });
-  }
-
-  updateWeightUnit(weightUnit: number) {
-    this.settingsService.updateSettings(this.authService.userValue.id, { weightUnit });
   }
 
 }

@@ -60,21 +60,6 @@
     </section>
 
     <section class="section">
-        <h1 class="title mb-3">{{ 'pages.settings.weightUnit' | translate }}</h1>
-        <div class="subtitle">
-            <div class="radios">
-                @for (weightUnit of weightUnits; track weightUnit) {
-                    <label class="b-radio radio">
-                        <input type="radio" name="weightUnit" [(ngModel)]="settings.weightUnit" (ngModelChange)="updateWeightUnit(weightUnit)" [value]="weightUnit">
-                        <span class="check"></span>
-                        <span class="control-label">{{ weightUnitsLabels[weightUnit] }}</span>
-                    </label>
-                }
-            </div>
-        </div>
-    </section>
-
-    <section class="section">
         <h1 class="title mb-3">{{ 'pages.settings.about' | translate }}</h1>
         <div class="subtitle">
             <p class="mb-2">Poids pacha v0.3.0-dev</p>
