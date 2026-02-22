@@ -126,9 +126,8 @@ export class AuthService implements NgxAuthService {
 
         return this.apiService.post<AuthUserAccessData>('/refresh', { refreshToken }).pipe(
             tap((tokens: AuthUserAccessData) => this.saveAccessTokens(tokens)),
-            catchError(async (err) => {
-                this.logout();
-
+            catchError((err) => {
+                this.logout().subscribe();
                 return throwError(() => err);
             })
         );
