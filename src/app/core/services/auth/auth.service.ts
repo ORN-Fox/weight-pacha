@@ -135,7 +135,7 @@ export class AuthService implements NgxAuthService {
     }
 
     skipRequest(req: HttpRequest<any>) {
-        return req.url.endsWith('/refresh');
+        return req.url.endsWith('/refresh') || req.url.startsWith('/assets');
     }
 
     loadCurrentUser() {
