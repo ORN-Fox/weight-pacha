@@ -82,7 +82,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   // #region Pet Record 
 
   selectPetRecord(petRecord: PetRecord) {
-    if (this.authService.selectedPetRecordValue.id != petRecord.id) {
+    if (petRecord.isNewPetRecord || this.authService.selectedPetRecordValue.id != petRecord.id) {
       this.authService.selectedPetRecordValue = petRecord;
 
       let routeName = petRecord.isNewPetRecord ? '/informations' : '/home';
