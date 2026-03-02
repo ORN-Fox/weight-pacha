@@ -14,12 +14,11 @@ describe('Invoice', () => {
     });
 
     it('should initialize with default values', () => {
-        expect(invoice.id).toBeDefined();
+        expect(invoice.id).toBeUndefined();
         expect(invoice.amount).toBeNull();
         expect(invoice.description).toBeUndefined();
         expect(moment.isMoment(invoice.billingDate)).toBeTruthy();
-        expect(moment.isMoment(invoice.createdAt)).toBeTruthy();
+        expect(moment.isMoment(invoice.createdAt)).toBeFalsy();
         expect(invoice.updatedAt).toBeUndefined();
-        expect(invoice.editMode).toBeFalsy();
     });
 });

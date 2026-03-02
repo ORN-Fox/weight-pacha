@@ -1,9 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { PaginationComponent } from './pagination.component';
+import { AuthService } from '../../services/auth/auth.service';
 
 describe('PaginationComponent', () => {
   let component: PaginationComponent;
@@ -17,6 +20,10 @@ describe('PaginationComponent', () => {
         NgxPaginationModule,
         TranslateModule.forRoot({})
       ],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting()
+      ]
     })
     .compileComponents();
 

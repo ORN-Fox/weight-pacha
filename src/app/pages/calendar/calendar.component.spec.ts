@@ -30,6 +30,7 @@ describe('CalendarComponent', () => {
         {
           provide: AuthService,
           useValue: {
+            userValue: '1234',
             selectedPetRecordValue: { id: 1 }
           }
         }

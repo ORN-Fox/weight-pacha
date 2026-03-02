@@ -1,5 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import { Measure } from '../../models/measure/measure.model';
 
@@ -17,6 +19,11 @@ describe('MeasureComponent', () => {
       imports: [
         TranslateModule.forRoot({})
       ],
+      providers: [
+          provideHttpClient(),
+          provideHttpClientTesting(),
+          TranslateService
+      ]
     });
     fixture = TestBed.createComponent(MeasureComponent);
     component = fixture.componentInstance;
