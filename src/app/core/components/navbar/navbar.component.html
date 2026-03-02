@@ -45,13 +45,15 @@
                                 </a>
                             }
                             <a class="navbar-item" (click)="createPetRecord()">
-                                <i class="far fa-plus mr-2"></i> Ajouter un animal
+                                <img src="/assets/images/animals/unknown.png" alt="">
+                                {{ "commons.addPetRecord" | translate }}
                             </a>
                         </div>
                     </div>
                 } @else {
                     <a class="navbar-item" (click)="createPetRecord()">
-                        <i class="far fa-plus mr-2"></i> Ajouter un animal
+                        <img src="/assets/images/animals/unknown.png" alt="">
+                        {{ "commons.addPetRecord" | translate }}
                     </a>
                 }
             }
