@@ -11,7 +11,6 @@ import { SettingsService } from '../../services/settings/settings.service';
 
 import { PetRecord } from '../../models/pet-record/pet-record.model';
 import { User } from '../../models/user/user.model';
-import { UserSettings } from '../../models/user-settings/user-settings.model';
 
 @Component({
   selector: 'app-navbar',
@@ -38,21 +37,15 @@ export class NavbarComponent implements OnInit, OnDestroy {
   locales: string[] = ['en-US', 'fr-CA', 'fr-FR'];
   selectedLocale: string;
 
+  favoritePetRecordId?: string;
+
   isOpenSidebar: boolean = false;
 
   constructor() { }
 
   ngOnInit() {
-    this.userSub = this.authService.user$.subscribe(user => {
+    this.userSub = this.authService.user$.subscribe((user: User) => {
       this.user = user;
-    });
-
-    this.petRecordsSub = this.authService.petRecords$.subscribe(petRecords => {
-      this.petRecords = petRecords;
-    });
-
-    this.selectedPetRecordSub = this.authService.selectedPetRecord$.subscribe(selectedPetRecord => {
-      this.selectedPetRecord = selectedPetRecord;
     });
 
     this.settingsService.settings$.subscribe(settings => {
@@ -61,6 +54,16 @@ export class NavbarComponent implements OnInit, OnDestroy {
       flatpickr.localize(this.selectedLocale === 'en-US' ? english : French);
 
       document.documentElement.setAttribute('data-theme', settings.theme || 'light');
+
+      this.favoritePetRecordId = settings.favoritePetRecordId;
+    });
+
+    this.petRecordsSub = this.authService.petRecords$.subscribe((petRecords: PetRecord[]) => {
+      this.petRecords = petRecords?.filter(petRecord => !petRecord.archivedAt);
+    });
+
+    this.selectedPetRecordSub = this.authService.selectedPetRecord$.subscribe((selectedPetRecord: PetRecord) => {
+      this.selectedPetRecord = selectedPetRecord;
     });
   }
 
@@ -94,6 +97,14 @@ export class NavbarComponent implements OnInit, OnDestroy {
     let petRecord = new PetRecord();
     petRecord.isNewPetRecord = true;
     this.selectPetRecord(petRecord);
+  }
+
+  toggleFavoritePetRecord(event: Event, petRecord: PetRecord) {
+    event.stopImmediatePropagation();
+
+    if (!this.settingsService.currentSettings.favoritePetRecordId || this.settingsService.currentSettings.favoritePetRecordId != petRecord.id) {
+      this.settingsService.updateSettings(this.user.id, { favoritePetRecordId: petRecord.id });
+    }
   }
 
   // #endregion

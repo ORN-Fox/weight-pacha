@@ -42,6 +42,10 @@
                                     (click)="selectPetRecord(petRecord)">
                                     <img [src]="'/assets/images/animals/' + petRecord.getSpecieIcon() + '.png'" alt="">
                                     {{ petRecord.firstName }}
+
+                                    <button type="button" class="button btn-star" [ngClass]="{'is-active': petRecord.id == favoritePetRecordId}" (click)="toggleFavoritePetRecord($event, petRecord)">
+                                        <i [class]="petRecord.id == favoritePetRecordId ? 'fas fa-star' : 'far fa-star'"></i>
+                                    </button>
                                 </a>
                             }
                             <a class="navbar-item" (click)="createPetRecord()">

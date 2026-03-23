@@ -172,7 +172,14 @@ export class AuthService implements NgxAuthService {
         this.petRecordsSubject.next(user.petRecords);
 
         if (this.petRecordsValue.length > 0) {
-            this.selectedPetRecordSubject.next(this.petRecordsValue[0]);
+            let selectedPetRecord: PetRecord | null = this.petRecordsValue[0];
+
+            if (user.settings.favoritePetRecordId) {
+                const petRecords = this.petRecordsValue.filter(petRecord => petRecord.id == user.settings.favoritePetRecordId);
+                selectedPetRecord = petRecords ? petRecords[0] : null;
+            }
+
+            this.selectedPetRecordSubject.next(selectedPetRecord);
         }
     }
 

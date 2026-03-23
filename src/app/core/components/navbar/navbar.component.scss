@@ -1,0 +1,36 @@
+.btn-star {
+    background-color: transparent;
+    border: 0;
+    padding: 0;
+    font-size: 1.25rem;
+    box-shadow: none;
+
+    .fa-star {
+        color: rgb(199, 199, 199);
+    }
+
+    &.is-active, &:hover {
+        .fa-star {
+            color: rgb(244, 205, 50);
+            animation: star-pop 0.5s ease forwards;
+            transition: transform .2s ease-out;
+        }
+    }
+}
+
+@keyframes star-pop {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+
+    60% {
+        transform: scale(1.25);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
