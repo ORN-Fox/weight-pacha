@@ -113,6 +113,16 @@ export class AuthService implements NgxAuthService {
                 this.clearUserandPetRecordsData();
 
                 await this.router.navigateByUrl('/login');
+            }),
+            catchError((error) => {
+                console.error('error', error);
+
+                this.tokenStorageService.clear();
+                this.clearUserandPetRecordsData();
+
+                this.router.navigateByUrl('/login');
+
+                return throwError(() => error);
             })
         );
     }
