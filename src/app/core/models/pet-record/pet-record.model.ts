@@ -20,6 +20,8 @@ export interface ISerializedPetRecord extends ISerializeModel {
     sterilizeDate: string | null;
     tagNumber: string;
     tagRageNumber: string;
+    healthWeight: number;
+    weightUnit: number;
     description: string;
     archivedAt: string | null
 }
@@ -38,6 +40,8 @@ export class PetRecord extends SerializeModel {
     sterilize: boolean;
     tagNumber: string;
     tagRageNumber: string;
+    healthWeight: number;
+    weightUnit: number;
     description: string;
     archivedAt: moment.Moment | null;
 
@@ -67,6 +71,8 @@ export class PetRecord extends SerializeModel {
             sterilizeDate: DateService.getStringDateFromMoment(this.sterilizeDate),
             tagNumber: this.tagNumber,
             tagRageNumber: this.tagRageNumber,
+            healthWeight: this.healthWeight,
+            weightUnit: this.weightUnit,
             description: this.description,
             archivedAt: DateService.getStringDateFromMoment(this.archivedAt)
         };
@@ -92,6 +98,8 @@ export class PetRecord extends SerializeModel {
             this.sterilizeDate = DateService.getMomentFromStringDate(serializePetRecord.sterilizeDate);
             this.tagNumber = serializePetRecord.tagNumber;
             this.tagRageNumber = serializePetRecord.tagRageNumber;
+            this.healthWeight = serializePetRecord.healthWeight;
+            this.weightUnit = serializePetRecord.weightUnit;
             this.description = serializePetRecord.description;
             this.archivedAt = DateService.getMomentFromStringDate(serializePetRecord.archivedAt);
         } catch (exception) {

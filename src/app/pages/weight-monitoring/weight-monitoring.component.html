@@ -113,21 +113,30 @@
       </div>
     </div>
 
-    <div class="field">
-      <label class="label">{{ "pages.weight.healthyWeight" | translate }}</label>
-      <div class="control has-icons-left has-icons-right">
-        <input type="number" name="healthWeight" class="input" [ngClass]="{'is-danger': !healthWeight || healthWeight < 0}"
-         [(ngModel)]="healthWeight" (ngModelChange)="updateHealthWeight()" step="any" min="0.01" max="100" placeholder="4">
-        <span class="icon is-small is-left">
-          <i class="far fa-weight-hanging"></i>
-        </span>
-        <span class="icon is-small is-right">
-          {{ getMeasureUnitLabel() }}
-        </span>
-        @if (isInvalidWeight(healthWeight)) {
+    <form (ngSubmit)="saveHealthWeight()">
+      <div class="field">
+        <label class="label">{{ "pages.weight.healthyWeight" | translate }}</label>
+        <div class="control has-icons-left has-icons-right">
+          <input type="number" name="healthWeight" class="input" [ngClass]="{'is-danger': !healthWeight || healthWeight < 0}"
+            [(ngModel)]="healthWeight" (ngModelChange)="updateChartOnHealthWeightChange()" step="0.1" min="0.1" max="100" placeholder="4">
+          <span class="icon is-small is-left">
+            <i class="far fa-weight-hanging"></i>
+          </span>
+          <span class="icon is-small is-right">
+            {{ getMeasureUnitLabel() }}
+          </span>
+          @if (isInvalidWeight(healthWeight)) {
           <p class="help is-danger">{{ "pages.weight.errors.weightMustBePositive" | translate }}</p>
-        }
+          }
+        </div>
       </div>
-    </div>
+      
+      <div class="field has-text-centered">
+        <div class="control">
+          <app-action-button type="submit" title="commons.actions.save" customClass="is-primary" icon="far fa-bookmark mr-2"
+            [isLoading]="isHealthWeightSaving"></app-action-button>
+        </div>
+      </div>
+    </form>
   </div>
 </div>

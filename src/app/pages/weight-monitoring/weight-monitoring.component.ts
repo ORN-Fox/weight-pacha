@@ -25,6 +25,7 @@ import { IChartDataSetPoint } from 'src/app/core/interfaces/IChartDataSetPoint';
 import { IInputElementWithFlatpickr } from 'src/app/core/interfaces/IInputElementWithFlatpickr';
 
 import { ISerializedMeasure, Measure } from 'src/app/core/models/measure/measure.model';
+import { PetRecord } from 'src/app/core/models/pet-record/pet-record.model';
 
 interface IWeightChartDataSetPoint extends IChartDataSetPoint {
   x: moment.Moment,
@@ -57,7 +58,7 @@ export class WeightMonitoringComponent implements AfterViewInit, OnDestroy {
 
   sourceMeasures: Measure[] = [];
   measures: Measure[] = [];
-  healthWeight: number = 4;
+  healthWeight: number = 1;
   healthWeightOffset: number = .5;
 
   weightUnits: number[] = [UnitType.KiloGram, UnitType.Pounds, UnitType.Gram, UnitType.Ounce];
@@ -66,18 +67,22 @@ export class WeightMonitoringComponent implements AfterViewInit, OnDestroy {
 
   measureForm: FormGroup;
   
+  isHealthWeightSaving: boolean = false;
   isLoading: boolean = false;
   isSubmitted: boolean = false;
 
   rangeDateInputInstance: Instance;
 
   constructor() {
-    this.settingsService.settings$.subscribe(() => {
+    this.settingsService.settings$?.subscribe(() => {
       this.updateFlatpickrLocales();
       this.updateChartLocale();
     });
-    
-    this.selectedWeightUnit = this.settingsService.currentSettings.weightUnit || UnitType.KiloGram;
+
+    this.authService.selectedPetRecord$?.subscribe((selectedPetRecord: PetRecord) => {
+      this.healthWeight = selectedPetRecord.healthWeight ?? 1;
+      this.selectedWeightUnit = selectedPetRecord.weightUnit ?? UnitType.KiloGram;
+    });
 
     Chart.register(annotationPlugin);
 
@@ -290,20 +295,16 @@ export class WeightMonitoringComponent implements AfterViewInit, OnDestroy {
   }
 
   updateWeightUnit(selectedWeightUnit: number) {
+    let updatedSelectedPetRecord = cloneDeep(this.authService.selectedPetRecordValue);
+    updatedSelectedPetRecord.weightUnit = selectedWeightUnit;
+    this.authService.selectedPetRecordValue = updatedSelectedPetRecord;
+
     const healthWeightLabel = this.chart.options.plugins.annotation.annotations.label;
     healthWeightLabel.content = this.computeWeightHealthLabel();
-    
-    let weightUnit = selectedWeightUnit;
-    this.settingsService.updateSettings(this.authService.userValue.id, { weightUnit });
-
     this.updateChart();
   }
 
-  updateHealthWeight() {
-    if (this.isInvalidWeight(this.healthWeight)) {
-      return;
-    }
-
+  updateChartOnHealthWeightChange() {
     const healthWeightLine = this.chart.options.plugins.annotation.annotations.healthWeightLine;
     healthWeightLine.yMin = this.healthWeight;
     healthWeightLine.yMax = this.healthWeight;
@@ -316,6 +317,25 @@ export class WeightMonitoringComponent implements AfterViewInit, OnDestroy {
     healthWeightLabel.content = this.computeWeightHealthLabel();
 
     this.updateChart();
+  }
+
+  saveHealthWeight() {
+    this.isHealthWeightSaving = true;
+
+    if (this.isInvalidWeight(this.healthWeight)) {
+      setTimeout(() => this.isHealthWeightSaving = false, 500);
+      return;
+    }
+
+    console.log('updateHealthWeight', this.healthWeight)
+
+    let updatedSelectedPetRecord = cloneDeep(this.authService.selectedPetRecordValue);
+    updatedSelectedPetRecord.healthWeight = this.healthWeight;
+    this.authService.selectedPetRecordValue = updatedSelectedPetRecord;
+
+    this.updateChartOnHealthWeightChange();
+
+    this.isHealthWeightSaving = false;
   }
 
   private initForm() {
@@ -342,9 +362,6 @@ export class WeightMonitoringComponent implements AfterViewInit, OnDestroy {
 
         this.sourceMeasures = measures;
         this.measures = cloneDeep(this.sourceMeasures);
-
-        // TODO how store data ?
-        this.healthWeight = 5; // measuresJSON.healthWeight;
 
         this.updateChart();
       }),

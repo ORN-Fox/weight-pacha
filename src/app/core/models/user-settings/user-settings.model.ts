@@ -5,7 +5,6 @@ export interface ISerializedUserSettings extends ISerializeModel {
     theme?: string;
     calendarViewFormat?: string;
     itemsPerPage?: number;
-    weightUnit?: number;
 }
 
 export class UserSettings extends SerializeModel {
@@ -14,7 +13,6 @@ export class UserSettings extends SerializeModel {
     theme?: string;
     calendarViewFormat?: string;
     itemsPerPage?: number;
-    weightUnit?: number;
 
     constructor() {
         super();
@@ -28,7 +26,6 @@ export class UserSettings extends SerializeModel {
             theme: this.theme,
             calendarViewFormat: this.calendarViewFormat,
             itemsPerPage: this.itemsPerPage,
-            weightUnit: this.weightUnit
         };
 
         let serializedUserSettings: ISerializedUserSettings = Object.assign(serializedFields, super.serializeForSave());
@@ -44,7 +41,6 @@ export class UserSettings extends SerializeModel {
             this.theme = serializedUSerSettings.theme;
             this.calendarViewFormat = serializedUSerSettings.calendarViewFormat;
             this.itemsPerPage = serializedUSerSettings.itemsPerPage;
-            this.weightUnit = serializedUSerSettings.weightUnit;
         } catch (exception) {
             console.error('Exception on deserialize user settings model', exception);
         }
