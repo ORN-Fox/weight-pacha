@@ -3,6 +3,7 @@ import { catchError, Subscription, tap, throwError } from 'rxjs';
 
 import { ApiService } from 'src/app/core/services/api/api.service';
 import { AuthService } from 'src/app/core/services/auth/auth.service';
+import { SettingsService } from 'src/app/core/services/settings/settings.service';
 import { ToastService } from 'src/app/core/services/toast/toast.service';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -19,6 +20,7 @@ export class AccountTabInformationsComponent implements OnDestroy {
 
   readonly apiService = inject(ApiService);
   readonly authService = inject(AuthService);
+  readonly settingsService = inject(SettingsService);
   readonly toastService = inject(ToastService);
   readonly translateService = inject(TranslateService);
 
@@ -26,8 +28,14 @@ export class AccountTabInformationsComponent implements OnDestroy {
 
   user: User;
 
+  dateTimeFormat: string;
+
   constructor() {
     this.user = this.authService.userValue;
+
+    this.settingsService.settings$.subscribe(() => {
+      this.dateTimeFormat = this.translateService.instant('commons.dateFormats.dateTime');
+    });
   }
 
   ngOnDestroy() {

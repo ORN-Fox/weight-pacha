@@ -6,17 +6,13 @@
                     <img src="https://cdn-icons-png.flaticon.com/64/145/145848.png" alt="Avatar utilisateur">
                 </p>
             </figure>
+
             <div class="media-content">
                 <div class="content">
                     <p><strong>{{ user.username }}</strong></p>
-                    <p>
-                        <span class="icon-text">
-                            <span class="icon">
-                                <i class="fas fa-envelope"></i>
-                            </span>
-                            <span>{{ user.email }}</span>
-                        </span>
-                    </p>
+                    <p><i class="fas fa-envelope mr-2"></i> <span>{{ user.email }}</span></p>
+                    <p>Membre depuis le {{ user.createdAt?.format(dateTimeFormat) }}</p>
+
                     <div class="tags">
                         <span class="tag is-primary">Statut : Actif</span>
                         <span class="tag is-success">Vérifié : {{ (user.verified ? 'commons.actions.yes' : 'commons.actions.no') | translate }}</span>
