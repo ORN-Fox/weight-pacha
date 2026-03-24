@@ -32,7 +32,7 @@
                 <div class="control radios">
                     @for (specie of species; track specie) {
                         <label class="radio custom-radio-with-icon has-text-centered" [ngClass]="{'active': petForm.get('specie')?.value == specie.value, 'is-danger': isSubmitted && !petForm.get('specie')?.value}">
-                            <input type="radio" formControlName="specie" value="{{ specie.value }}" />
+                            <input type="radio" formControlName="specie" [value]="specie.value" />
                             <img [src]="'/assets/images/animals/' + specie.key + '.png'" alt=""> {{ ("pages.informations." + specie.key) | translate }}
                         </label>
                     }
