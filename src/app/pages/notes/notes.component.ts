@@ -91,7 +91,6 @@ export class NotesComponent implements OnDestroy {
     this.isSubmitted = true;
     if (this.noteForm.valid && this.selectedNote) {
       Object.assign(this.selectedNote, this.noteForm.value);
-      // this.selectedNote.updatedAt = moment();
       
       if (this.editMode) {
         this.updateNote();
