@@ -58,8 +58,8 @@ export class WeightMonitoringComponent implements AfterViewInit, OnDestroy {
 
   sourceMeasures: Measure[] = [];
   measures: Measure[] = [];
-  healthWeight: number = 1;
-  healthWeightOffset: number = .5;
+  weightHealth: number = 1;
+  weightHealthOffset: number = .5;
 
   weightUnits: number[] = [UnitType.KiloGram, UnitType.Pounds, UnitType.Gram, UnitType.Ounce];
   weightUnitsLabels: string[] = ['Kg', 'Lbs', 'g', 'oz'];
@@ -67,7 +67,7 @@ export class WeightMonitoringComponent implements AfterViewInit, OnDestroy {
 
   measureForm: FormGroup;
   
-  isHealthWeightSaving: boolean = false;
+  isWeightHealthSaving: boolean = false;
   isLoading: boolean = false;
   isSubmitted: boolean = false;
 
@@ -80,7 +80,7 @@ export class WeightMonitoringComponent implements AfterViewInit, OnDestroy {
     });
 
     this.authService.selectedPetRecord$?.subscribe((selectedPetRecord: PetRecord) => {
-      this.healthWeight = selectedPetRecord.healthWeight ?? 1;
+      this.weightHealth = selectedPetRecord.weightHealth ?? 1;
       this.selectedWeightUnit = selectedPetRecord.weightUnit ?? UnitType.KiloGram;
     });
 
@@ -299,43 +299,43 @@ export class WeightMonitoringComponent implements AfterViewInit, OnDestroy {
     updatedSelectedPetRecord.weightUnit = selectedWeightUnit;
     this.authService.selectedPetRecordValue = updatedSelectedPetRecord;
 
-    const healthWeightLabel = this.chart.options.plugins.annotation.annotations.label;
-    healthWeightLabel.content = this.computeWeightHealthLabel();
+    const weightHealthLabel = this.chart.options.plugins.annotation.annotations.label;
+    weightHealthLabel.content = this.computeWeightHealthLabel();
     this.updateChart();
   }
 
-  updateChartOnHealthWeightChange() {
-    const healthWeightLine = this.chart.options.plugins.annotation.annotations.healthWeightLine;
-    healthWeightLine.yMin = this.healthWeight;
-    healthWeightLine.yMax = this.healthWeight;
+  updateChartOnWeightHealthChange() {
+    const weightHealthLine = this.chart.options.plugins.annotation.annotations.weightHealthLine;
+    weightHealthLine.yMin = this.weightHealth;
+    weightHealthLine.yMax = this.weightHealth;
 
-    const healthWeightZone = this.chart.options.plugins.annotation.annotations.healthWeightZone;
-    healthWeightZone.yMin = this.healthWeight - this.healthWeightOffset;
-    healthWeightZone.yMax = this.healthWeight + this.healthWeightOffset;
+    const weightHealthZone = this.chart.options.plugins.annotation.annotations.weightHealthZone;
+    weightHealthZone.yMin = this.weightHealth - this.weightHealthOffset;
+    weightHealthZone.yMax = this.weightHealth + this.weightHealthOffset;
 
-    const healthWeightLabel = this.chart.options.plugins.annotation.annotations.label;
-    healthWeightLabel.content = this.computeWeightHealthLabel();
+    const weightHealthLabel = this.chart.options.plugins.annotation.annotations.label;
+    weightHealthLabel.content = this.computeWeightHealthLabel();
 
     this.updateChart();
   }
 
-  saveHealthWeight() {
-    this.isHealthWeightSaving = true;
+  saveWeightHealth() {
+    this.isWeightHealthSaving = true;
 
-    if (this.isInvalidWeight(this.healthWeight)) {
-      setTimeout(() => this.isHealthWeightSaving = false, 500);
+    if (this.isInvalidWeight(this.weightHealth)) {
+      setTimeout(() => this.isWeightHealthSaving = false, 500);
       return;
     }
 
     console.log('updateHealthWeight', this.healthWeight)
 
     let updatedSelectedPetRecord = cloneDeep(this.authService.selectedPetRecordValue);
-    updatedSelectedPetRecord.healthWeight = this.healthWeight;
+    updatedSelectedPetRecord.weightHealth = this.weightHealth;
     this.authService.selectedPetRecordValue = updatedSelectedPetRecord;
 
-    this.updateChartOnHealthWeightChange();
+    this.updateChartOnWeightHealthChange();
 
-    this.isHealthWeightSaving = false;
+    this.isWeightHealthSaving = false;
   }
 
   private initForm() {
@@ -346,7 +346,7 @@ export class WeightMonitoringComponent implements AfterViewInit, OnDestroy {
   }
 
   private computeWeightHealthLabel(): string {
-    return `${this.translateService.instant('pages.weight.healthyWeight')} : ${this.healthWeight} ${this.getMeasureUnitLabel()}`;
+    return `${this.translateService.instant('pages.weight.healthyWeight')} : ${this.weightHealth} ${this.getMeasureUnitLabel()}`;
   }
 
   private loadMeasures() {
@@ -443,16 +443,16 @@ export class WeightMonitoringComponent implements AfterViewInit, OnDestroy {
     ctx: { p0: { parsed: { y: number } }, p1: { parsed: { y: number } } },
     value: string
   ): string | undefined => {
-    const minHealthWeight = this.healthWeight - this.healthWeightOffset;
-    const maxHealthWeight = this.healthWeight + this.healthWeightOffset;
+    const minWeightHealth = this.weightHealth - this.weightHealthOffset;
+    const maxWeightHealth = this.weightHealth + this.weightHealthOffset;
 
     const p0 = ctx.p0.parsed.y;
     const p1 = ctx.p1.parsed.y;
     const diff = p1 - p0;
 
-    if (diff > 0 && p1 > maxHealthWeight) return value;
-    if (diff < 0 && (p1 < minHealthWeight)) return value;
-    if (diff === 0 && p1 > maxHealthWeight) return value;
+    if (diff > 0 && p1 > maxWeightHealth) return value;
+    if (diff < 0 && (p1 < minWeightHealth)) return value;
+    if (diff === 0 && p1 > maxWeightHealth) return value;
 
     return;
   };
@@ -522,17 +522,17 @@ export class WeightMonitoringComponent implements AfterViewInit, OnDestroy {
         plugins: {
           annotation: {
             annotations: {
-              healthWeightLine: {
+              weightHealthLine: {
                 type: 'line',
-                yMin: this.healthWeight,
-                yMax: this.healthWeight,
+                yMin: this.weightHealth,
+                yMax: this.weightHealth,
                 borderColor: 'rgb(107, 201, 255)',
                 borderWidth: 2
               },
-              healthWeightZone: {
+              weightHealthZone: {
                 type: 'box',
-                yMin: this.healthWeight - this.healthWeightOffset,
-                yMax: this.healthWeight + this.healthWeightOffset,
+                yMin: this.weightHealth - this.weightHealthOffset,
+                yMax: this.weightHealth + this.weightHealthOffset,
                 backgroundColor: 'rgba(107, 201, 255, 0.1)',
                 borderColor: 'transparent'
               },

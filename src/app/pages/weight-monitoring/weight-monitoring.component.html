@@ -113,19 +113,19 @@
       </div>
     </div>
 
-    <form (ngSubmit)="saveHealthWeight()">
+    <form (ngSubmit)="saveWeightHealth()">
       <div class="field">
-        <label class="label">{{ "pages.weight.healthyWeight" | translate }}</label>
+        <label class="label">{{ "pages.weight.weightHealth" | translate }}</label>
         <div class="control has-icons-left has-icons-right">
-          <input type="number" name="healthWeight" class="input" [ngClass]="{'is-danger': !healthWeight || healthWeight < 0}"
-            [(ngModel)]="healthWeight" (ngModelChange)="updateChartOnHealthWeightChange()" step="0.1" min="0.1" max="100" placeholder="4">
+          <input type="number" name="weightHealth" class="input" [ngClass]="{'is-danger': !weightHealth || weightHealth < 0}"
+            [(ngModel)]="weightHealth" (ngModelChange)="updateChartOnWeightHealthChange()" step="0.1" min="0.1" max="100" placeholder="4">
           <span class="icon is-small is-left">
             <i class="far fa-weight-hanging"></i>
           </span>
           <span class="icon is-small is-right">
             {{ getMeasureUnitLabel() }}
           </span>
-          @if (isInvalidWeight(healthWeight)) {
+          @if (isInvalidWeight(weightHealth)) {
           <p class="help is-danger">{{ "pages.weight.errors.weightMustBePositive" | translate }}</p>
           }
         </div>
@@ -134,7 +134,7 @@
       <div class="field has-text-centered">
         <div class="control">
           <app-action-button type="submit" title="commons.actions.save" customClass="is-primary" icon="far fa-bookmark mr-2"
-            [isLoading]="isHealthWeightSaving"></app-action-button>
+            [isLoading]="isWeightHealthSaving"></app-action-button>
         </div>
       </div>
     </form>

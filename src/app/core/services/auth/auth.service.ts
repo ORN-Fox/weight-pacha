@@ -66,6 +66,18 @@ export class AuthService implements NgxAuthService {
             this.selectedPetRecordSubject.next(petRecord);
             return;
         }
+
+        this.apiService.put<ISerializedPetRecord>(`/pet-record/${petRecord.id}`, petRecord.serializeForSave()).pipe(
+            tap(async (updatedPetRecord) => {
+                console.log('updatedPetRecord', updatedPetRecord)
+                this.selectedPetRecordSubject.next(updatedPetRecord);
+            }),
+            catchError((error) => {
+                this.toastService.showToast('error', this.translateService.instant('commons.toast.error.update'));
+                console.error('Unable to update pet record', error);
+                return throwError(() => error);
+            }),
+        ).subscribe();
     }
 
     getAccessToken() {
