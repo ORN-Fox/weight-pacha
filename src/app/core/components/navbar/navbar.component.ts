@@ -59,7 +59,10 @@ export class NavbarComponent implements OnInit, OnDestroy {
     });
 
     this.petRecordsSub = this.authService.petRecords$.subscribe((petRecords: PetRecord[]) => {
-      this.petRecords = petRecords?.filter(petRecord => !petRecord.archivedAt);
+      this.petRecords = petRecords?.filter(petRecord => !petRecord.archivedAt)
+        .sort((firstPetRecord, secondPetRecord) => {
+          return firstPetRecord.specie - secondPetRecord.specie || firstPetRecord.firstName.localeCompare(secondPetRecord.firstName, this.selectedLocale)
+        });
     });
 
     this.selectedPetRecordSub = this.authService.selectedPetRecord$.subscribe((selectedPetRecord: PetRecord) => {
