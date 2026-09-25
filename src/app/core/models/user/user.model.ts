@@ -40,6 +40,12 @@ export class User extends SerializeModel {
 
             this.username = serializeUser.username;
             this.email = serializeUser.email;
+
+            let settings = new UserSettings(); 
+            if (serializeUser.Settings) {
+                settings.deserilizeFromSave(serializeUser.Settings);
+            }
+            this.settings = settings;
             
             this.petRecords = [];
             if (serializeUser.PetRecords) {
@@ -48,13 +54,11 @@ export class User extends SerializeModel {
                     petRecord.deserilizeFromSave(petRecordJson);
                     this.petRecords.push(petRecord);
                 });
-            }
 
-            let settings = new UserSettings(); 
-            if (serializeUser.Settings) {
-                settings.deserilizeFromSave(serializeUser.Settings);
+                this.petRecords = this.petRecords?.sort((firstPetRecord, secondPetRecord) => {
+                    return firstPetRecord.specie - secondPetRecord.specie || firstPetRecord.firstName.localeCompare(secondPetRecord.firstName, this.settings.locale)
+                });
             }
-            this.settings = settings;
         } catch (exception) {
             console.error('Exception on deserialize user model', exception);
         }
