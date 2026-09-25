@@ -12,7 +12,7 @@ import { SettingsService } from '../settings/settings.service';
 import { ToastService } from '../toast/toast.service';
 import { TokenStorageService } from '../token-storage/token-storage.service';
 
-import { PetRecord } from '../../models/pet-record/pet-record.model';
+import { ISerializedPetRecord, PetRecord } from '../../models/pet-record/pet-record.model';
 import { ISerializedUser, User } from '../../models/user/user.model';
 import { UserSettings } from '../../models/user-settings/user-settings.model';
 
@@ -62,7 +62,10 @@ export class AuthService implements NgxAuthService {
     }
 
     set selectedPetRecordValue(petRecord: PetRecord) {
-        this.selectedPetRecordSubject.next(petRecord);
+        if (petRecord.isNewPetRecord) {
+            this.selectedPetRecordSubject.next(petRecord);
+            return;
+        }
     }
 
     getAccessToken() {
