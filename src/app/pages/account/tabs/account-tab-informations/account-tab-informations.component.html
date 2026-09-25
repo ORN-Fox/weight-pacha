@@ -27,43 +27,48 @@
 
     <p class="title has-text-black">Mes animaux</p>
 
-    <div class="grid is-gap-6">
-        @for (petRecord of user.petRecords; track petRecord) {
-            <div class="box cell mb-0">
-                <article class="media">
-                    <figure class="media-left">
-                        <p class="image is-64x64">
-                            <img [src]="'/assets/images/animals/' + petRecord.getSpecieIcon() + '.png'" alt="">
-                        </p>
-                    </figure>
-
-                    <div class="media-content">
-                        <div class="content">
-                            <p><strong>{{ petRecord.firstName }}</strong></p>
-                            @if (petRecord.birthDate) {
-                                <p>{{ petRecord.getAge() }} {{ 'commons.yearOld' | translate}}</p>
+    <div class="fixed-grid has-4-cols">
+        <div class="grid is-gap-6">
+            @for (petRecord of user.petRecords; track petRecord) {
+                <div class="box cell mb-0" [ngClass]="{'disabled': petRecord.archivedAt}">
+                    <article class="media">
+                        <figure class="media-left">
+                            <p class="image is-64x64">
+                                <img [src]="'/assets/images/animals/' + petRecord.getSpecieIcon() + '.png'" alt="">
+                            </p>
+                        </figure>
+    
+                        <div class="media-content">
+                            <div class="content">
+                                <p>{{ petRecord.firstName }}</p>
+                                @if (petRecord.birthDate) {
+                                    <p>{{ petRecord.getAge() }} {{ 'commons.yearOld' | translate}}</p>
+                                }
+                            </div>
+                            @if (petRecord.archivedAt) {
+                                <div class="tags">
+                                    <span class="tag is-warning" title="Archivé le {{ petRecord.archivedAt.format('LLL') }}"><i class="far fa-box mr-2"></i> Archivé</span>
+                                </div>
                             }
                         </div>
+    
                         @if (petRecord.archivedAt) {
-                            <div class="tags">
-                                <span class="tag is-warning"><i class="far fa-box mr-2"></i> Archivé le {{ petRecord.archivedAt.format('LLL') }}</span>
-                            </div>
+                            <button type="button" class="button btn-restore" (click)="restorePetRecord(petRecord)">
+                                <i class="far fa-box-open"></i>
+                            </button>
+                        } @else {
+                            <button type="button" class="button btn-archive" (click)="archivePetRecord(petRecord)">
+                                <i class="far fa-archive"></i>
+                            </button>
                         }
-                    </div>
+                    </article>
+                </div>
+            } @empty {
+                <button type="button" class="button is-primary" (click)="createPetRecord()">
+                    <i class="far fa-plus mr-2"></i> Ajouter un animal
+                </button>
+            }
+        </div>
 
-                    @if (petRecord.archivedAt) {
-                        <button type="button" class="button btn-restore" (click)="restorePetRecord(petRecord)">
-                            <i class="far fa-box-open"></i>
-                        </button>
-                    } @else {
-                        <button type="button" class="button btn-archive" (click)="archivePetRecord(petRecord)">
-                            <i class="far fa-archive"></i>
-                        </button>
-                    }
-                </article>
-            </div>
-        } @empty {
-            TODO ajouter un animal (button)
-        }
     </div>
 }
