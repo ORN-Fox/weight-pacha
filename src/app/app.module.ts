@@ -45,14 +45,26 @@ import { CalendarEventDialogComponent } from './pages/calendar/calendar-event-di
 import { InvoiceDialogComponent } from './pages/invoices/invoice-dialog/invoice-dialog.component';
 import { VaccineDialogComponent } from './pages/vaccines/vaccine-dialog/vaccine-dialog.component';
 import { WormableDialogComponent } from './pages/wormables/wormable-dialog/wormable-dialog.component';
+import { firstValueFrom, of, switchMap } from 'rxjs';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
 }
 
-function initializeAppFactory(translate: TranslateService, settings: SettingsService) {
-    return () => {
+function initializeAppFactory(
+    translate: TranslateService, 
+    settings: SettingsService,
+    authService: AuthService
+) {
+    return async () => {
         console.log('Initialisation en cours...');
+
+        await firstValueFrom(
+            authService.isAuthenticated().pipe(
+                switchMap(isAuthenticated => isAuthenticated ? authService.loadCurrentUser() : of(null))
+            )
+        );
+
         const locale = settings.currentSettings.locale || 'en-US';
         translate.setDefaultLang(locale);
         return translate.use(locale).toPromise();
@@ -127,7 +139,7 @@ function initializeAppFactory(translate: TranslateService, settings: SettingsSer
         {
             provide: APP_INITIALIZER,
             useFactory: initializeAppFactory,
-            deps: [TranslateService, SettingsService],
+            deps: [TranslateService, SettingsService, AuthService],
             multi: true
         },
     ]

@@ -1,7 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-
-import { AuthService } from 'src/app/core/services/auth/auth.service';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -9,21 +6,8 @@ import { AuthService } from 'src/app/core/services/auth/auth.service';
   styleUrls: ['./app.component.scss'],
   standalone: false
 })
-export class AppComponent implements OnInit {
-
-  readonly authService = inject(AuthService);
-  readonly router = inject(Router);
+export class AppComponent {
 
   constructor() {}
-
-  ngOnInit() {
-    this.redirectToHomeIfAlreadyAuthenticaded();
-  }
-
-  private redirectToHomeIfAlreadyAuthenticaded() {
-    if (this.authService.isAuthenticated()) {
-      this.authService.loadCurrentUser().subscribe(() => this.router.navigate(['/home']));
-    }
-  }
 
 }
