@@ -327,7 +327,6 @@ export class WeightMonitoringComponent implements AfterViewInit, OnDestroy {
       return;
     }
 
-    console.log('updateHealthWeight', this.healthWeight)
 
     let updatedSelectedPetRecord = cloneDeep(this.authService.selectedPetRecordValue);
     updatedSelectedPetRecord.weightHealth = this.weightHealth;
